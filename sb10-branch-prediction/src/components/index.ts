@@ -5,3 +5,4 @@ export { BranchInfoCard } from "./BranchInfoCard";
 export { CheckInButton } from "./CheckInButton";
 export { HistoricalComparison } from "./HistoricalComparison";
 export { QueueDisplay } from "./QueueDisplay";
+export { BranchDetailClient } from "./BranchDetailClient";
