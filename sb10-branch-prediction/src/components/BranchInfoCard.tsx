@@ -1,3 +1,6 @@
+import { Clock, Users, Activity, CheckCircle } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Branch } from "@/lib/data";
 
 interface BranchInfoCardProps {
@@ -5,40 +8,55 @@ interface BranchInfoCardProps {
 }
 
 export function BranchInfoCard({ branch }: BranchInfoCardProps) {
+  const waitVariant =
+    branch.congestionLevel === "high"
+      ? "destructive"
+      : branch.congestionLevel === "medium"
+      ? "warning"
+      : "success";
+
   return (
-    <div className="bg-white rounded-xl shadow-md p-6 mb-6">
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="text-center p-4 bg-gray-50 rounded-lg">
-          <p className="text-gray-600 text-sm">Trạng thái</p>
-          <p className="font-semibold text-lg mt-1">
-            {branch.status === "open" ? "🟢 Mở cửa" : "🔴 Đóng cửa"}
-          </p>
+    <Card className="mb-6">
+      <CardContent className="p-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+            <CheckCircle className="w-5 h-5 text-green-500 shrink-0" />
+            <div>
+              <p className="text-gray-500 text-xs">Trạng thái</p>
+              <p className="font-semibold">
+                <Badge variant={branch.status === "open" ? "success" : "destructive"}>
+                  {branch.status === "open" ? "Mở cửa" : "Đóng cửa"}
+                </Badge>
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+            <Clock className="w-5 h-5 text-blue-500 shrink-0" />
+            <div>
+              <p className="text-gray-500 text-xs">Giờ mở cửa</p>
+              <p className="font-semibold text-sm">
+                {branch.openTime} - {branch.closeTime}
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+            <Users className="w-5 h-5 text-purple-500 shrink-0" />
+            <div>
+              <p className="text-gray-500 text-xs">Nhân viên</p>
+              <p className="font-semibold">{branch.staffCount} người</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+            <Activity className="w-5 h-5 text-orange-500 shrink-0" />
+            <div>
+              <p className="text-gray-500 text-xs">Thời gian chờ</p>
+              <p className="font-semibold">
+                <Badge variant={waitVariant}>~{branch.currentWaitTime} phút</Badge>
+              </p>
+            </div>
+          </div>
         </div>
-        <div className="text-center p-4 bg-gray-50 rounded-lg">
-          <p className="text-gray-600 text-sm">Giờ mở cửa</p>
-          <p className="font-semibold text-lg mt-1">
-            {branch.openTime} - {branch.closeTime}
-          </p>
-        </div>
-        <div className="text-center p-4 bg-gray-50 rounded-lg">
-          <p className="text-gray-600 text-sm">Nhân viên</p>
-          <p className="font-semibold text-lg mt-1">{branch.staffCount} người</p>
-        </div>
-        <div className="text-center p-4 bg-gray-50 rounded-lg">
-          <p className="text-gray-600 text-sm">Thời gian chờ</p>
-          <p
-            className={`font-semibold text-lg mt-1 ${
-              branch.congestionLevel === "high"
-                ? "text-red-600"
-                : branch.congestionLevel === "medium"
-                ? "text-yellow-600"
-                : "text-green-600"
-            }`}
-          >
-            {branch.currentWaitTime} phút
-          </p>
-        </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

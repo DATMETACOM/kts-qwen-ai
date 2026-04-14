@@ -1,6 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { UserPlus } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 interface CheckInButtonProps {
   branchId: string;
@@ -30,37 +33,45 @@ export function CheckInButton({ branchId, onCheckIn }: CheckInButtonProps) {
 
       if (response.ok) {
         setMessage(
-          `✅ Check-in thành công! Số thứ tự: ${data.positionInQueue}, Thời gian chờ: ~${data.estimatedWaitTime} phút`
+          `Check-in thành công! Số thứ tự: ${data.positionInQueue}, Thời gian chờ: ~${data.estimatedWaitTime} phút`
         );
         onCheckIn?.();
       } else {
-        setMessage(`❌ Lỗi: ${data.error?.message || "Không thể check-in"}`);
+        setMessage(`Lỗi: ${data.error?.message || "Không thể check-in"}`);
       }
     } catch {
-      setMessage("❌ Lỗi kết nối");
+      setMessage("Lỗi kết nối");
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-md p-6">
-      <h2 className="text-lg font-semibold text-gray-900 mb-4">📝 Check-in mô phỏng</h2>
-      <p className="text-gray-600 text-sm mb-4">
-        Thêm khách check-in để xem hàng đợi và dự báo cập nhật theo thời gian thực
-      </p>
-      <button
-        className="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-        onClick={handleCheckIn}
-        disabled={isLoading}
-      >
-        {isLoading ? "Đang xử lý..." : "+ Check-in mới"}
-      </button>
-      {message && (
-        <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg text-sm text-blue-800">
-          {message}
-        </div>
-      )}
-    </div>
+    <Card className="mb-6">
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <UserPlus className="w-5 h-5" />
+          Check-in mô phỏng
+        </CardTitle>
+        <CardDescription>
+          Thêm khách check-in để xem hàng đợi và dự báo cập nhật theo thời gian thực
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Button onClick={handleCheckIn} disabled={isLoading}>
+          <UserPlus className="w-4 h-4 mr-2" />
+          {isLoading ? "Đang xử lý..." : "Check-in mới"}
+        </Button>
+        {message && (
+          <div className={`mt-4 p-3 rounded-lg text-sm ${
+            message.startsWith("Check-in")
+              ? "bg-green-50 border border-green-200 text-green-800"
+              : "bg-red-50 border border-red-200 text-red-800"
+          }`}>
+            {message.startsWith("Check-in") ? "✅" : "❌"} {message}
+          </div>
+        )}
+      </CardContent>
+    </Card>
   );
 }

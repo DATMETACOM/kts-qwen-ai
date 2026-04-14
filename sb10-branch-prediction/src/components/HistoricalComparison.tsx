@@ -10,6 +10,8 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import { TrendingUp } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TrafficRecord } from "@/lib/data";
 
 interface HistoricalComparisonProps {
@@ -38,10 +40,14 @@ export function HistoricalComparison({ todayForecast, lastWeekHistory }: Histori
   });
 
   return (
-    <div className="bg-white rounded-xl shadow-md p-6 mb-6">
-      <h2 className="text-lg font-semibold text-gray-900 mb-4">
-        📈 So sánh: Hôm nay vs Tuần trước
-      </h2>
+    <Card className="mb-6">
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <TrendingUp className="w-5 h-5" />
+          So sánh: Hôm nay vs Tuần trước
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
 
       <div style={{ width: "100%", height: 300 }}>
         <ResponsiveContainer>
@@ -66,6 +72,7 @@ export function HistoricalComparison({ todayForecast, lastWeekHistory }: Histori
           </BarChart>
         </ResponsiveContainer>
       </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

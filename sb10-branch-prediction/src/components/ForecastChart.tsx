@@ -11,6 +11,8 @@ import {
   ResponsiveContainer,
   Cell,
 } from "recharts";
+import { BarChart3 } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { HourlyForecast } from "@/lib/data";
 
 interface ForecastChartProps {
@@ -85,10 +87,14 @@ export function ForecastChart({ hourlyForecast, targetDate }: ForecastChartProps
   const maxCustomers = Math.max(...hourlyForecast.map((h) => h.predictedCustomers), 1);
 
   return (
-    <div className="bg-white rounded-xl shadow-md p-6 mb-6">
-      <h2 className="text-lg font-semibold text-gray-900 mb-4">
-        📊 Dự báo lưu lượng ({targetDate})
-      </h2>
+    <Card className="mb-6">
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <BarChart3 className="w-5 h-5" />
+          Dự báo lưu lượng ({targetDate})
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
 
       <div style={{ width: "100%", height: 350 }}>
         <ResponsiveContainer>
@@ -157,6 +163,7 @@ export function ForecastChart({ hourlyForecast, targetDate }: ForecastChartProps
           <span className="text-sm text-gray-600">Cao (&gt;20 phút)</span>
         </div>
       </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }
