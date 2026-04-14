@@ -20,51 +20,49 @@ export async function predictTraffic(
   const apiKey = process.env.QWEN_API_KEY || "";
 
   if (!apiKey) {
-    // Fallback to mock prediction for demo
-    return mockPrediction(request);
+    throw new Error("QWEN_API_KEY is not configured. Please set it in .env.local");
   }
 
-  try {
-    const response = await fetch(QWEN_API_URL, {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${apiKey}`,
-        "Content-Type": "application/json"
+  const response = await fetch(QWEN_API_URL, {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${apiKey}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      model: "qwen-plus",
+      input: {
+        messages: [
+          {
+            role: "system",
+            content: "You are a bank branch traffic analyst. Predict customer traffic and wait times based on historical data. You MUST respond with valid JSON only, no markdown, no explanation outside JSON."
+          },
+          {
+            role: "user",
+            content: buildPredictionPrompt(request)
+          }
+        ]
       },
-      body: JSON.stringify({
-        model: "qwen-plus",
-        input: {
-          messages: [
-            {
-              role: "system",
-              content: "You are a bank branch traffic analyst. Predict customer traffic and wait times based on historical data."
-            },
-            {
-              role: "user",
-              content: buildPredictionPrompt(request)
-            }
-          ]
-        },
-        parameters: {
-          result_format: "message",
-          max_tokens: 2000
-        }
-      })
-    });
+      parameters: {
+        result_format: "message",
+        max_tokens: 2000
+      }
+    })
+  });
 
-    if (!response.ok) {
-      console.error("Qwen API error:", response.status);
-      return mockPrediction(request);
-    }
-
-    const data = await response.json();
-    const content = data.output?.choices?.[0]?.message?.content || "";
-
-    return parsePredictionResponse(content);
-  } catch (error) {
-    console.error("Qwen API call failed:", error);
-    return mockPrediction(request);
+  if (!response.ok) {
+    const errBody = await response.text().catch(() => "");
+    throw new Error(`Qwen API error ${response.status}: ${errBody}`);
   }
+
+  const data = await response.json();
+  const content = data.output?.choices?.[0]?.message?.content || "";
+
+  if (!content) {
+    throw new Error("Qwen API returned empty response");
+  }
+
+  return parsePredictionResponse(content);
 }
 
 /**
@@ -118,78 +116,23 @@ function buildPredictionPrompt(request: QwenPredictionRequest): string {
  * Parse Qwen JSON response
  */
 function parsePredictionResponse(content: string): QwenPredictionResponse {
+  const jsonMatch = content.match(/\{[\s\S]*\}/);
+  if (!jsonMatch) {
+    throw new Error(`Failed to extract JSON from Qwen response: ${content.substring(0, 200)}`);
+  }
+
   try {
-    // Extract JSON from response
-    const jsonMatch = content.match(/\{[\s\S]*\}/);
-    if (jsonMatch) {
-      return JSON.parse(jsonMatch[0]);
+    const parsed = JSON.parse(jsonMatch[0]);
+    if (!parsed.hourly || !Array.isArray(parsed.hourly) || parsed.hourly.length === 0) {
+      throw new Error("Qwen response missing hourly array");
     }
+    return parsed;
   } catch (error) {
-    console.error("Failed to parse Qwen response:", error);
+    if (error instanceof SyntaxError) {
+      throw new Error(`Invalid JSON from Qwen: ${jsonMatch[0].substring(0, 300)}`);
+    }
+    throw error;
   }
-
-  // Fallback to mock
-  return {
-    hourly: [],
-    bestTimeToVisit: "9:00 AM",
-    summary: content.substring(0, 200)
-  };
-}
-
-/**
- * Mock prediction for demo/fallback
- */
-function mockPrediction(request: QwenPredictionRequest): QwenPredictionResponse {
-  const { branchId, targetDate } = request;
-  const targetDateObj = new Date(targetDate);
-  const dayOfWeek = targetDateObj.getDay();
-  const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
-  const isEndOfMonth = targetDateObj.getDate() >= 25;
-
-  const hourly: HourlyForecast[] = [];
-
-  for (let hour = 8; hour < 17; hour++) {
-    let customers = isWeekend ? 3 : 5;
-
-    // Lunch rush
-    if (hour >= 11 && hour <= 13) {
-      customers += isWeekend ? 8 : 20;
-    }
-
-    // End of month
-    if (isEndOfMonth) {
-      customers += 5;
-    }
-
-    // Afternoon dip
-    if (hour >= 14 && hour <= 15) {
-      customers = Math.max(5, customers - 8);
-    }
-
-    const waitTime = Math.max(5, Math.floor(customers * 1.3));
-    let congestionLevel: "low" | "medium" | "high" = "low";
-
-    if (waitTime > 20) congestionLevel = "high";
-    else if (waitTime > 10) congestionLevel = "medium";
-
-    hourly.push({
-      hour,
-      predictedCustomers: customers,
-      predictedWaitTime: waitTime,
-      congestionLevel
-    });
-  }
-
-  // Find best time (lowest wait time, exclude first/last hour)
-  const bestHour = hourly.slice(1, -1).reduce((best, h) =>
-    h.predictedWaitTime < best.predictedWaitTime ? h : best
-  );
-
-  return {
-    hourly,
-    bestTimeToVisit: `${bestHour.hour}:00 AM or ${bestHour.hour + 1}:00 PM`,
-    summary: `${isWeekend ? "Weekend traffic" : "Weekday traffic"} - ${isEndOfMonth ? "End of month busy" : "Normal volume"}. Peak expected at 11:00-13:00.`
-  };
 }
 
 /**
