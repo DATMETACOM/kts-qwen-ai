@@ -5,9 +5,11 @@ interface BestTimeBadgeProps {
 }
 
 export function BestTimeBadge({ hourlyForecast }: BestTimeBadgeProps) {
-  const bestHour = hourlyForecast
-    .filter((h) => h.hour >= 9 && h.hour <= 16)
-    .reduce((best, h) => (h.predictedWaitTime < best.predictedWaitTime ? h : best));
+  const filtered = hourlyForecast.filter((h) => h.hour >= 9 && h.hour <= 16);
+  if (filtered.length === 0) return null;
+  const bestHour = filtered.reduce((best, h) =>
+    h.predictedWaitTime < best.predictedWaitTime ? h : best
+  );
 
   return (
     <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl shadow-md p-6 mb-6">

@@ -147,28 +147,41 @@ export const SIMULATED_CHECK_INS = [
   { branchId: "bn-005", count: 0 }
 ];
 
-// Generate mock hourly forecast for today
-export function generateHourlyForecast(): HourlyForecast[] {
+function seededRandom(seed: number): () => number {
+  let s = seed;
+  return () => {
+    s = (s * 16807 + 0) % 2147483647;
+    return (s - 1) / 2147483646;
+  };
+}
+
+export function generateHourlyForecast(branchId?: string, targetDate?: string): HourlyForecast[] {
+  const today = targetDate || new Date().toISOString().split("T")[0];
+  const seedBase = branchId
+    ? branchId.split("").reduce((acc, c) => acc + c.charCodeAt(0), 0) + today.split("").reduce((acc, c) => acc + c.charCodeAt(0), 0)
+    : 42;
+  const rand = seededRandom(seedBase);
+  const dateObj = new Date(today);
+  const isWeekend = dateObj.getDay() === 0 || dateObj.getDay() === 6;
+  const isEndOfMonth = dateObj.getDate() >= 25;
+
   const forecast: HourlyForecast[] = [];
   for (let hour = 8; hour < 17; hour++) {
-    let customers = 5;
-    let congestionLevel: "low" | "medium" | "high" = "low";
+    let customers = isWeekend ? 3 : 5;
 
-    // Lunch rush
     if (hour >= 11 && hour <= 13) {
-      customers = 25 + Math.floor(Math.random() * 10);
-      congestionLevel = "high";
-    } else if (hour >= 14 && hour <= 15) {
-      customers = 10 + Math.floor(Math.random() * 5);
-      congestionLevel = "medium";
-    } else if (hour === 16) {
-      customers = 8 + Math.floor(Math.random() * 4);
-      congestionLevel = "low";
-    } else if (hour === 9 || hour === 10) {
-      customers = 8 + Math.floor(Math.random() * 3);
-      congestionLevel = "low";
+      customers += isWeekend ? 8 : 20;
     }
 
+    if (isEndOfMonth) {
+      customers += 5;
+    }
+
+    if (hour >= 14 && hour <= 15) {
+      customers = Math.max(5, customers - 8);
+    }
+
+    customers += Math.floor(rand() * 5);
     const waitTime = Math.max(5, Math.floor(customers * 1.3));
 
     forecast.push({
