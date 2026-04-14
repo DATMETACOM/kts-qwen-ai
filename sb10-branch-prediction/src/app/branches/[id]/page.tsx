@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { BRANCHES, getBranchTraffic } from "@/lib/data";
 import { predictTraffic } from "@/lib/qwen";
-import { BranchInfoCard, BestTimeBadge, ForecastChart, CheckInButton } from "@/components";
+import { BranchInfoCard, BestTimeBadge, ForecastChart, CheckInButton, HistoricalComparison, QueueDisplay } from "@/components";
 
 interface PageProps {
   params: { id: string };
@@ -36,6 +36,7 @@ export default async function BranchDetailPage({ params }: PageProps) {
   }
 
   const hourlyForecast = prediction?.hourly || [];
+  const todayCustomers = hourlyForecast.map((h) => h.predictedCustomers);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -63,16 +64,18 @@ export default async function BranchDetailPage({ params }: PageProps) {
           <>
             {prediction.summary && (
               <div className="bg-blue-50 border border-blue-200 text-blue-800 rounded-xl p-4 mb-6">
-                <p className="font-semibold">Phân tích Qwen AI</p>
+                <p className="font-semibold">🤖 Phân tích Qwen AI</p>
                 <p className="text-sm mt-1">{prediction.summary}</p>
               </div>
             )}
 
             <BestTimeBadge hourlyForecast={hourlyForecast} bestTimeLabel={prediction.bestTimeToVisit} />
             <ForecastChart hourlyForecast={hourlyForecast} targetDate={today} />
+            <HistoricalComparison todayForecast={todayCustomers} lastWeekHistory={trafficHistory} />
           </>
         )}
 
+        <QueueDisplay branchId={branch.id} />
         <CheckInButton branchId={branch.id} />
 
         <div className="mt-8 text-center">
