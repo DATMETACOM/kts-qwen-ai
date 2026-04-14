@@ -1,7 +1,9 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import Link from "next/link";
+import { Brain, RefreshCw } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Branch, TrafficRecord, HourlyForecast } from "@/lib/data";
 import { BranchInfoCard, BestTimeBadge, ForecastChart, CheckInButton, HistoricalComparison, QueueDisplay } from "@/components";
 
@@ -65,6 +67,24 @@ export function BranchDetailClient({
           </Link>
           <h1 className="text-xl font-bold">{branch.name}</h1>
           <p className="text-blue-200 text-sm">{branch.address}</p>
+          <div className="mt-3 flex items-center gap-3">
+            <Link href={`/admin/${branch.id}`}>
+              <Button variant="secondary" size="sm" className="bg-blue-800 text-blue-200 hover:bg-blue-700 hover:text-white">
+                <Brain className="w-4 h-4 mr-1" />
+                Quản lý nhân sự
+              </Button>
+            </Link>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-blue-300 hover:text-white hover:bg-blue-800"
+              onClick={refreshPrediction}
+              disabled={refreshing}
+            >
+              <RefreshCw className={`w-4 h-4 mr-1 ${refreshing ? "animate-spin" : ""}`} />
+              {refreshing ? "Đang cập nhật..." : "Làm mới dự báo"}
+            </Button>
+          </div>
         </div>
       </header>
 

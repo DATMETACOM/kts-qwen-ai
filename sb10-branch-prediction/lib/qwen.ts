@@ -138,6 +138,87 @@ function parsePredictionResponse(content: string): QwenPredictionResponse {
 /**
  * Get traffic description in Vietnamese
  */
+export interface StaffOptimization {
+  hourlyRecommendations: {
+    hour: number;
+    recommendedStaff: number;
+    currentStaff: number;
+    reason: string;
+  }[];
+  totalAdditionalStaff: number;
+  summary: string;
+}
+
+export async function optimizeStaff(
+  branchName: string,
+  currentStaff: number,
+  forecast: HourlyForecast[]
+): Promise<StaffOptimization> {
+  const apiKey = process.env.QWEN_API_KEY || "";
+  if (!apiKey) {
+    throw new Error("QWEN_API_KEY is not configured");
+  }
+
+  const forecastSummary = forecast.map(
+    (h) => `${h.hour}:00 - ${h.predictedCustomers} khách, ${h.predictedWaitTime} phút chờ (${h.congestionLevel})`
+  ).join("\n");
+
+  const prompt = `Bạn là chuyên gia tối ưu nhân sự ngân hàng.
+
+Chi nhánh: ${branchName}
+Số nhân viên hiện tại: ${currentStaff}
+Mỗi nhân viên phục vụ ~2 khách/giờ.
+
+Dự báo lưu lượng ngày mai:
+${forecastSummary}
+
+Mục tiêu: thời gian chờ < 15 phút.
+
+Trả về JSON:
+{
+  "hourlyRecommendations": [
+    {"hour": 8, "recommendedStaff": 3, "currentStaff": ${currentStaff}, "reason": "..."},
+    ...
+  ],
+  "totalAdditionalStaff": 2,
+  "summary": "Tóm tắt ngắn bằng tiếng Việt"
+}`;
+
+  const response = await fetch(QWEN_API_URL, {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${apiKey}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      model: "qwen-plus",
+      input: {
+        messages: [
+          {
+            role: "system",
+            content: "You are a bank staff optimization expert. Respond with valid JSON only."
+          },
+          { role: "user", content: prompt }
+        ]
+      },
+      parameters: { result_format: "message", max_tokens: 2000 }
+    })
+  });
+
+  if (!response.ok) {
+    throw new Error(`Qwen API error ${response.status}`);
+  }
+
+  const data = await response.json();
+  const content = data.output?.choices?.[0]?.message?.content || "";
+  const jsonMatch = content.match(/\{[\s\S]*\}/);
+  if (!jsonMatch) {
+    throw new Error("Failed to parse staff optimization response");
+  }
+
+  return JSON.parse(jsonMatch[0]);
+}
+
 export function getCongestionLabel(level: "low" | "medium" | "high"): string {
   const labels = {
     low: "Thấp - Đến ngay",
