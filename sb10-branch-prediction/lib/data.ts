@@ -204,4 +204,4 @@ export function generateHourlyForecast(branchId?: string, targetDate?: string): 
 }
 
 // Re-export types for convenience
-export type { HourlyForecast, Prediction, Branch, TrafficRecord, CheckIn, QwenPredictionRequest } from "../types/index.ts";
+export type { HourlyForecast, Prediction, Branch, TrafficRecord, CheckIn, QwenPredictionRequest, QueueStatus } from "../types/index.ts";

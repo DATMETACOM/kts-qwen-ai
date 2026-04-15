@@ -27,13 +27,23 @@ export interface TrafficRecord {
 }
 
 export interface CheckIn {
-  id: string;
+  checkInId: string;
   branchId: string;
   customerName: string;
-  checkInTime: Date;
-  estimatedWait: number;
+  checkInTime: string;
+  positionInQueue: number;
+  estimatedWaitTime: number;
   serviceType: string;
   status: "waiting" | "serving" | "completed";
+}
+
+export interface QueueStatus {
+  branchId: string;
+  waiting: number;
+  serving: number;
+  averageWaitTime: number;
+  estimatedTimeForNew: number;
+  checkIns: CheckIn[];
 }
 
 export interface HourlyForecast {

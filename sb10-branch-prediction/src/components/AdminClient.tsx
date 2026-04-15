@@ -14,6 +14,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Branch, HourlyForecast } from "@/lib/data";
+import type { QueueStatus } from "@/lib/data";
 
 interface StaffRec {
   hour: number;
@@ -29,6 +30,7 @@ interface AdminData {
     totalAdditionalStaff: number;
     summary: string;
   };
+  queueStatus: QueueStatus;
 }
 
 interface AdminClientProps {
@@ -128,6 +130,27 @@ export function AdminClient({ branch }: AdminClientProps) {
 
         {data && (
           <>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+              <Card>
+                <CardContent className="p-4 text-center">
+                  <p className="text-2xl font-bold text-blue-700">{data.queueStatus.waiting}</p>
+                  <p className="text-sm text-gray-600">Khách đang chờ hiện tại</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-4 text-center">
+                  <p className="text-2xl font-bold text-orange-700">{data.queueStatus.averageWaitTime}p</p>
+                  <p className="text-sm text-gray-600">Thời gian chờ TB hiện tại</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-4 text-center">
+                  <p className="text-2xl font-bold text-emerald-700">{data.queueStatus.estimatedTimeForNew}p</p>
+                  <p className="text-sm text-gray-600">Ước tính cho khách mới</p>
+                </CardContent>
+              </Card>
+            </div>
+
             {data.prediction.summary && (
               <Card className="mb-6">
                 <CardContent className="p-4">

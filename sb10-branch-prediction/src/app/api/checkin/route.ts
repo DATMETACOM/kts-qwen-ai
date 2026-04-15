@@ -1,13 +1,43 @@
 import { NextResponse } from "next/server";
 import { BRANCHES } from "@/lib/data";
+import type { CheckIn, QueueStatus } from "../../../../types/index";
 
 // Simulated check-in storage (in-memory, resets on restart)
-const checkIns: Map<string, any[]> = new Map();
+const checkIns: Map<string, CheckIn[]> = new Map();
+
+function getTodayKey(branchId: string, date = new Date()) {
+  return `${branchId}-${date.toISOString().split("T")[0]}`;
+}
+
+function buildQueueStatus(branchId: string, queue: CheckIn[]): QueueStatus {
+  const waiting = queue.filter((item) => item.status === "waiting").length;
+  const serving = queue.filter((item) => item.status === "serving").length;
+  const averageWaitTime =
+    queue.length > 0
+      ? Math.ceil(queue.reduce((sum, item) => sum + item.estimatedWaitTime, 0) / queue.length)
+      : 0;
+
+  return {
+    branchId,
+    waiting,
+    serving,
+    averageWaitTime,
+    estimatedTimeForNew: Math.ceil(averageWaitTime * (1 + waiting * 0.2)),
+    checkIns: queue,
+  };
+}
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
     const { branchId, customerName, serviceType } = body;
+
+    if (!branchId || typeof branchId !== "string") {
+      return NextResponse.json(
+        { error: { code: "INVALID_REQUEST", message: "branchId is required" } },
+        { status: 400 }
+      );
+    }
 
     // Validate branch exists
     const branch = BRANCHES.find((b) => b.id === branchId);
@@ -21,11 +51,9 @@ export async function POST(request: Request) {
     // Create check-in record
     const checkInId = `ci-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     const now = new Date();
-    const currentHour = now.getHours();
 
     // Get existing check-ins for today
-    const today = now.toISOString().split("T")[0];
-    const todayKey = `${branchId}-${today}`;
+    const todayKey = getTodayKey(branchId, now);
     const existingCheckIns = checkIns.get(todayKey) || [];
     const positionInQueue = existingCheckIns.length + 1;
 
@@ -34,11 +62,17 @@ export async function POST(request: Request) {
     const staffCapacity = branch.staffCount * 2; // Each staff can handle 2 customers/hour
     const estimatedWaitTime = Math.max(baseWaitTime, Math.ceil(positionInQueue * (60 / staffCapacity)));
 
-    const checkIn = {
+    const checkIn: CheckIn = {
       checkInId,
       branchId,
-      customerName: customerName || "Khách vãng lai",
-      serviceType: serviceType || "Khác",
+      customerName:
+        typeof customerName === "string" && customerName.trim()
+          ? customerName.trim()
+          : "Khách vãng lai",
+      serviceType:
+        typeof serviceType === "string" && serviceType.trim()
+          ? serviceType.trim()
+          : "Khác",
       checkInTime: now.toISOString(),
       positionInQueue,
       estimatedWaitTime,
@@ -77,23 +111,7 @@ export async function GET(request: Request) {
     );
   }
 
-  const today = new Date().toISOString().split("T")[0];
-  const todayKey = `${branchId}-${today}`;
+  const todayKey = getTodayKey(branchId);
   const todayCheckIns = checkIns.get(todayKey) || [];
-
-  const waiting = todayCheckIns.filter((c) => c.status === "waiting").length;
-  const serving = todayCheckIns.filter((c) => c.status === "serving").length;
-  const averageWaitTime = waiting > 0
-    ? todayCheckIns.reduce((sum, c) => sum + c.estimatedWaitTime, 0) / todayCheckIns.length
-    : 0;
-  const estimatedTimeForNew = Math.ceil(averageWaitTime * (1 + waiting * 0.2));
-
-  return NextResponse.json({
-    branchId,
-    waiting,
-    serving,
-    averageWaitTime: Math.ceil(averageWaitTime),
-    estimatedTimeForNew,
-    checkIns: todayCheckIns,
-  });
+  return NextResponse.json(buildQueueStatus(branchId, todayCheckIns));
 }
