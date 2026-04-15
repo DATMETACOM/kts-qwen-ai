@@ -1,6 +1,7 @@
 // SB10 - Qwen API Client
 
-import { QwenPredictionRequest, HourlyForecast, Prediction } from "../types";
+import { QwenPredictionRequest, HourlyForecast } from "../types";
+import { generateHourlyForecast } from "./data";
 
 // Qwen API endpoint for DashScope INTL
 const QWEN_API_URL = "https://dashscope-intl.aliyuncs.com/api/v1/services/aigc/text-generation/generation";
@@ -20,49 +21,54 @@ export async function predictTraffic(
   const apiKey = process.env.QWEN_API_KEY || "";
 
   if (!apiKey) {
-    throw new Error("QWEN_API_KEY is not configured. Please set it in .env.local");
+    return buildFallbackPrediction(request, "QWEN_API_KEY is not configured");
   }
 
-  const response = await fetch(QWEN_API_URL, {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${apiKey}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      model: "qwen-plus",
-      input: {
-        messages: [
-          {
-            role: "system",
-            content: "You are a bank branch traffic analyst. Predict customer traffic and wait times based on historical data. You MUST respond with valid JSON only, no markdown, no explanation outside JSON."
-          },
-          {
-            role: "user",
-            content: buildPredictionPrompt(request)
-          }
-        ]
+  try {
+    const response = await fetch(QWEN_API_URL, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${apiKey}`,
+        "Content-Type": "application/json"
       },
-      parameters: {
-        result_format: "message",
-        max_tokens: 2000
-      }
-    })
-  });
+      body: JSON.stringify({
+        model: "qwen-plus",
+        input: {
+          messages: [
+            {
+              role: "system",
+              content: "You are a bank branch traffic analyst. Predict customer traffic and wait times based on historical data. You MUST respond with valid JSON only, no markdown, no explanation outside JSON."
+            },
+            {
+              role: "user",
+              content: buildPredictionPrompt(request)
+            }
+          ]
+        },
+        parameters: {
+          result_format: "message",
+          max_tokens: 2000
+        }
+      })
+    });
 
-  if (!response.ok) {
-    const errBody = await response.text().catch(() => "");
-    throw new Error(`Qwen API error ${response.status}: ${errBody}`);
+    if (!response.ok) {
+      const errBody = await response.text().catch(() => "");
+      throw new Error(`Qwen API error ${response.status}: ${errBody}`);
+    }
+
+    const data = await response.json();
+    const content = data.output?.choices?.[0]?.message?.content || "";
+
+    if (!content) {
+      throw new Error("Qwen API returned empty response");
+    }
+
+    return parsePredictionResponse(content);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Qwen prediction failed";
+    return buildFallbackPrediction(request, message);
   }
-
-  const data = await response.json();
-  const content = data.output?.choices?.[0]?.message?.content || "";
-
-  if (!content) {
-    throw new Error("Qwen API returned empty response");
-  }
-
-  return parsePredictionResponse(content);
 }
 
 /**
@@ -135,6 +141,34 @@ function parsePredictionResponse(content: string): QwenPredictionResponse {
   }
 }
 
+function buildFallbackPrediction(
+  request: QwenPredictionRequest,
+  reason: string
+): QwenPredictionResponse {
+  const hourly: HourlyForecast[] = generateHourlyForecast(request.branchId, request.targetDate)
+    .map((item) => ({
+      ...item,
+      predictedCustomers: item.predictedCustomers + Math.min(request.currentCheckIns || 0, 6),
+      predictedWaitTime: item.predictedWaitTime + Math.min((request.currentCheckIns || 0) * 2, 12),
+    }))
+    .map((item) => ({
+      ...item,
+      congestionLevel: (
+        item.predictedWaitTime > 20 ? "high" : item.predictedWaitTime > 10 ? "medium" : "low"
+      ) as HourlyForecast["congestionLevel"],
+    }));
+
+  const bestHour = hourly
+    .filter((slot) => slot.hour >= 9 && slot.hour <= 16)
+    .reduce((best, slot) => (slot.predictedWaitTime < best.predictedWaitTime ? slot : best), hourly[0]);
+
+  return {
+    hourly,
+    bestTimeToVisit: `${bestHour.hour}:00 - ${bestHour.hour + 1}:00`,
+    summary: `Fallback deterministic forecast đang được dùng do Qwen chưa phản hồi ổn định: ${reason}.`,
+  };
+}
+
 /**
  * Get traffic description in Vietnamese
  */
@@ -156,7 +190,7 @@ export async function optimizeStaff(
 ): Promise<StaffOptimization> {
   const apiKey = process.env.QWEN_API_KEY || "";
   if (!apiKey) {
-    throw new Error("QWEN_API_KEY is not configured");
+    return buildFallbackStaffOptimization(branchName, currentStaff, forecast, "QWEN_API_KEY is not configured");
   }
 
   const forecastSummary = forecast.map(
@@ -184,39 +218,77 @@ Trả về JSON:
   "summary": "Tóm tắt ngắn bằng tiếng Việt"
 }`;
 
-  const response = await fetch(QWEN_API_URL, {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${apiKey}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      model: "qwen-plus",
-      input: {
-        messages: [
-          {
-            role: "system",
-            content: "You are a bank staff optimization expert. Respond with valid JSON only."
-          },
-          { role: "user", content: prompt }
-        ]
+  try {
+    const response = await fetch(QWEN_API_URL, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${apiKey}`,
+        "Content-Type": "application/json"
       },
-      parameters: { result_format: "message", max_tokens: 2000 }
-    })
+      body: JSON.stringify({
+        model: "qwen-plus",
+        input: {
+          messages: [
+            {
+              role: "system",
+              content: "You are a bank staff optimization expert. Respond with valid JSON only."
+            },
+            { role: "user", content: prompt }
+          ]
+        },
+        parameters: { result_format: "message", max_tokens: 2000 }
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`Qwen API error ${response.status}`);
+    }
+
+    const data = await response.json();
+    const content = data.output?.choices?.[0]?.message?.content || "";
+    const jsonMatch = content.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) {
+      throw new Error("Failed to parse staff optimization response");
+    }
+
+    return JSON.parse(jsonMatch[0]);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Staff optimization failed";
+    return buildFallbackStaffOptimization(branchName, currentStaff, forecast, message);
+  }
+}
+
+function buildFallbackStaffOptimization(
+  branchName: string,
+  currentStaff: number,
+  forecast: HourlyForecast[],
+  reason: string
+): StaffOptimization {
+  const hourlyRecommendations = forecast.map((slot) => {
+    const demandStaff = Math.max(currentStaff, Math.ceil(slot.predictedCustomers / 8));
+    return {
+      hour: slot.hour,
+      currentStaff,
+      recommendedStaff: demandStaff,
+      reason:
+        slot.congestionLevel === "high"
+          ? "Khung giờ cao điểm, cần tăng thêm nhân sự để giữ thời gian chờ dưới ngưỡng."
+          : slot.congestionLevel === "medium"
+          ? "Lưu lượng trung bình, nên duy trì hoặc tăng nhẹ nhân sự."
+          : "Lưu lượng thấp, giữ mức nhân sự hiện tại là đủ.",
+    };
   });
 
-  if (!response.ok) {
-    throw new Error(`Qwen API error ${response.status}`);
-  }
+  const totalAdditionalStaff = Math.max(
+    0,
+    Math.max(...hourlyRecommendations.map((slot) => slot.recommendedStaff - currentStaff))
+  );
 
-  const data = await response.json();
-  const content = data.output?.choices?.[0]?.message?.content || "";
-  const jsonMatch = content.match(/\{[\s\S]*\}/);
-  if (!jsonMatch) {
-    throw new Error("Failed to parse staff optimization response");
-  }
-
-  return JSON.parse(jsonMatch[0]);
+  return {
+    hourlyRecommendations,
+    totalAdditionalStaff,
+    summary: `Fallback staff optimization cho ${branchName} được dùng do Qwen chưa khả dụng: ${reason}.`,
+  };
 }
 
 export function getCongestionLabel(level: "low" | "medium" | "high"): string {

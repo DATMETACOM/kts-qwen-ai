@@ -71,6 +71,21 @@ export const BRANCHES: Branch[] = [
   }
 ];
 
+function createSeed(...parts: Array<string | number>): number {
+  return parts
+    .join("|")
+    .split("")
+    .reduce((acc, char) => acc + char.charCodeAt(0), 0);
+}
+
+function seededRandom(seed: number): () => number {
+  let s = seed;
+  return () => {
+    s = (s * 16807 + 0) % 2147483647;
+    return (s - 1) / 2147483646;
+  };
+}
+
 // Generate 30 days of traffic data for each branch
 export function generateTrafficData(): TrafficRecord[] {
   const records: TrafficRecord[] = [];
@@ -100,9 +115,13 @@ export function generateTrafficData(): TrafficRecord[] {
           baseCustomers += 8;
         }
 
-        // Add randomness
-        const customers = baseCustomers + Math.floor(Math.random() * 5);
+        const rand = seededRandom(createSeed(branch.id, dateStr, hour));
+        const customers = baseCustomers + Math.floor(rand() * 5);
         const waitTime = Math.max(2, Math.floor(customers * 1.5));
+        const serviceCount = Math.min(
+          branch.services.length,
+          Math.max(1, Math.floor(rand() * branch.services.length) + 1)
+        );
 
         records.push({
           id: `tr-${branch.id}-${dateStr}-${hour}`,
@@ -112,7 +131,7 @@ export function generateTrafficData(): TrafficRecord[] {
           dayOfWeek,
           customerCount: customers,
           avgWaitTime: waitTime,
-          serviceTypes: branch.services.slice(0, Math.floor(Math.random() * 3) + 1),
+          serviceTypes: branch.services.slice(0, serviceCount),
           staffOnDuty: branch.staffCount
         });
       }
@@ -147,19 +166,9 @@ export const SIMULATED_CHECK_INS = [
   { branchId: "bn-005", count: 0 }
 ];
 
-function seededRandom(seed: number): () => number {
-  let s = seed;
-  return () => {
-    s = (s * 16807 + 0) % 2147483647;
-    return (s - 1) / 2147483646;
-  };
-}
-
 export function generateHourlyForecast(branchId?: string, targetDate?: string): HourlyForecast[] {
   const today = targetDate || new Date().toISOString().split("T")[0];
-  const seedBase = branchId
-    ? branchId.split("").reduce((acc, c) => acc + c.charCodeAt(0), 0) + today.split("").reduce((acc, c) => acc + c.charCodeAt(0), 0)
-    : 42;
+  const seedBase = branchId ? createSeed(branchId, today) : 42;
   const rand = seededRandom(seedBase);
   const dateObj = new Date(today);
   const isWeekend = dateObj.getDay() === 0 || dateObj.getDay() === 6;
