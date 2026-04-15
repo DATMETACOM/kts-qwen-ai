@@ -2,16 +2,22 @@ import { Clock, Users, Activity, CheckCircle } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Branch } from "@/lib/data";
+import type { QueueStatus } from "@/lib/data";
 
 interface BranchInfoCardProps {
   branch: Branch;
+  queueStatus?: QueueStatus | null;
 }
 
-export function BranchInfoCard({ branch }: BranchInfoCardProps) {
+export function BranchInfoCard({ branch, queueStatus }: BranchInfoCardProps) {
+  const liveWaitTime = queueStatus?.averageWaitTime ?? branch.currentWaitTime ?? 0;
+  const liveCongestionLevel =
+    liveWaitTime > 20 ? "high" : liveWaitTime > 10 ? "medium" : "low";
+
   const waitVariant =
-    branch.congestionLevel === "high"
+    liveCongestionLevel === "high"
       ? "destructive"
-      : branch.congestionLevel === "medium"
+      : liveCongestionLevel === "medium"
       ? "warning"
       : "success";
 
@@ -51,7 +57,7 @@ export function BranchInfoCard({ branch }: BranchInfoCardProps) {
             <div>
               <p className="text-gray-500 text-xs">Thời gian chờ</p>
               <p className="font-semibold">
-                <Badge variant={waitVariant}>~{branch.currentWaitTime} phút</Badge>
+                <Badge variant={waitVariant}>~{liveWaitTime} phút</Badge>
               </p>
             </div>
           </div>

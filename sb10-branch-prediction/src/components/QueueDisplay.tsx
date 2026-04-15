@@ -4,28 +4,14 @@ import { useState, useEffect } from "react";
 import { ListOrdered, Loader2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-
-interface QueueStatus {
-  branchId: string;
-  waiting: number;
-  serving: number;
-  averageWaitTime: number;
-  estimatedTimeForNew: number;
-  checkIns: {
-    checkInId: string;
-    positionInQueue: number;
-    estimatedWaitTime: number;
-    customerName: string;
-    serviceType: string;
-    status: string;
-  }[];
-}
+import type { QueueStatus } from "@/lib/data";
 
 interface QueueDisplayProps {
   branchId: string;
+  onStatusChange?: (queue: QueueStatus) => void;
 }
 
-export function QueueDisplay({ branchId }: QueueDisplayProps) {
+export function QueueDisplay({ branchId, onStatusChange }: QueueDisplayProps) {
   const [queue, setQueue] = useState<QueueStatus | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -35,6 +21,7 @@ export function QueueDisplay({ branchId }: QueueDisplayProps) {
       if (res.ok) {
         const data = await res.json();
         setQueue(data);
+        onStatusChange?.(data);
       }
     } catch {
       // silent
@@ -48,7 +35,7 @@ export function QueueDisplay({ branchId }: QueueDisplayProps) {
     const interval = setInterval(fetchQueue, 15000);
     return () => clearInterval(interval);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [branchId]);
+  }, [branchId, onStatusChange]);
 
   if (loading) {
     return (

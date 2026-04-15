@@ -26,6 +26,13 @@ export async function POST(
       );
     }
 
+    if (typeof currentCheckIns !== "number" || Number.isNaN(currentCheckIns) || currentCheckIns < 0) {
+      return NextResponse.json(
+        { error: { code: "INVALID_REQUEST", message: "currentCheckIns must be a non-negative number" } },
+        { status: 400 }
+      );
+    }
+
     // Get traffic history for prediction
     const trafficHistory = getBranchTraffic(branch.id, 30);
 
@@ -41,8 +48,9 @@ export async function POST(
 
     return NextResponse.json(prediction);
   } catch (error) {
+    const message = error instanceof Error ? error.message : "Failed to generate prediction";
     return NextResponse.json(
-      { error: { code: "PREDICTION_ERROR", message: "Failed to generate prediction" } },
+      { error: { code: "PREDICTION_ERROR", message } },
       { status: 500 }
     );
   }

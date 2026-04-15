@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Brain, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Branch, TrafficRecord, HourlyForecast } from "@/lib/data";
+import type { QueueStatus } from "@/lib/data";
 import { BranchInfoCard, BestTimeBadge, ForecastChart, CheckInButton, HistoricalComparison, QueueDisplay } from "@/components";
 
 interface BranchDetailClientProps {
@@ -31,6 +32,7 @@ export function BranchDetailClient({
   const [summary, setSummary] = useState(initialSummary);
   const [error, setError] = useState(predictionError);
   const [refreshing, setRefreshing] = useState(false);
+  const [queueStatus, setQueueStatus] = useState<QueueStatus | null>(null);
 
   const refreshPrediction = useCallback(async (currentCheckIns = 0) => {
     setRefreshing(true);
@@ -46,16 +48,19 @@ export function BranchDetailClient({
         setBestTime(data.bestTimeToVisit);
         setSummary(data.summary);
         setError(undefined);
+      } else {
+        const failure = await res.json().catch(() => ({}));
+        setError(failure.error?.message || "Không thể cập nhật dự báo");
       }
     } catch {
-      // keep current data
+      setError("Không thể cập nhật dự báo");
     } finally {
       setRefreshing(false);
     }
   }, [branch.id, today]);
 
   const handleCheckIn = (positionInQueue?: number) => {
-    refreshPrediction(positionInQueue || 0);
+    refreshPrediction(positionInQueue ?? queueStatus?.waiting ?? 0);
   };
 
   return (
@@ -89,7 +94,7 @@ export function BranchDetailClient({
       </header>
 
       <main className="container mx-auto px-4 py-8">
-        <BranchInfoCard branch={branch} />
+        <BranchInfoCard branch={branch} queueStatus={queueStatus} />
 
         {refreshing && (
           <div className="bg-yellow-50 border border-yellow-200 text-yellow-800 rounded-xl p-3 mb-4 text-sm">
@@ -122,7 +127,7 @@ export function BranchDetailClient({
           </>
         )}
 
-        <QueueDisplay branchId={branch.id} />
+        <QueueDisplay branchId={branch.id} onStatusChange={setQueueStatus} />
         <CheckInButton branchId={branch.id} onCheckIn={handleCheckIn} />
 
         <div className="mt-8 text-center">
