@@ -1,7 +1,7 @@
 // SB10 - Qwen API Client
 
-import { QwenPredictionRequest, HourlyForecast } from "../types";
-import { generateHourlyForecast } from "./data";
+import type { QwenPredictionRequest, HourlyForecast } from "../types/index.ts";
+import { generateHourlyForecast } from "./data.ts";
 
 // Qwen API endpoint for DashScope INTL
 const QWEN_API_URL = "https://dashscope-intl.aliyuncs.com/api/v1/services/aigc/text-generation/generation";

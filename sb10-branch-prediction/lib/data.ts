@@ -1,6 +1,6 @@
 // SB10 - Mock Data Generator
 
-import { Branch, TrafficRecord, HourlyForecast } from "../types";
+import type { Branch, TrafficRecord, HourlyForecast } from "../types/index.ts";
 
 // 5 Branches in HCMC
 export const BRANCHES: Branch[] = [
@@ -204,4 +204,4 @@ export function generateHourlyForecast(branchId?: string, targetDate?: string): 
 }
 
 // Re-export types for convenience
-export type { HourlyForecast, Prediction, Branch, TrafficRecord, CheckIn, QwenPredictionRequest } from "../types";
+export type { HourlyForecast, Prediction, Branch, TrafficRecord, CheckIn, QwenPredictionRequest } from "../types/index.ts";

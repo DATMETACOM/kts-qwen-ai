@@ -2,11 +2,13 @@
   "name": "sb10-branch-prediction",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "node --test --experimental-strip-types tests/*.test.ts"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.4",
