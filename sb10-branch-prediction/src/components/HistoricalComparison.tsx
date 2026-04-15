@@ -20,18 +20,23 @@ interface HistoricalComparisonProps {
 }
 
 export function HistoricalComparison({ todayForecast, lastWeekHistory }: HistoricalComparisonProps) {
-  const lastWeekByHour = new Map<number, number>();
-  lastWeekHistory.forEach((r) => {
-    lastWeekByHour.set(r.hour, (lastWeekByHour.get(r.hour) || 0) + r.customerCount);
+  const historyByHour = new Map<number, { totalCustomers: number; samples: number }>();
+
+  lastWeekHistory.forEach((record) => {
+    const current = historyByHour.get(record.hour) || { totalCustomers: 0, samples: 0 };
+    historyByHour.set(record.hour, {
+      totalCustomers: current.totalCustomers + record.customerCount,
+      samples: current.samples + 1,
+    });
   });
-  const lastWeekCount = lastWeekHistory.length > 0 ? Math.max(...lastWeekByHour.values()) : 1;
 
   const chartData = todayForecast.map((customers, i) => {
     const hour = i + 8;
-    const lastWeek = lastWeekByHour.get(hour) || 0;
-    const avgLastWeek = lastWeekHistory.length > 0
-      ? Math.round((lastWeek / lastWeekCount) * customers * 0.8)
-      : Math.round(customers * (0.8 + Math.random() * 0.4));
+    const historical = historyByHour.get(hour);
+    const avgLastWeek = historical
+      ? Math.round(historical.totalCustomers / historical.samples)
+      : customers;
+
     return {
       hour: `${hour}h`,
       homNay: customers,

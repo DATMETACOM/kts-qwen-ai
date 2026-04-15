@@ -21,6 +21,17 @@ export function DashboardClient({ branches }: DashboardClientProps) {
   const [filterLevel, setFilterLevel] = useState<FilterLevel>("all");
   const [sortKey, setSortKey] = useState<SortKey>("name");
 
+  const cycleSortKey = () => {
+    setSortKey((current) => {
+      if (current === "name") return "waitTime";
+      if (current === "waitTime") return "staff";
+      return "name";
+    });
+  };
+
+  const sortLabel =
+    sortKey === "waitTime" ? "Chờ ↓" : sortKey === "staff" ? "NV ↓" : "Tên A-Z";
+
   const filtered = useMemo(() => {
     let result = [...branches];
 
@@ -105,10 +116,10 @@ export function DashboardClient({ branches }: DashboardClientProps) {
             <Button
               size="sm"
               variant="ghost"
-              onClick={() => setSortKey(sortKey === "waitTime" ? "name" : "waitTime")}
+              onClick={cycleSortKey}
             >
               <ArrowUpDown className="w-4 h-4 mr-1" />
-              {sortKey === "waitTime" ? "Chờ ↓" : sortKey === "staff" ? "NV ↓" : "Tên A-Z"}
+              {sortLabel}
             </Button>
           </div>
         </CardContent>
