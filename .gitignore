@@ -1,0 +1,34 @@
+# ============================================
+# kts-qwen-ai Monorepo .gitignore
+# Multiple Vercel deployments - be specific!
+# ============================================
+
+# SF8 - AI Customer Behavior Prediction
+sf8-behavior-prediction/node_modules/
+sf8-behavior-prediction/dist/
+sf8-behavior-prediction/*.tsbuildinfo
+sf8-behavior-prediction/.env
+sf8-behavior-prediction/.env.local
+sf8-behavior-prediction/.env.*.local
+
+# SB10 - Branch Traffic Prediction
+sb10-branch-prediction/node_modules/
+sb10-branch-prediction/.next/
+sb10-branch-prediction/.env
+sb10-branch-prediction/.env.local
+sb10-branch-prediction/.env.*.local
+
+# Global
+.env
+.env.local
+.env.*.local
+*.log
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

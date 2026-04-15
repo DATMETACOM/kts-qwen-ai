@@ -1,6 +1,6 @@
 // SF8 - Qwen API Client for Customer Behavior Prediction
 
-import { QwenBehaviorRequest, BehaviorPrediction, ShinhanProduct } from "../types";
+import { QwenBehaviorRequest, ShinhanProduct } from "../types";
 
 const QWEN_API_URL = "https://dashscope-intl.aliyuncs.com/api/v1/services/aigc/text-generation/generation";
 

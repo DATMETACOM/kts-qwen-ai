@@ -1,209 +1,192 @@
-# SF8 - Customer Behavior Prediction
+# SF8 - AI Customer Behavior Prediction
 
-> **AI-powered Customer Behavior Analysis for Shinhan Finance**
-> PoC for Shinhan InnoBoost 2026
+> **PoC for Shinhan Finance InnoBoost 2026 | Qwen AI Build Day - Financial Services Track**
+
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen)]()
+[![Track](https://img.shields.io/badge/track-financial%20services-blue)]()
+[![Demo](https://img.shields.io/badge/demo-ready-green)]()
 
 ---
 
-## 🎯 Problem Statement
+## 🎯 Problem
 
-Dữ liệu khách hàng mới phân tán, khó dự đoán nhu cầu:
-- Không có lịch sử giao dịch tại Shinhan
-- Dữ liệu rời rạc (telco, e-wallet, social...)
-- Không biết offer nào phù hợp
-- Conversion rate thấp (5-10%)
+New customers have no transaction history at Shinhan Finance, making product recommendation impossible with traditional scoring.
+
+**Challenge**: How to understand customer needs without internal data?
 
 ---
 
 ## 💡 Solution
 
-AI phân tích hành vi khách hàng mới từ đa nguồn dữ liệu:
-- **Alternative Data Scoring** - Dùng telco, e-wallet, ecommerce, social data
-- **Next Product Prediction** - Khách cần gì tiếp theo?
-- **Personalized Offer** - Offer đúng người, đúng lúc
-- **Real-time Recommendation** - Gợi ý tức thì
+SF8 analyzes **alternative data** from 4 sources to predict financial product needs:
+
+| Data Source | Signals | Example Fields |
+|-------------|---------|----------------|
+| **Telco** | Spending, tenure, usage | Monthly spend, data GB, months active |
+| **E-Wallet** | Transaction frequency | Usage level, monthly transactions, categories |
+| **E-Commerce** | Shopping patterns | Orders/month, avg order value, categories |
+| **Social** | Interests, engagement | Interest topics, activity level |
+
+### How It Works
+
+1. **Deterministic Scoring** (0-100 score)
+   - Partner/Channel Fit (20%)
+   - Behavior Signal Strength (30%)
+   - Early Reaction Quality (15%)
+   - Product Affinity (35%)
+
+2. **Action Recommendation**
+   - `push now` (score ≥75 + affinity ≥70)
+   - `nurture` (score 50-74 + affinity ≥50)
+   - `hold` (score <50 OR affinity <50)
+
+3. **AI Explanation** - Qwen generates natural language reasoning
+4. **What-If Simulation** - Test impact of changing engagement, offers, or signals
 
 ---
 
 ## 🚀 Quick Start
 
 ```bash
-# Install dependencies
 npm install
-
-# Run development server
 npm run dev
-
-# Open http://localhost:3000
 ```
 
----
+Open `http://localhost:5173` in your browser.
 
-## ✨ Features
-
-### 1. Customer Dashboard
-- List view của 20 khách hàng mẫu
-- Profile summary: age, income, occupation
-- Click để xem chi tiết
-
-### 2. Customer Detail View
-- **Hồ sơ khách hàng**: Thông tin cơ bản, thu nhập
-- **Alternative Data**:
-  - 📱 Telco: Chi tiêu, thâm niên, data usage
-  - 💳 E-Wallet: Usage level, transactions, categories
-  - 🛒 E-commerce: Orders, value, categories
-  - 👥 Social: Interests, activity level
-
-### 3. AI Recommendation
-- Product recommendation từ Qwen AI
-- Confidence score (Cao/Trung bình/Thấp)
-- Lý do đề xuất (dựa trên behavior analysis)
-- Personalized offer details
-
----
-
-## 🤖 Qwen Integration
-
-```typescript
-// Analyze customer behavior
-const prediction = await qwen.predictBehavior({
-  customer: {
-    name: "Nguyễn Văn An",
-    age: 28,
-    income: 15000000,
-    occupation: "Kỹ sư phần mềm"
-  },
-  alternativeData: {
-    telco: { monthlySpend: 300000, tenure: 36, dataUsage: 15 },
-    eWallet: { usage: "high", monthlyTransactions: 45, categories: ["food", "shopping"] },
-    ecommerce: { monthlyOrders: 8, avgOrderValue: 500000, categories: ["electronics"] },
-    social: { interests: ["technology", "gaming"], activity: "high" }
-  },
-  availableProducts: [...]
-});
-
-// Response
-{
-  recommendedProduct: { name: "Thẻ tín dụng Platinum", type: "credit_card" },
-  confidence: 0.85,
-  reason: "Khách hàng có 8 đơn hàng/tháng...",
-  nextAction: "Liên hệ khách hàng...",
-  offerDetails: { limit: "50M VND", promo: "0% phí rút tiền 12 tháng" }
-}
-```
-
----
-
-## 📊 Data Structure
-
-### Customer
-```typescript
-interface Customer {
-  id: string;
-  name: string;
-  age: number;
-  income: number;
-  occupation: string;
-}
-```
-
-### Alternative Data
-```typescript
-interface AlternativeData {
-  telco: { monthlySpend: number; tenure: number; dataUsage: number };
-  eWallet: { usage: "low" | "medium" | "high"; monthlyTransactions: number; categories: string[] };
-  ecommerce: { monthlyOrders: number; avgOrderValue: number; categories: string[] };
-  social: { interests: string[]; activity: "low" | "medium" | "high" };
-}
-```
+### Demo Flow (3 minutes)
+1. **Dashboard** → Portfolio overview with 20 customers
+2. **Hero Case** → Click highest-scoring customer for deep-dive
+3. **Simulation** → Run what-if analysis to see score delta
+4. **Export/Pitch** → Generate insight report with outreach note
 
 ---
 
 ## 🏗️ Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                      Next.js 14 App                         │
-│  ┌────────────┐  ┌────────────┐  ┌────────────────────┐   │
-│  │CustomerList│  │CustomerView│  │  AI Recommendation │   │
-│  └─────┬──────┘  └─────┬──────┘  └──────────┬─────────┘   │
-│        └────────────────┴────────────────────┘            │
-└──────────────────────────────┬─────────────────────────────┘
-                               │
-                    ┌──────────▼──────────┐
-                    │   Data Layer        │
-                    │  - 20 Customers     │
-                    │  - Alt Data         │
-                    │  - 7 Products       │
-                    └──────────┬──────────┘
-                               │
-                    ┌──────────▼──────────┐
-                    │   Qwen API Layer   │ (TBD)
-                    │  - Prompt Builder  │
-                    │  - Rule Fallback   │
-                    └─────────────────────┘
+SF8 App
+├── Deterministic Scoring Engine (lib/scoring.ts)
+│   ├── Partner/Channel Fit (pcf)
+│   ├── Behavior Signal Strength (bss)
+│   ├── Early Reaction Quality (erq)
+│   └── Product Affinity (pa)
+│
+├── Qwen AI Integration (lib/qwen.ts)
+│   ├── Explanation generation (explain, don't decide)
+│   └── Outreach note generation
+│
+├── Data Layer (lib/data.ts + src/dataProvider.ts)
+│   ├── 20 demo customers with alternative data
+│   ├── 7 Shinhan Finance products
+│   └── Governed data pipeline (generated → approved → published)
+│
+└── 4 Core Views (src/views/)
+    ├── Dashboard - Portfolio overview
+    ├── CustomerDetail - Deep-dive + inline simulation
+    ├── Simulation - Workspace for what-if analysis
+    └── ExportPitch - Report generation
 ```
 
----
-
-## 🎨 Demo Flow (3 minutes)
-
-1. **Customer List** - Show 20 customers với basic info
-2. **Customer Detail** - Click để xem behavior analysis
-3. **Alternative Data** - Show telco, e-wallet, ecommerce, social data
-4. **AI Recommendation** - Qwen suggest product với confidence & offer
+### Tech Stack
+- **Frontend**: React 18 + TypeScript + Vite
+- **Routing**: React Router v6
+- **AI**: Qwen (DashScope API via Alibaba Cloud)
+- **Styling**: Custom CSS (no framework)
 
 ---
 
-## 📁 Project Structure
+## 📊 Demo Data
 
-```
-sf8-behavior-prediction/
-├── src/
-│   ├── app/
-│   │   ├── page.tsx              # Customer list dashboard
-│   │   ├── customers/[id]/page.tsx  # Customer detail
-│   │   └── api/                  # API routes
-│   ├── lib/
-│   │   ├── data.ts               # Mock data
-│   │   └── qwen.ts               # Qwen client
-│   └── types/
-│       └── index.ts              # TypeScript types
-├── README.md
-├── ARCHITECTURE.md
-├── API.md
-└── DEMO.md
+- **20 sample customers** with Vietnamese names and profiles
+- **7 Shinhan Finance products**: Credit cards, personal loans, SME loans, insurance, BNPL
+- **Alternative data** for each customer across 4 sources
+- **6 archetypes** mapped to behavioral patterns
+
+---
+
+## 🤖 Qwen Integration
+
+Qwen is used for **explanation only** - it never decides scores or actions.
+
+```typescript
+// Deterministic scoring (Qwen-independent)
+const score = scoreCustomer(customer, altData, products);
+
+// Qwen explains the reasoning
+const explanation = await qwen.generateExplanation(score, customer, altData);
 ```
 
----
-
-## 🛠️ Tech Stack
-
-- **Framework**: Next.js 14 (App Router)
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **AI**: Qwen (Alibaba Cloud)
+**Why deterministic-first?** Financial services require transparent, auditable decisions. Qwen enhances understanding but doesn't override logic.
 
 ---
 
-## 📚 Documentation
+## 🎨 App Views
 
-- [ARCHITECTURE.md](./ARCHITECTURE.md) - System architecture
-- [API.md](./API.md) - API endpoints
-- [DEMO.md](./DEMO.md) - Demo script
+### Dashboard
+- 4 stat cards (Total, Push Now, Nurture, Hold)
+- Hero case highlight
+- Product distribution
+- Customer lead list with scores and actions
+
+### Customer Detail
+- Overall score with breakdown
+- Alternative data signals
+- AI explanation
+- Inline what-if simulation
+
+### Simulation Workspace
+- Change variables: partner/channel, product/offer, early reaction
+- Run simulation on single customer or entire portfolio
+- See before/after score delta
+
+### Export/Pitch
+- Complete customer insight report
+- Personalized outreach note (Vietnamese)
+- Print/save as PDF
 
 ---
 
-## 🚧 Roadmap
+## 📋 Submission Assets
 
-- [ ] Integrate Qwen API (pending API key)
-- [ ] Add real-time data updates
-- [ ] Implement customer segmentation
-- [ ] Add batch prediction for all customers
-- [ ] Create admin dashboard for offers management
+- ✅ Project story: `PROJECT-STORY.md`
+- ✅ One-pager: `ONE-PAGER.md`
+- ✅ Video script: `VIDEO-SCRIPT.md`
+- ✅ Screenshot guide: `SCREENSHOT-GUIDE.md`
+- ✅ Repo: This repository
+- ✅ Live demo: Run `npm run dev`
 
 ---
 
-**Track:** Financial Services (Shinhan Finance)
-**InnoBoost Deadline:** 3/5/2026
-**GitHub:** https://github.com/DATMETACOM/kts-qwen-ai
+## 🏆 Track
+
+**Financial Services - Shinhan Future's Lab (InnoBoost 2026)**
+
+- **Hackathon Deadline**: April 17, 2026
+- **InnoBoost Application**: May 3, 2026
+- **POC Contract**: Up to 200M VND for successful outcomes
+
+---
+
+## 📝 Governance
+
+This PoC follows strict data governance:
+- All customer data is **generated** (not real PII)
+- Each record has **provenance metadata** (source_type, approval_status)
+- UI includes **disclosure badges** ("Generated demo data")
+- Scores are **relative within demo set** (not absolute creditworthiness)
+
+See `DATA-GOVERNANCE.md` and `DATASET-PIPELINE.md` for details.
+
+---
+
+## 🚧 Limitations
+
+- Demo uses generated data, not real customer data
+- Scores validated only within demo set
+- Not production-ready (POC stage)
+- Qwen API optional (falls back to deterministic explanation)
+
+---
+
+**Built in 24 hours for Qwen AI Build Day 2026**
