@@ -7,11 +7,12 @@ import { Badge } from "@/components/ui/badge";
 
 interface QueueStatus {
   branchId: string;
-  waitingCount: number;
-  servingCount: number;
-  avgWaitTime: number;
+  waiting: number;
+  serving: number;
+  averageWaitTime: number;
+  estimatedTimeForNew: number;
   checkIns: {
-    id: string;
+    checkInId: string;
     positionInQueue: number;
     estimatedWaitTime: number;
     customerName: string;
@@ -81,15 +82,15 @@ export function QueueDisplay({ branchId }: QueueDisplayProps) {
       <CardContent>
         <div className="grid grid-cols-3 gap-4 mb-4">
           <div className="text-center p-3 bg-blue-50 rounded-lg">
-            <p className="text-2xl font-bold text-blue-600">{queue?.waitingCount || 0}</p>
+            <p className="text-2xl font-bold text-blue-600">{queue?.waiting || 0}</p>
             <p className="text-xs text-gray-600">Đang chờ</p>
           </div>
           <div className="text-center p-3 bg-green-50 rounded-lg">
-            <p className="text-2xl font-bold text-green-600">{queue?.servingCount || 0}</p>
+            <p className="text-2xl font-bold text-green-600">{queue?.serving || 0}</p>
             <p className="text-xs text-gray-600">Đang phục vụ</p>
           </div>
           <div className="text-center p-3 bg-orange-50 rounded-lg">
-            <p className="text-2xl font-bold text-orange-600">{queue?.avgWaitTime || 0}p</p>
+            <p className="text-2xl font-bold text-orange-600">{queue?.averageWaitTime || 0}p</p>
             <p className="text-xs text-gray-600">TB chờ</p>
           </div>
         </div>
@@ -98,7 +99,7 @@ export function QueueDisplay({ branchId }: QueueDisplayProps) {
           <div className="space-y-2">
             {checkIns.slice(0, 8).map((c) => (
               <div
-                key={c.id}
+                key={c.checkInId}
                 className="flex items-center justify-between p-3 bg-gray-50 rounded-lg text-sm"
               >
                 <div className="flex items-center gap-3">
@@ -120,7 +121,9 @@ export function QueueDisplay({ branchId }: QueueDisplayProps) {
           <p className="text-gray-400 text-sm text-center py-4">Chưa có khách hàng nào trong hàng đợi</p>
         )}
 
-        <p className="text-xs text-gray-400 mt-3 text-right">Tự động cập nhật mỗi 15 giây</p>
+        <p className="text-xs text-gray-400 mt-3 text-right">
+          Ước tính khách mới: ~{queue?.estimatedTimeForNew || 0} phút. Tự động cập nhật mỗi 15 giây
+        </p>
       </CardContent>
     </Card>
   );

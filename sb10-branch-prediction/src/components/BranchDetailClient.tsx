@@ -32,13 +32,13 @@ export function BranchDetailClient({
   const [error, setError] = useState(predictionError);
   const [refreshing, setRefreshing] = useState(false);
 
-  const refreshPrediction = useCallback(async () => {
+  const refreshPrediction = useCallback(async (currentCheckIns = 0) => {
     setRefreshing(true);
     try {
       const res = await fetch(`/api/predict/${branch.id}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ targetDate: today, currentCheckIns: 0 }),
+        body: JSON.stringify({ targetDate: today, currentCheckIns }),
       });
       if (res.ok) {
         const data = await res.json();
@@ -54,8 +54,8 @@ export function BranchDetailClient({
     }
   }, [branch.id, today]);
 
-  const handleCheckIn = () => {
-    refreshPrediction();
+  const handleCheckIn = (positionInQueue?: number) => {
+    refreshPrediction(positionInQueue || 0);
   };
 
   return (
@@ -78,7 +78,7 @@ export function BranchDetailClient({
               variant="ghost"
               size="sm"
               className="text-blue-300 hover:text-white hover:bg-blue-800"
-              onClick={refreshPrediction}
+              onClick={() => refreshPrediction()}
               disabled={refreshing}
             >
               <RefreshCw className={`w-4 h-4 mr-1 ${refreshing ? "animate-spin" : ""}`} />

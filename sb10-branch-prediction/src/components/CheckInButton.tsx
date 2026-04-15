@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 
 interface CheckInButtonProps {
   branchId: string;
-  onCheckIn?: () => void;
+  onCheckIn?: (positionInQueue?: number) => void;
 }
 
 export function CheckInButton({ branchId, onCheckIn }: CheckInButtonProps) {
@@ -35,7 +35,7 @@ export function CheckInButton({ branchId, onCheckIn }: CheckInButtonProps) {
         setMessage(
           `Check-in thành công! Số thứ tự: ${data.positionInQueue}, Thời gian chờ: ~${data.estimatedWaitTime} phút`
         );
-        onCheckIn?.();
+        onCheckIn?.(data.positionInQueue);
       } else {
         setMessage(`Lỗi: ${data.error?.message || "Không thể check-in"}`);
       }
