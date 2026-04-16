@@ -1,192 +1,95 @@
-# SF8 - AI Customer Behavior Prediction
+﻿# 🏦 Cuca-Insider-AI - AI-powered Sales Closing Assistant
 
-> **PoC for Shinhan Finance InnoBoost 2026 | Qwen AI Build Day - Financial Services Track**
+Cuca-Insider-AI is a hackathon PoC for **[SF8] Shinhan Future's Lab**.
+The product helps telesales teams analyze thin-file new customers from alternative data and generate a tactical **Next Best Offer (NBO)** script with Qwen.
 
-[![Build Status](https://img.shields.io/badge/build-passing-brightgreen)]()
-[![Track](https://img.shields.io/badge/track-financial%20services-blue)]()
-[![Demo](https://img.shields.io/badge/demo-ready-green)]()
+## 🧠 Architecture Overview
 
----
+The backend follows a strict 4-layer pipeline:
 
-## 🎯 Problem
+1. **Native Calculation**
+   - Load customer deterministic stats and behavioral tags from `customers_data.json`.
+2. **PII Masking**
+   - Remove `full_name` and `phone` before sending payload to Qwen.
+3. **Qwen AI Inference**
+   - Qwen returns strict JSON fields:
+     `recommended_product`, `behavioral_rationale`, `statistical_evidence`, `sales_pitch_script`, `risk_warning_and_upsell`.
+4. **UI Rendering (Unmasking)**
+   - Backend merges AI output with original customer name and serves the tactical drawer UI.
 
-New customers have no transaction history at Shinhan Finance, making product recommendation impossible with traditional scoring.
+This architecture keeps customer privacy boundaries explicit while still enabling AI-powered sales recommendations.
 
-**Challenge**: How to understand customer needs without internal data?
+## ✅ Prerequisites
 
----
+- Node.js 18+
+- Python 3.10+
 
-## 💡 Solution
+## ⚙️ Setup Instructions
 
-SF8 analyzes **alternative data** from 4 sources to predict financial product needs:
-
-| Data Source | Signals | Example Fields |
-|-------------|---------|----------------|
-| **Telco** | Spending, tenure, usage | Monthly spend, data GB, months active |
-| **E-Wallet** | Transaction frequency | Usage level, monthly transactions, categories |
-| **E-Commerce** | Shopping patterns | Orders/month, avg order value, categories |
-| **Social** | Interests, engagement | Interest topics, activity level |
-
-### How It Works
-
-1. **Deterministic Scoring** (0-100 score)
-   - Partner/Channel Fit (20%)
-   - Behavior Signal Strength (30%)
-   - Early Reaction Quality (15%)
-   - Product Affinity (35%)
-
-2. **Action Recommendation**
-   - `push now` (score ≥75 + affinity ≥70)
-   - `nurture` (score 50-74 + affinity ≥50)
-   - `hold` (score <50 OR affinity <50)
-
-3. **AI Explanation** - Qwen generates natural language reasoning
-4. **What-If Simulation** - Test impact of changing engagement, offers, or signals
-
----
-
-## 🚀 Quick Start
+### 1) Backend (FastAPI)
 
 ```bash
+cd backend
+python -m pip install -r requirements.txt
+copy .env.example .env
+```
+
+Update `.env`:
+
+```env
+QWEN_API_KEY=your_real_qwen_api_key
+BASE_URL=https://dashscope.aliyuncs.com/compatible-mode/v1
+QWEN_MODEL=qwen-plus
+```
+
+Generate mock dataset (JSON + CSV):
+
+```bash
+python generate_mock_data.py
+```
+
+Run API server:
+
+```bash
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
+```
+
+### 2) Frontend (React + Vite + Tailwind)
+
+```bash
+cd ..
 npm install
 npm run dev
 ```
 
-Open `http://localhost:5173` in your browser.
+Open: `http://localhost:5173`
 
-### Demo Flow (3 minutes)
-1. **Dashboard** → Portfolio overview with 20 customers
-2. **Hero Case** → Click highest-scoring customer for deep-dive
-3. **Simulation** → Run what-if analysis to see score delta
-4. **Export/Pitch** → Generate insight report with outreach note
+> Vite proxy is configured, so frontend calls `http://127.0.0.1:8000/api` automatically in local development.
 
----
+## 🧪 How To Test (Demo Guide)
 
-## 🏗️ Architecture
+1. Use the provided `backend/SF8_Customers_Mock.csv` as the official mock input file for judges.
+2. Start backend and frontend.
+3. Open Dashboard and review:
+   - KPI cards
+   - Hero customer
+   - Pipeline table with clear **Alternative Data** tags.
+4. Click **"Phân tích AI"** on any customer row.
+5. Verify tactical drawer:
+   - Script Box (`sales_pitch_script`) + copy button
+   - Insight lists (`behavioral_rationale`, `statistical_evidence`)
+   - Risk badges (`risk_warning_and_upsell`)
+   - Copilot chatbox with quick prompts.
 
-```
-SF8 App
-├── Deterministic Scoring Engine (lib/scoring.ts)
-│   ├── Partner/Channel Fit (pcf)
-│   ├── Behavior Signal Strength (bss)
-│   ├── Early Reaction Quality (erq)
-│   └── Product Affinity (pa)
-│
-├── Qwen AI Integration (lib/qwen.ts)
-│   ├── Explanation generation (explain, don't decide)
-│   └── Outreach note generation
-│
-├── Data Layer (lib/data.ts + src/dataProvider.ts)
-│   ├── 20 demo customers with alternative data
-│   ├── 7 Shinhan Finance products
-│   └── Governed data pipeline (generated → approved → published)
-│
-└── 4 Core Views (src/views/)
-    ├── Dashboard - Portfolio overview
-    ├── CustomerDetail - Deep-dive + inline simulation
-    ├── Simulation - Workspace for what-if analysis
-    └── ExportPitch - Report generation
-```
+## 📁 Key Files
 
-### Tech Stack
-- **Frontend**: React 18 + TypeScript + Vite
-- **Routing**: React Router v6
-- **AI**: Qwen (DashScope API via Alibaba Cloud)
-- **Styling**: Custom CSS (no framework)
+- `backend/generate_mock_data.py`
+- `backend/customers_data.json`
+- `backend/SF8_Customers_Mock.csv`
+- `backend/Product_Catalog.json`
+- `backend/main.py`
+- `src/components/Dashboard.jsx`
 
----
+## ⚠️ Disclaimer
 
-## 📊 Demo Data
-
-- **20 sample customers** with Vietnamese names and profiles
-- **7 Shinhan Finance products**: Credit cards, personal loans, SME loans, insurance, BNPL
-- **Alternative data** for each customer across 4 sources
-- **6 archetypes** mapped to behavioral patterns
-
----
-
-## 🤖 Qwen Integration
-
-Qwen is used for **explanation only** - it never decides scores or actions.
-
-```typescript
-// Deterministic scoring (Qwen-independent)
-const score = scoreCustomer(customer, altData, products);
-
-// Qwen explains the reasoning
-const explanation = await qwen.generateExplanation(score, customer, altData);
-```
-
-**Why deterministic-first?** Financial services require transparent, auditable decisions. Qwen enhances understanding but doesn't override logic.
-
----
-
-## 🎨 App Views
-
-### Dashboard
-- 4 stat cards (Total, Push Now, Nurture, Hold)
-- Hero case highlight
-- Product distribution
-- Customer lead list with scores and actions
-
-### Customer Detail
-- Overall score with breakdown
-- Alternative data signals
-- AI explanation
-- Inline what-if simulation
-
-### Simulation Workspace
-- Change variables: partner/channel, product/offer, early reaction
-- Run simulation on single customer or entire portfolio
-- See before/after score delta
-
-### Export/Pitch
-- Complete customer insight report
-- Personalized outreach note (Vietnamese)
-- Print/save as PDF
-
----
-
-## 📋 Submission Assets
-
-- ✅ Project story: `PROJECT-STORY.md`
-- ✅ One-pager: `ONE-PAGER.md`
-- ✅ Video script: `VIDEO-SCRIPT.md`
-- ✅ Screenshot guide: `SCREENSHOT-GUIDE.md`
-- ✅ Repo: This repository
-- ✅ Live demo: Run `npm run dev`
-
----
-
-## 🏆 Track
-
-**Financial Services - Shinhan Future's Lab (InnoBoost 2026)**
-
-- **Hackathon Deadline**: April 17, 2026
-- **InnoBoost Application**: May 3, 2026
-- **POC Contract**: Up to 200M VND for successful outcomes
-
----
-
-## 📝 Governance
-
-This PoC follows strict data governance:
-- All customer data is **generated** (not real PII)
-- Each record has **provenance metadata** (source_type, approval_status)
-- UI includes **disclosure badges** ("Generated demo data")
-- Scores are **relative within demo set** (not absolute creditworthiness)
-
-See `DATA-GOVERNANCE.md` and `DATASET-PIPELINE.md` for details.
-
----
-
-## 🚧 Limitations
-
-- Demo uses generated data, not real customer data
-- Scores validated only within demo set
-- Not production-ready (POC stage)
-- Qwen API optional (falls back to deterministic explanation)
-
----
-
-**Built in 24 hours for Qwen AI Build Day 2026**
+AI is used as a tactical analysis assistant. Final lending/approval decisions must remain under authorized Shinhan officers.

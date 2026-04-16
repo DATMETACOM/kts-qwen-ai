@@ -1,0 +1,24 @@
+{
+  "products": [
+    {
+      "name": "Vay tín chấp cá nhân",
+      "han_muc": "Lên đến 300 triệu VNĐ",
+      "dac_diem": "Giải ngân nhanh, không cần thế chấp tài sản, thủ tục 100% online",
+      "lai_suat_tham_khao": "Từ 18% - 24%/năm tùy điểm tín dụng",
+      "doi_tuong_khuyen_dung": "Khách hàng cần vốn gấp, thanh toán hóa đơn ổn định, tiêu dùng cao"
+    },
+    {
+      "name": "Thẻ tín dụng THE FIRST",
+      "han_muc": "Cấp theo điểm tín dụng, tối đa 100 triệu VNĐ",
+      "dac_diem": "Rút tiền mặt 100% hạn mức, tích lũy điểm thưởng, trả góp 0%",
+      "phi_thuong_nien": "Miễn phí năm đầu",
+      "doi_tuong_khuyen_dung": "Khách hàng hay mua sắm thương mại điện tử, thanh toán ví điện tử nhiều, thích linh hoạt dòng tiền"
+    },
+    {
+      "name": "Vay mua ô tô",
+      "han_muc": "Lên đến 4 tỷ VNĐ",
+      "dac_diem": "Tài trợ đến 80% giá trị xe mới, thời hạn vay lên đến 84 tháng",
+      "doi_tuong_khuyen_dung": "Khách hàng có thu nhập cao, quan tâm nội dung xe hơi trên mạng xã hội, có kế hoạch nâng cấp tài sản"
+    }
+  ]
+}

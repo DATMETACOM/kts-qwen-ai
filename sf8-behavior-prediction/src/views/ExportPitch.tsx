@@ -1,13 +1,19 @@
 import { useState } from 'react'
 import { getHeroCase, getAllCustomers, getExportData } from '../dataProvider'
 
+function toActionLabel(action: string): string {
+  if (action === 'push now') return 'Uu tien tiep can'
+  if (action === 'nurture') return 'Cham soc dinh ky'
+  return 'Chua du dieu kien'
+}
+
 export default function ExportPitch() {
   const heroCase = getHeroCase()
   const allCustomers = getAllCustomers()
   const [selectedId, setSelectedId] = useState(heroCase.id)
-  
+
   const exportData = getExportData(selectedId)
-  if (!exportData) return <div className="container">No data available</div>
+  if (!exportData) return <div className="container">Khong co du lieu</div>
 
   const { customer, product, score, explanation } = exportData
 
@@ -32,195 +38,175 @@ export default function ExportPitch() {
 
   return (
     <div className="container">
-      <div className="section-title">Export / Pitch View</div>
+      <div className="section-title">Bao cao nop bai</div>
       <div className="section-subtitle">
-        Generate snapshot for presentation and pitch
+        Bao cao tong hop phuc vu pitch va danh gia giam khao
       </div>
 
-      {/* Customer Selector */}
       <div className="card" style={{ marginBottom: '2rem' }}>
         <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
           <div style={{ flex: 1 }}>
             <label style={{ fontSize: '0.875rem', fontWeight: 500, marginBottom: '0.25rem', display: 'block' }}>
-              Select Customer
+              Chon ho so khach hang
             </label>
-            <select 
+            <select
               value={selectedId}
-              onChange={e => setSelectedId(e.target.value)}
+              onChange={(e) => setSelectedId(e.target.value)}
               style={{ width: '100%', padding: '0.5rem', border: '1px solid #d1d5db', borderRadius: '8px' }}
             >
-              {allCustomers.map(c => (
-                <option key={c.id} value={c.id}>{c.name} (Score: {c.scoring.overallScore})</option>
+              {allCustomers.map((c) => (
+                <option key={c.id} value={c.id}>{c.name} (Lead Score: {c.scoring.overallScore})</option>
               ))}
             </select>
           </div>
           <button className="btn btn-primary" onClick={handlePrint}>
-            🖨️ Print / Save PDF
+            In / Luu PDF
           </button>
         </div>
       </div>
 
-      {/* Export Card */}
       <div className="export-card">
         <div className="export-header">
           <div>
             <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#2563eb' }}>
-              SF8 - Customer Insight Report
+              (SF8) Cuca-Insider-AI - Bao cao ho so khach hang
             </h2>
             <div style={{ fontSize: '0.875rem', color: '#6b7280' }}>
-              AI-Powered Behavior Prediction • PoC Demo
+              Shinhan Ops CRM | Phan tich & Khuyen nghi (PoC)
             </div>
           </div>
           <div className="badge badge-info">Generated Demo Data</div>
         </div>
 
-        {/* Customer Profile */}
         <div style={{ marginBottom: '2rem' }}>
           <h3 style={{ fontSize: '1.125rem', fontWeight: 600, marginBottom: '1rem', paddingBottom: '0.5rem', borderBottom: '1px solid #e5e7eb' }}>
-            Customer Profile
+            Tong quan ho so (Customer 360)
           </h3>
           <div className="detail-layout">
             <div>
               <div style={{ marginBottom: '0.75rem' }}>
-                <div className="detail-label">Name</div>
+                <div className="detail-label">Khach hang</div>
                 <div className="detail-value">{customer.name}</div>
               </div>
               <div style={{ marginBottom: '0.75rem' }}>
-                <div className="detail-label">Age</div>
+                <div className="detail-label">Do tuoi</div>
                 <div className="detail-value">{customer.age}</div>
               </div>
             </div>
             <div>
               <div style={{ marginBottom: '0.75rem' }}>
-                <div className="detail-label">Occupation</div>
+                <div className="detail-label">Nghe nghiep</div>
                 <div className="detail-value">{customer.occupation}</div>
               </div>
               <div style={{ marginBottom: '0.75rem' }}>
-                <div className="detail-label">Income</div>
-                <div className="detail-value">{(customer.income / 1000000).toFixed(1)}M VNĐ/month</div>
+                <div className="detail-label">Thu nhap khai bao</div>
+                <div className="detail-value">{(customer.income / 1000000).toFixed(1)}M VND/thang</div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* AI Recommendation */}
         <div style={{ marginBottom: '2rem' }}>
           <h3 style={{ fontSize: '1.125rem', fontWeight: 600, marginBottom: '1rem', paddingBottom: '0.5rem', borderBottom: '1px solid #e5e7eb' }}>
-            AI Recommendation
+            De xuat xu ly va NBO
           </h3>
-          
+
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
             <div style={{ textAlign: 'center', padding: '1rem', background: '#f9fafb', borderRadius: '8px' }}>
-              <div className="detail-label">Overall Score</div>
+              <div className="detail-label">Diem tiem nang (Lead Score)</div>
               <div style={{ fontSize: '2rem', fontWeight: 700, color: getScoreColor(score.overallScore) }}>
                 {score.overallScore}/100
               </div>
             </div>
             <div style={{ textAlign: 'center', padding: '1rem', background: '#f9fafb', borderRadius: '8px' }}>
-              <div className="detail-label">Recommended Product</div>
+              <div className="detail-label">San pham de xuat (NBO)</div>
               <div style={{ fontSize: '1rem', fontWeight: 600, color: '#2563eb' }}>
                 {product.name}
               </div>
             </div>
             <div style={{ textAlign: 'center', padding: '1rem', background: '#f9fafb', borderRadius: '8px' }}>
-              <div className="detail-label">Action</div>
+              <div className="detail-label">Khuyen nghi xu ly</div>
               <div style={{ marginTop: '0.5rem' }}>
-                <span className={`badge ${getActionBadge(score.action)}`}>{score.action}</span>
+                <span className={`badge ${getActionBadge(score.action)}`}>{toActionLabel(score.action)}</span>
               </div>
             </div>
           </div>
 
-          {/* Score Breakdown */}
           <div style={{ padding: '1rem', background: '#f9fafb', borderRadius: '8px', marginBottom: '1.5rem' }}>
-            <div className="detail-label" style={{ marginBottom: '0.5rem' }}>Score Breakdown</div>
+            <div className="detail-label" style={{ marginBottom: '0.5rem' }}>Cau phan bo diem</div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: '1rem' }}>
               <div>
-                <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>Partner/Channel</div>
+                <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>Kenh tiep can</div>
                 <div style={{ fontWeight: 600 }}>{score.breakdown.pcf}</div>
               </div>
               <div>
-                <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>Behavior</div>
+                <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>Hanh vi</div>
                 <div style={{ fontWeight: 600 }}>{score.breakdown.bss}</div>
               </div>
               <div>
-                <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>Reaction</div>
+                <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>Tin hieu chuyen doi</div>
                 <div style={{ fontWeight: 600 }}>{score.breakdown.erq}</div>
               </div>
               <div>
-                <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>Affinity</div>
+                <div style={{ fontSize: '0.75rem', color: '#6b7280' }}>Phu hop san pham</div>
                 <div style={{ fontWeight: 600 }}>{score.breakdown.pa}</div>
               </div>
             </div>
           </div>
 
-          {/* AI Explanation */}
           <div style={{ padding: '1rem', background: '#dbeafe', borderRadius: '8px', marginBottom: '1.5rem' }}>
             <div className="detail-label" style={{ marginBottom: '0.5rem', color: '#1e40af' }}>
-              🤖 AI Explanation
+              Tom tat ho so & De xuat phuong an xu ly
             </div>
             <div style={{ lineHeight: 1.6 }}>{explanation}</div>
           </div>
 
-          {/* Outreach Note */}
           <div style={{ padding: '1rem', background: '#dcfce7', borderRadius: '8px' }}>
             <div className="detail-label" style={{ marginBottom: '0.5rem', color: '#166534' }}>
-              📝 Personalized Outreach Note
+              Ghi chu tiep can khach hang
             </div>
             <div style={{ lineHeight: 1.6 }}>
-              <p>Kính gửi <strong>{customer.name}</strong>,</p>
-              <p style={{ marginTop: '0.5rem' }}>
-                Dựa trên phân tích hành vi và nhu cầu của quý khách, chúng tôi xin đề xuất sản phẩm{' '}
-                <strong>{product.name}</strong> với các ưu đãi đặc biệt:
-              </p>
-              <ul style={{ marginTop: '0.5rem', marginLeft: '1.5rem' }}>
-                <li>Phê duyệt nhanh trong 24h</li>
-                <li>Ưu đãi lãi suất 0% cho 3 tháng đầu</li>
-                <li>Hỗ trợ tư vấn 24/7</li>
-              </ul>
-              <p style={{ marginTop: '0.5rem' }}>
-                Liên hệ hotline 1900XXXX để được tư vấn chi tiết.
-              </p>
+              Uu tien tiep can <strong>{customer.name}</strong> voi san pham <strong>{product.name}</strong>.
+              Nhan vien can doi chieu dieu kien thu nhap, KYC va quy trinh tham dinh truoc khi de xuat ho so.
             </div>
           </div>
         </div>
 
-        {/* Signal Summary */}
         <div>
           <h3 style={{ fontSize: '1.125rem', fontWeight: 600, marginBottom: '1rem', paddingBottom: '0.5rem', borderBottom: '1px solid #e5e7eb' }}>
-            Alternative Data Signal Summary
+            Tong hop tin hieu Alternative Data
           </h3>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
             <div style={{ padding: '0.75rem', background: '#f9fafb', borderRadius: '8px' }}>
               <div className="detail-label">Telco</div>
               <div style={{ fontSize: '0.875rem' }}>
-                {(customer.alternativeData.telco.monthlySpend / 1000000).toFixed(2)}M/tháng • {customer.alternativeData.telco.tenure} tháng
+                {(customer.alternativeData.telco.monthlySpend / 1000000).toFixed(2)}M/thang | {customer.alternativeData.telco.tenure} thang
               </div>
             </div>
             <div style={{ padding: '0.75rem', background: '#f9fafb', borderRadius: '8px' }}>
-              <div className="detail-label">E-Wallet</div>
+              <div className="detail-label">Vi dien tu</div>
               <div style={{ fontSize: '0.875rem' }}>
-                {customer.alternativeData.eWallet.usage} • {customer.alternativeData.eWallet.monthlyTransactions} txn/tháng
+                {customer.alternativeData.eWallet.usage} | {customer.alternativeData.eWallet.monthlyTransactions} giao dich/thang
               </div>
             </div>
             <div style={{ padding: '0.75rem', background: '#f9fafb', borderRadius: '8px' }}>
-              <div className="detail-label">E-commerce</div>
+              <div className="detail-label">Thuong mai dien tu</div>
               <div style={{ fontSize: '0.875rem' }}>
-                {customer.alternativeData.ecommerce.monthlyOrders} đơn/tháng • {(customer.alternativeData.ecommerce.avgOrderValue / 1000000).toFixed(2)}M/đơn
+                {customer.alternativeData.ecommerce.monthlyOrders} don/thang | {(customer.alternativeData.ecommerce.avgOrderValue / 1000000).toFixed(2)}M/don
               </div>
             </div>
             <div style={{ padding: '0.75rem', background: '#f9fafb', borderRadius: '8px' }}>
               <div className="detail-label">Social</div>
               <div style={{ fontSize: '0.875rem' }}>
-                {customer.alternativeData.social.activity} • {customer.alternativeData.social.interests.length} interests
+                {customer.alternativeData.social.activity} | {customer.alternativeData.social.interests.length} nhom quan tam
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Governance Disclosure */}
       <div className="disclosure">
-        ⚠️ This report uses generated demo data for PoC purposes. Scores are relative within the demo set and do not represent absolute creditworthiness.
+        Luu y he thong: AI chi dong vai tro khuyen nghi. Quyet dinh cap tin dung thuoc tham quyen cua can bo Shinhan.
       </div>
     </div>
   )

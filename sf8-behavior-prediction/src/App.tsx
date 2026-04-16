@@ -10,19 +10,19 @@ function App() {
       <div className="app">
         <header className="header">
           <div className="header-brand">
-            <h1>🎯 SF8</h1>
-            <span className="header-badge">AI Customer Behavior Prediction</span>
-            <span className="header-badge">PoC Demo</span>
+            <h1>(SF8) Cuca-Insider-AI</h1>
+            <span className="header-badge">Shinhan Ops CRM</span>
+            <span className="header-badge">Phan tich & Khuyen nghi (PoC)</span>
           </div>
           <nav className="nav">
-            <NavLink to="/" end className={({ isActive }) => isActive ? 'active' : ''}>
-              Dashboard
+            <NavLink to="/" end className={({ isActive }) => (isActive ? 'active' : '')}>
+              Quan tri van hanh
             </NavLink>
-            <NavLink to="/simulation" className={({ isActive }) => isActive ? 'active' : ''}>
-              Simulation
+            <NavLink to="/simulation" className={({ isActive }) => (isActive ? 'active' : '')}>
+              Phan tich gia dinh
             </NavLink>
-            <NavLink to="/export" className={({ isActive }) => isActive ? 'active' : ''}>
-              Export / Pitch
+            <NavLink to="/export" className={({ isActive }) => (isActive ? 'active' : '')}>
+              Bao cao nop bai
             </NavLink>
           </nav>
         </header>

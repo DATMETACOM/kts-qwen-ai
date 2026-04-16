@@ -1,14 +1,14 @@
 // SF8 - Data Provider (governed data access layer)
-import { CUSTOMERS, ALTERNATIVE_DATA, PRODUCTS, getEligibleProducts } from '../lib/data'
-import { Customer, AlternativeData } from '../types'
-import { 
-  scoreAllCustomers, 
-  getScoreStats, 
+import { CUSTOMERS, ALTERNATIVE_DATA, PRODUCTS, getEligibleProducts } from './lib/data'
+import { Customer, AlternativeData, CopilotContext } from './types'
+import {
+  scoreAllCustomers,
+  getScoreStats,
   simulateWhatIf,
   generateExplanation,
-  ScoringResult, 
-  SimulationResult 
-} from '../lib/scoring'
+  ScoringResult,
+  SimulationResult
+} from './lib/scoring'
 
 // Published app dataset (Layer 4 per DATASET-PIPELINE.md)
 export interface PublishedCustomer extends Customer {
@@ -25,7 +25,7 @@ function computePublishedData(): PublishedCustomer[] {
     const altData = ALTERNATIVE_DATA[customer.id]
     const score = scoringResults.find(r => r.customerId === customer.id)!
     const product = PRODUCTS.find(p => p.id === score.recommendedProduct)!
-    const explanation = generateExplanation(customer, altData, score, product)
+    const explanation = generateExplanation(customer, score, product)
     
     return {
       ...customer,
@@ -76,7 +76,7 @@ export function getDashboardStats() {
   return {
     stats,
     productDistribution,
-    customers: customers.slice(0, 10) // Top 10 for list view
+    customers // Full list for dashboard table
   }
 }
 
@@ -115,5 +115,47 @@ export function getExportData(customerId: string) {
     score: customer.scoring,
     explanation: customer.explanation,
     eligibleProducts: getEligibleProducts(customer.income)
+  }
+}
+
+export function getCopilotContext(selectedCustomerId?: string): CopilotContext {
+  const customers = getPublishedData()
+  const results = customers.map((item) => item.scoring)
+  const stats = getScoreStats(results)
+  const selected = selectedCustomerId ? customers.find((item) => item.id === selectedCustomerId) : undefined
+
+  return {
+    generatedAt: new Date().toISOString(),
+    stats: {
+      total: stats.total,
+      avgScore: stats.avgScore,
+      maxScore: stats.maxScore,
+      minScore: stats.minScore,
+      pushNow: stats.pushNow,
+      nurture: stats.nurture,
+      hold: stats.hold
+    },
+    selectedCustomerId: selected?.id,
+    customers: customers.map((item) => ({
+      id: item.id,
+      name: item.name,
+      age: item.age,
+      income: item.income,
+      occupation: item.occupation,
+      overallScore: item.scoring.overallScore,
+      action: item.scoring.action,
+      confidence: item.scoring.confidence,
+      recommendedProduct: item.scoring.recommendedProduct,
+      positiveFactors: item.scoring.factors.positive.slice(0, 4),
+      negativeFactors: item.scoring.factors.negative.slice(0, 4)
+    })),
+    productCatalog: PRODUCTS.map((product) => ({
+      id: product.id,
+      productCode: product.productCode || product.id,
+      name: product.name,
+      minIncome: product.minIncome,
+      description: product.description,
+      keyTerms: product.keyTerms
+    }))
   }
 }

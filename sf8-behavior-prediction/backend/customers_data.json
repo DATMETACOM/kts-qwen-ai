@@ -1,0 +1,1352 @@
+[
+  {
+    "customer_id": "CUS001",
+    "pii_data": {
+      "full_name": "Phạm Minh Lan",
+      "phone": "0983399595",
+      "job_title": "Nhân viên kinh doanh"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Thanh toán điện nước đúng hạn",
+        "Lịch sử hoàn tiền ổn định"
+      ],
+      "social_media": [
+        "Thường xuyên săn sale",
+        "Quan tâm xe hơi"
+      ],
+      "telco": [
+        "Thường xuyên roaming công tác",
+        "Hay nạp thẻ lẻ tẻ"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "Medium",
+      "recommended_nbo": "Vay mua ô tô",
+      "lookalike_rate": 20
+    }
+  },
+  {
+    "customer_id": "CUS002",
+    "pii_data": {
+      "full_name": "Nguyễn Ngọc Sơn",
+      "phone": "0949541213",
+      "job_title": "Tài xế công nghệ"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Lịch sử hoàn tiền ổn định",
+        "Thanh toán điện nước đúng hạn"
+      ],
+      "social_media": [
+        "Thường xuyên săn sale",
+        "Quan tâm du lịch gia đình"
+      ],
+      "telco": [
+        "Lịch sử > 3 năm",
+        "Dùng gói Data MAX"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "Low",
+      "recommended_nbo": "Thẻ tín dụng THE FIRST",
+      "lookalike_rate": 25
+    }
+  },
+  {
+    "customer_id": "CUS003",
+    "pii_data": {
+      "full_name": "Lê Ngọc An",
+      "phone": "0970145320",
+      "job_title": "Chủ shop online"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Mua sắm online nhiều",
+        "Hay trả góp kỳ hạn ngắn"
+      ],
+      "social_media": [
+        "Theo dõi reviewer tài chính",
+        "Tìm hiểu mẹo tiết kiệm"
+      ],
+      "telco": [
+        "Lịch sử > 3 năm",
+        "Ưu tiên gói gọi ngoại mạng"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "Low",
+      "recommended_nbo": "Thẻ tín dụng THE FIRST",
+      "lookalike_rate": 10
+    }
+  },
+  {
+    "customer_id": "CUS004",
+    "pii_data": {
+      "full_name": "Nguyễn Tuấn Châu",
+      "phone": "0951105321",
+      "job_title": "Quản lý cửa hàng"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Mua sắm online nhiều",
+        "Thanh toán điện nước đúng hạn"
+      ],
+      "social_media": [
+        "Quan tâm du lịch gia đình",
+        "Thường xuyên săn sale"
+      ],
+      "telco": [
+        "Ưu tiên gói gọi ngoại mạng",
+        "Hay nạp thẻ lẻ tẻ"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "Medium",
+      "recommended_nbo": "Thẻ tín dụng THE FIRST",
+      "lookalike_rate": 18
+    }
+  },
+  {
+    "customer_id": "CUS005",
+    "pii_data": {
+      "full_name": "Hồ Anh Nhi",
+      "phone": "0995628739",
+      "job_title": "Tư vấn bảo hiểm"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Thường hết hạn mức",
+        "Mua sắm online nhiều"
+      ],
+      "social_media": [
+        "Tìm hiểu mẹo tiết kiệm",
+        "Quan tâm xe hơi"
+      ],
+      "telco": [
+        "Lịch sử > 3 năm",
+        "Ưu tiên gói gọi ngoại mạng"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "Medium",
+      "recommended_nbo": "Thẻ tín dụng THE FIRST",
+      "lookalike_rate": 23
+    }
+  },
+  {
+    "customer_id": "CUS006",
+    "pii_data": {
+      "full_name": "Bùi Tuấn Nam",
+      "phone": "0988182676",
+      "job_title": "Nhân viên ngân hàng"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Ưu tiên quét QR tại cửa hàng",
+        "Mua sắm online nhiều"
+      ],
+      "social_media": [
+        "Quan tâm du lịch gia đình",
+        "Tìm hiểu mẹo tiết kiệm"
+      ],
+      "telco": [
+        "Thường xuyên roaming công tác",
+        "Hay nạp thẻ lẻ tẻ"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "Medium",
+      "recommended_nbo": "Thẻ tín dụng THE FIRST",
+      "lookalike_rate": 22
+    }
+  },
+  {
+    "customer_id": "CUS007",
+    "pii_data": {
+      "full_name": "Võ Minh Châu",
+      "phone": "0913243443",
+      "job_title": "Quản lý dự án"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Hay trả góp kỳ hạn ngắn",
+        "Thường hết hạn mức"
+      ],
+      "social_media": [
+        "Quan tâm xe hơi",
+        "Xem nội dung nâng cấp tài sản"
+      ],
+      "telco": [
+        "Ưu tiên gói gọi ngoại mạng",
+        "Hay nạp thẻ lẻ tẻ"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "High",
+      "recommended_nbo": "Thẻ tín dụng THE FIRST",
+      "lookalike_rate": 20
+    }
+  },
+  {
+    "customer_id": "CUS008",
+    "pii_data": {
+      "full_name": "Hoàng Ngọc Bình",
+      "phone": "0972066395",
+      "job_title": "Nhân viên hành chính"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Giao dịch cao",
+        "Lịch sử hoàn tiền ổn định"
+      ],
+      "social_media": [
+        "Quan tâm xe hơi",
+        "Tìm hiểu mẹo tiết kiệm"
+      ],
+      "telco": [
+        "Hay nạp thẻ lẻ tẻ",
+        "Cước tháng ổn định"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "Medium",
+      "recommended_nbo": "Thẻ tín dụng THE FIRST",
+      "lookalike_rate": 13
+    }
+  },
+  {
+    "customer_id": "CUS009",
+    "pii_data": {
+      "full_name": "Lê Thị Nam",
+      "phone": "0923775998",
+      "job_title": "Trưởng nhóm bán hàng"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Lịch sử hoàn tiền ổn định",
+        "Ưu tiên quét QR tại cửa hàng"
+      ],
+      "social_media": [
+        "Xem nội dung nâng cấp tài sản",
+        "Quan tâm xe hơi"
+      ],
+      "telco": [
+        "Ưu tiên gói gọi ngoại mạng",
+        "Lịch sử > 3 năm"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "Low",
+      "recommended_nbo": "Vay mua ô tô",
+      "lookalike_rate": 8
+    }
+  },
+  {
+    "customer_id": "CUS010",
+    "pii_data": {
+      "full_name": "Đỗ Hoài Yến",
+      "phone": "0977659225",
+      "job_title": "Nhân viên ngân hàng"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Mua sắm online nhiều",
+        "Hay trả góp kỳ hạn ngắn"
+      ],
+      "social_media": [
+        "Quan tâm du lịch gia đình",
+        "Thích check-in sang chảnh"
+      ],
+      "telco": [
+        "Lịch sử > 3 năm",
+        "Dùng gói Data MAX"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "Low",
+      "recommended_nbo": "Thẻ tín dụng THE FIRST",
+      "lookalike_rate": 19
+    }
+  },
+  {
+    "customer_id": "CUS011",
+    "pii_data": {
+      "full_name": "Bùi Gia Thảo",
+      "phone": "0994321143",
+      "job_title": "Chuyên viên marketing"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Mua sắm online nhiều",
+        "Giao dịch cao"
+      ],
+      "social_media": [
+        "Thường xuyên săn sale",
+        "Xem nội dung nâng cấp tài sản"
+      ],
+      "telco": [
+        "Ưu tiên gói gọi ngoại mạng",
+        "Hay nạp thẻ lẻ tẻ"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "High",
+      "recommended_nbo": "Thẻ tín dụng THE FIRST",
+      "lookalike_rate": 13
+    }
+  },
+  {
+    "customer_id": "CUS012",
+    "pii_data": {
+      "full_name": "Hoàng Văn An",
+      "phone": "0936756426",
+      "job_title": "Kỹ sư phần mềm"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Lịch sử hoàn tiền ổn định",
+        "Hay trả góp kỳ hạn ngắn"
+      ],
+      "social_media": [
+        "Thường xuyên săn sale",
+        "Theo dõi reviewer tài chính"
+      ],
+      "telco": [
+        "Lịch sử > 3 năm",
+        "Dùng gói Data MAX"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "Medium",
+      "recommended_nbo": "Vay tín chấp cá nhân",
+      "lookalike_rate": 13
+    }
+  },
+  {
+    "customer_id": "CUS013",
+    "pii_data": {
+      "full_name": "Nguyễn Văn Giang",
+      "phone": "0911914962",
+      "job_title": "Quản lý dự án"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Lịch sử hoàn tiền ổn định",
+        "Ưu tiên quét QR tại cửa hàng"
+      ],
+      "social_media": [
+        "Xem nội dung nâng cấp tài sản",
+        "Thường xuyên săn sale"
+      ],
+      "telco": [
+        "Dùng gói Data MAX",
+        "Lịch sử > 3 năm"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "Low",
+      "recommended_nbo": "Vay mua ô tô",
+      "lookalike_rate": 19
+    }
+  },
+  {
+    "customer_id": "CUS014",
+    "pii_data": {
+      "full_name": "Trần Hoài Hùng",
+      "phone": "0968022017",
+      "job_title": "Chuyên viên marketing"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Thường hết hạn mức",
+        "Lịch sử hoàn tiền ổn định"
+      ],
+      "social_media": [
+        "Thường xuyên săn sale",
+        "Tìm hiểu mẹo tiết kiệm"
+      ],
+      "telco": [
+        "Dùng gói Data MAX",
+        "Lịch sử > 3 năm"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "Low",
+      "recommended_nbo": "Thẻ tín dụng THE FIRST",
+      "lookalike_rate": 9
+    }
+  },
+  {
+    "customer_id": "CUS015",
+    "pii_data": {
+      "full_name": "Phạm Thị Duy",
+      "phone": "0960437423",
+      "job_title": "Kỹ sư phần mềm"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Giao dịch cao",
+        "Thanh toán điện nước đúng hạn"
+      ],
+      "social_media": [
+        "Thích check-in sang chảnh",
+        "Theo dõi reviewer tài chính"
+      ],
+      "telco": [
+        "Lịch sử > 3 năm",
+        "Hay nạp thẻ lẻ tẻ"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "Low",
+      "recommended_nbo": "Thẻ tín dụng THE FIRST",
+      "lookalike_rate": 9
+    }
+  },
+  {
+    "customer_id": "CUS016",
+    "pii_data": {
+      "full_name": "Phạm Văn Vi",
+      "phone": "0965178528",
+      "job_title": "Nhân viên hành chính"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Thanh toán điện nước đúng hạn",
+        "Hay trả góp kỳ hạn ngắn"
+      ],
+      "social_media": [
+        "Tìm hiểu mẹo tiết kiệm",
+        "Quan tâm du lịch gia đình"
+      ],
+      "telco": [
+        "Thường xuyên roaming công tác",
+        "Cước tháng ổn định"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "Low",
+      "recommended_nbo": "Vay tín chấp cá nhân",
+      "lookalike_rate": 8
+    }
+  },
+  {
+    "customer_id": "CUS017",
+    "pii_data": {
+      "full_name": "Trần Hoài An",
+      "phone": "0923760124",
+      "job_title": "Trưởng nhóm bán hàng"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Ưu tiên quét QR tại cửa hàng",
+        "Thường hết hạn mức"
+      ],
+      "social_media": [
+        "Quan tâm xe hơi",
+        "Xem nội dung nâng cấp tài sản"
+      ],
+      "telco": [
+        "Thường xuyên roaming công tác",
+        "Hay nạp thẻ lẻ tẻ"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "High",
+      "recommended_nbo": "Vay mua ô tô",
+      "lookalike_rate": 24
+    }
+  },
+  {
+    "customer_id": "CUS018",
+    "pii_data": {
+      "full_name": "Võ Hoài Vi",
+      "phone": "0920398586",
+      "job_title": "Kỹ sư phần mềm"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Mua sắm online nhiều",
+        "Ưu tiên quét QR tại cửa hàng"
+      ],
+      "social_media": [
+        "Quan tâm du lịch gia đình",
+        "Tìm hiểu mẹo tiết kiệm"
+      ],
+      "telco": [
+        "Hay nạp thẻ lẻ tẻ",
+        "Dùng gói Data MAX"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "Medium",
+      "recommended_nbo": "Thẻ tín dụng THE FIRST",
+      "lookalike_rate": 11
+    }
+  },
+  {
+    "customer_id": "CUS019",
+    "pii_data": {
+      "full_name": "Đỗ Thị Yến",
+      "phone": "0953451132",
+      "job_title": "Tư vấn bảo hiểm"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Lịch sử hoàn tiền ổn định",
+        "Thanh toán điện nước đúng hạn"
+      ],
+      "social_media": [
+        "Quan tâm du lịch gia đình",
+        "Xem nội dung nâng cấp tài sản"
+      ],
+      "telco": [
+        "Dùng gói Data MAX",
+        "Lịch sử > 3 năm"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "Low",
+      "recommended_nbo": "Thẻ tín dụng THE FIRST",
+      "lookalike_rate": 22
+    }
+  },
+  {
+    "customer_id": "CUS020",
+    "pii_data": {
+      "full_name": "Hồ Minh Thảo",
+      "phone": "0971346454",
+      "job_title": "Chủ shop online"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Lịch sử hoàn tiền ổn định",
+        "Ưu tiên quét QR tại cửa hàng"
+      ],
+      "social_media": [
+        "Thường xuyên săn sale",
+        "Xem nội dung nâng cấp tài sản"
+      ],
+      "telco": [
+        "Ưu tiên gói gọi ngoại mạng",
+        "Dùng gói Data MAX"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "Medium",
+      "recommended_nbo": "Thẻ tín dụng THE FIRST",
+      "lookalike_rate": 24
+    }
+  },
+  {
+    "customer_id": "CUS021",
+    "pii_data": {
+      "full_name": "Lê Anh Lan",
+      "phone": "0979472928",
+      "job_title": "Nhân viên hành chính"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Ưu tiên quét QR tại cửa hàng",
+        "Mua sắm online nhiều"
+      ],
+      "social_media": [
+        "Quan tâm du lịch gia đình",
+        "Thường xuyên săn sale"
+      ],
+      "telco": [
+        "Ưu tiên gói gọi ngoại mạng",
+        "Dùng gói Data MAX"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "Medium",
+      "recommended_nbo": "Thẻ tín dụng THE FIRST",
+      "lookalike_rate": 12
+    }
+  },
+  {
+    "customer_id": "CUS022",
+    "pii_data": {
+      "full_name": "Võ Minh Khôi",
+      "phone": "0967163419",
+      "job_title": "Kế toán doanh nghiệp"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Thanh toán điện nước đúng hạn",
+        "Giao dịch cao"
+      ],
+      "social_media": [
+        "Xem nội dung nâng cấp tài sản",
+        "Thường xuyên săn sale"
+      ],
+      "telco": [
+        "Ưu tiên gói gọi ngoại mạng",
+        "Lịch sử > 3 năm"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "Low",
+      "recommended_nbo": "Thẻ tín dụng THE FIRST",
+      "lookalike_rate": 18
+    }
+  },
+  {
+    "customer_id": "CUS023",
+    "pii_data": {
+      "full_name": "Phạm Anh Uyên",
+      "phone": "0925590022",
+      "job_title": "Quản lý dự án"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Lịch sử hoàn tiền ổn định",
+        "Ưu tiên quét QR tại cửa hàng"
+      ],
+      "social_media": [
+        "Tìm hiểu mẹo tiết kiệm",
+        "Quan tâm xe hơi"
+      ],
+      "telco": [
+        "Lịch sử > 3 năm",
+        "Ưu tiên gói gọi ngoại mạng"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "Low",
+      "recommended_nbo": "Thẻ tín dụng THE FIRST",
+      "lookalike_rate": 20
+    }
+  },
+  {
+    "customer_id": "CUS024",
+    "pii_data": {
+      "full_name": "Đỗ Văn Thảo",
+      "phone": "0966410523",
+      "job_title": "Quản lý cửa hàng"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Ưu tiên quét QR tại cửa hàng",
+        "Hay trả góp kỳ hạn ngắn"
+      ],
+      "social_media": [
+        "Thích check-in sang chảnh",
+        "Quan tâm xe hơi"
+      ],
+      "telco": [
+        "Hay nạp thẻ lẻ tẻ",
+        "Ưu tiên gói gọi ngoại mạng"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "Medium",
+      "recommended_nbo": "Vay mua ô tô",
+      "lookalike_rate": 21
+    }
+  },
+  {
+    "customer_id": "CUS025",
+    "pii_data": {
+      "full_name": "Lê Minh Uyên",
+      "phone": "0975155737",
+      "job_title": "Tư vấn bảo hiểm"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Ưu tiên quét QR tại cửa hàng",
+        "Lịch sử hoàn tiền ổn định"
+      ],
+      "social_media": [
+        "Thích check-in sang chảnh",
+        "Thường xuyên săn sale"
+      ],
+      "telco": [
+        "Dùng gói Data MAX",
+        "Lịch sử > 3 năm"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "Low",
+      "recommended_nbo": "Vay tín chấp cá nhân",
+      "lookalike_rate": 23
+    }
+  },
+  {
+    "customer_id": "CUS026",
+    "pii_data": {
+      "full_name": "Hồ Quang Nhi",
+      "phone": "0955925524",
+      "job_title": "Tài xế công nghệ"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Giao dịch cao",
+        "Mua sắm online nhiều"
+      ],
+      "social_media": [
+        "Quan tâm xe hơi",
+        "Xem nội dung nâng cấp tài sản"
+      ],
+      "telco": [
+        "Hay nạp thẻ lẻ tẻ",
+        "Lịch sử > 3 năm"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "Medium",
+      "recommended_nbo": "Vay mua ô tô",
+      "lookalike_rate": 13
+    }
+  },
+  {
+    "customer_id": "CUS027",
+    "pii_data": {
+      "full_name": "Đặng Minh Trang",
+      "phone": "0971931198",
+      "job_title": "Nhân viên kinh doanh"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Ưu tiên quét QR tại cửa hàng",
+        "Lịch sử hoàn tiền ổn định"
+      ],
+      "social_media": [
+        "Thích check-in sang chảnh",
+        "Thường xuyên săn sale"
+      ],
+      "telco": [
+        "Lịch sử > 3 năm",
+        "Thường xuyên roaming công tác"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "Low",
+      "recommended_nbo": "Thẻ tín dụng THE FIRST",
+      "lookalike_rate": 17
+    }
+  },
+  {
+    "customer_id": "CUS028",
+    "pii_data": {
+      "full_name": "Phạm Minh Vi",
+      "phone": "0961261891",
+      "job_title": "Nhân viên kinh doanh"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Ưu tiên quét QR tại cửa hàng",
+        "Lịch sử hoàn tiền ổn định"
+      ],
+      "social_media": [
+        "Quan tâm xe hơi",
+        "Xem nội dung nâng cấp tài sản"
+      ],
+      "telco": [
+        "Ưu tiên gói gọi ngoại mạng",
+        "Thường xuyên roaming công tác"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "Medium",
+      "recommended_nbo": "Vay mua ô tô",
+      "lookalike_rate": 15
+    }
+  },
+  {
+    "customer_id": "CUS029",
+    "pii_data": {
+      "full_name": "Võ Anh Yến",
+      "phone": "0925632853",
+      "job_title": "Nhân viên ngân hàng"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Ưu tiên quét QR tại cửa hàng",
+        "Thường hết hạn mức"
+      ],
+      "social_media": [
+        "Quan tâm xe hơi",
+        "Theo dõi reviewer tài chính"
+      ],
+      "telco": [
+        "Cước tháng ổn định",
+        "Thường xuyên roaming công tác"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "Medium",
+      "recommended_nbo": "Vay mua ô tô",
+      "lookalike_rate": 16
+    }
+  },
+  {
+    "customer_id": "CUS030",
+    "pii_data": {
+      "full_name": "Hoàng Gia Hùng",
+      "phone": "0932485216",
+      "job_title": "Trưởng nhóm bán hàng"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Thanh toán điện nước đúng hạn",
+        "Lịch sử hoàn tiền ổn định"
+      ],
+      "social_media": [
+        "Quan tâm xe hơi",
+        "Tìm hiểu mẹo tiết kiệm"
+      ],
+      "telco": [
+        "Cước tháng ổn định",
+        "Hay nạp thẻ lẻ tẻ"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "Low",
+      "recommended_nbo": "Thẻ tín dụng THE FIRST",
+      "lookalike_rate": 24
+    }
+  },
+  {
+    "customer_id": "CUS031",
+    "pii_data": {
+      "full_name": "Đặng Anh Uyên",
+      "phone": "0980442882",
+      "job_title": "Chủ shop online"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Thường hết hạn mức",
+        "Hay trả góp kỳ hạn ngắn"
+      ],
+      "social_media": [
+        "Quan tâm du lịch gia đình",
+        "Quan tâm xe hơi"
+      ],
+      "telco": [
+        "Ưu tiên gói gọi ngoại mạng",
+        "Dùng gói Data MAX"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "Medium",
+      "recommended_nbo": "Vay mua ô tô",
+      "lookalike_rate": 19
+    }
+  },
+  {
+    "customer_id": "CUS032",
+    "pii_data": {
+      "full_name": "Đỗ Quang Hùng",
+      "phone": "0944796114",
+      "job_title": "Kế toán doanh nghiệp"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Lịch sử hoàn tiền ổn định",
+        "Thanh toán điện nước đúng hạn"
+      ],
+      "social_media": [
+        "Xem nội dung nâng cấp tài sản",
+        "Tìm hiểu mẹo tiết kiệm"
+      ],
+      "telco": [
+        "Ưu tiên gói gọi ngoại mạng",
+        "Dùng gói Data MAX"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "Medium",
+      "recommended_nbo": "Vay mua ô tô",
+      "lookalike_rate": 11
+    }
+  },
+  {
+    "customer_id": "CUS033",
+    "pii_data": {
+      "full_name": "Đặng Ngọc Thảo",
+      "phone": "0980734516",
+      "job_title": "Chủ shop online"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Mua sắm online nhiều",
+        "Hay trả góp kỳ hạn ngắn"
+      ],
+      "social_media": [
+        "Xem nội dung nâng cấp tài sản",
+        "Quan tâm xe hơi"
+      ],
+      "telco": [
+        "Dùng gói Data MAX",
+        "Lịch sử > 3 năm"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "Low",
+      "recommended_nbo": "Vay mua ô tô",
+      "lookalike_rate": 15
+    }
+  },
+  {
+    "customer_id": "CUS034",
+    "pii_data": {
+      "full_name": "Võ Gia Uyên",
+      "phone": "0939781871",
+      "job_title": "Nhân viên ngân hàng"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Giao dịch cao",
+        "Hay trả góp kỳ hạn ngắn"
+      ],
+      "social_media": [
+        "Xem nội dung nâng cấp tài sản",
+        "Thích check-in sang chảnh"
+      ],
+      "telco": [
+        "Ưu tiên gói gọi ngoại mạng",
+        "Dùng gói Data MAX"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "Medium",
+      "recommended_nbo": "Vay mua ô tô",
+      "lookalike_rate": 15
+    }
+  },
+  {
+    "customer_id": "CUS035",
+    "pii_data": {
+      "full_name": "Trần Quang Em",
+      "phone": "0948032734",
+      "job_title": "Nhân viên ngân hàng"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Giao dịch cao",
+        "Thường hết hạn mức"
+      ],
+      "social_media": [
+        "Xem nội dung nâng cấp tài sản",
+        "Thích check-in sang chảnh"
+      ],
+      "telco": [
+        "Thường xuyên roaming công tác",
+        "Hay nạp thẻ lẻ tẻ"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "Medium",
+      "recommended_nbo": "Vay mua ô tô",
+      "lookalike_rate": 16
+    }
+  },
+  {
+    "customer_id": "CUS036",
+    "pii_data": {
+      "full_name": "Nguyễn Văn Duy",
+      "phone": "0923340627",
+      "job_title": "Nhân viên kinh doanh"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Hay trả góp kỳ hạn ngắn",
+        "Mua sắm online nhiều"
+      ],
+      "social_media": [
+        "Thường xuyên săn sale",
+        "Theo dõi reviewer tài chính"
+      ],
+      "telco": [
+        "Hay nạp thẻ lẻ tẻ",
+        "Ưu tiên gói gọi ngoại mạng"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "Medium",
+      "recommended_nbo": "Thẻ tín dụng THE FIRST",
+      "lookalike_rate": 10
+    }
+  },
+  {
+    "customer_id": "CUS037",
+    "pii_data": {
+      "full_name": "Đỗ Tuấn Nhi",
+      "phone": "0990888498",
+      "job_title": "Kỹ sư phần mềm"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Ưu tiên quét QR tại cửa hàng",
+        "Lịch sử hoàn tiền ổn định"
+      ],
+      "social_media": [
+        "Xem nội dung nâng cấp tài sản",
+        "Quan tâm du lịch gia đình"
+      ],
+      "telco": [
+        "Cước tháng ổn định",
+        "Hay nạp thẻ lẻ tẻ"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "Medium",
+      "recommended_nbo": "Thẻ tín dụng THE FIRST",
+      "lookalike_rate": 20
+    }
+  },
+  {
+    "customer_id": "CUS038",
+    "pii_data": {
+      "full_name": "Bùi Ngọc Vi",
+      "phone": "0976934808",
+      "job_title": "Nhân viên hành chính"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Hay trả góp kỳ hạn ngắn",
+        "Giao dịch cao"
+      ],
+      "social_media": [
+        "Quan tâm xe hơi",
+        "Theo dõi reviewer tài chính"
+      ],
+      "telco": [
+        "Lịch sử > 3 năm",
+        "Dùng gói Data MAX"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "Low",
+      "recommended_nbo": "Vay tín chấp cá nhân",
+      "lookalike_rate": 13
+    }
+  },
+  {
+    "customer_id": "CUS039",
+    "pii_data": {
+      "full_name": "Lê Hoài Trang",
+      "phone": "0932438295",
+      "job_title": "Nhân viên ngân hàng"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Giao dịch cao",
+        "Thanh toán điện nước đúng hạn"
+      ],
+      "social_media": [
+        "Quan tâm xe hơi",
+        "Theo dõi reviewer tài chính"
+      ],
+      "telco": [
+        "Dùng gói Data MAX",
+        "Lịch sử > 3 năm"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "Low",
+      "recommended_nbo": "Vay tín chấp cá nhân",
+      "lookalike_rate": 17
+    }
+  },
+  {
+    "customer_id": "CUS040",
+    "pii_data": {
+      "full_name": "Nguyễn Thị Phúc",
+      "phone": "0977402027",
+      "job_title": "Nhân viên kinh doanh"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Giao dịch cao",
+        "Mua sắm online nhiều"
+      ],
+      "social_media": [
+        "Thường xuyên săn sale",
+        "Quan tâm du lịch gia đình"
+      ],
+      "telco": [
+        "Thường xuyên roaming công tác",
+        "Cước tháng ổn định"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "Medium",
+      "recommended_nbo": "Thẻ tín dụng THE FIRST",
+      "lookalike_rate": 17
+    }
+  },
+  {
+    "customer_id": "CUS041",
+    "pii_data": {
+      "full_name": "Đặng Anh Khôi",
+      "phone": "0989830103",
+      "job_title": "Quản lý dự án"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Thường hết hạn mức",
+        "Ưu tiên quét QR tại cửa hàng"
+      ],
+      "social_media": [
+        "Quan tâm du lịch gia đình",
+        "Quan tâm xe hơi"
+      ],
+      "telco": [
+        "Cước tháng ổn định",
+        "Ưu tiên gói gọi ngoại mạng"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "Medium",
+      "recommended_nbo": "Vay mua ô tô",
+      "lookalike_rate": 18
+    }
+  },
+  {
+    "customer_id": "CUS042",
+    "pii_data": {
+      "full_name": "Đỗ Ngọc Uyên",
+      "phone": "0955324796",
+      "job_title": "Chuyên viên marketing"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Thanh toán điện nước đúng hạn",
+        "Ưu tiên quét QR tại cửa hàng"
+      ],
+      "social_media": [
+        "Thường xuyên săn sale",
+        "Theo dõi reviewer tài chính"
+      ],
+      "telco": [
+        "Hay nạp thẻ lẻ tẻ",
+        "Dùng gói Data MAX"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "Medium",
+      "recommended_nbo": "Vay tín chấp cá nhân",
+      "lookalike_rate": 24
+    }
+  },
+  {
+    "customer_id": "CUS043",
+    "pii_data": {
+      "full_name": "Đỗ Khánh An",
+      "phone": "0984385307",
+      "job_title": "Kỹ sư phần mềm"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Lịch sử hoàn tiền ổn định",
+        "Ưu tiên quét QR tại cửa hàng"
+      ],
+      "social_media": [
+        "Xem nội dung nâng cấp tài sản",
+        "Quan tâm du lịch gia đình"
+      ],
+      "telco": [
+        "Cước tháng ổn định",
+        "Ưu tiên gói gọi ngoại mạng"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "Low",
+      "recommended_nbo": "Thẻ tín dụng THE FIRST",
+      "lookalike_rate": 8
+    }
+  },
+  {
+    "customer_id": "CUS044",
+    "pii_data": {
+      "full_name": "Hoàng Minh Nhi",
+      "phone": "0981417292",
+      "job_title": "Quản lý cửa hàng"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Hay trả góp kỳ hạn ngắn",
+        "Thường hết hạn mức"
+      ],
+      "social_media": [
+        "Thường xuyên săn sale",
+        "Theo dõi reviewer tài chính"
+      ],
+      "telco": [
+        "Cước tháng ổn định",
+        "Ưu tiên gói gọi ngoại mạng"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "Medium",
+      "recommended_nbo": "Thẻ tín dụng THE FIRST",
+      "lookalike_rate": 19
+    }
+  },
+  {
+    "customer_id": "CUS045",
+    "pii_data": {
+      "full_name": "Nguyễn Tuấn My",
+      "phone": "0996464701",
+      "job_title": "Nhân viên kinh doanh"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Hay trả góp kỳ hạn ngắn",
+        "Ưu tiên quét QR tại cửa hàng"
+      ],
+      "social_media": [
+        "Thường xuyên săn sale",
+        "Quan tâm xe hơi"
+      ],
+      "telco": [
+        "Ưu tiên gói gọi ngoại mạng",
+        "Thường xuyên roaming công tác"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "Medium",
+      "recommended_nbo": "Vay mua ô tô",
+      "lookalike_rate": 25
+    }
+  },
+  {
+    "customer_id": "CUS046",
+    "pii_data": {
+      "full_name": "Đỗ Thị Châu",
+      "phone": "0943161802",
+      "job_title": "Nhân viên kinh doanh"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Lịch sử hoàn tiền ổn định",
+        "Mua sắm online nhiều"
+      ],
+      "social_media": [
+        "Tìm hiểu mẹo tiết kiệm",
+        "Quan tâm xe hơi"
+      ],
+      "telco": [
+        "Thường xuyên roaming công tác",
+        "Dùng gói Data MAX"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "Medium",
+      "recommended_nbo": "Thẻ tín dụng THE FIRST",
+      "lookalike_rate": 15
+    }
+  },
+  {
+    "customer_id": "CUS047",
+    "pii_data": {
+      "full_name": "Đặng Văn Lan",
+      "phone": "0948535305",
+      "job_title": "Kỹ sư phần mềm"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Lịch sử hoàn tiền ổn định",
+        "Giao dịch cao"
+      ],
+      "social_media": [
+        "Xem nội dung nâng cấp tài sản",
+        "Theo dõi reviewer tài chính"
+      ],
+      "telco": [
+        "Ưu tiên gói gọi ngoại mạng",
+        "Thường xuyên roaming công tác"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "Medium",
+      "recommended_nbo": "Vay mua ô tô",
+      "lookalike_rate": 8
+    }
+  },
+  {
+    "customer_id": "CUS048",
+    "pii_data": {
+      "full_name": "Bùi Thị Em",
+      "phone": "0997379930",
+      "job_title": "Tài xế công nghệ"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Thường hết hạn mức",
+        "Thanh toán điện nước đúng hạn"
+      ],
+      "social_media": [
+        "Thường xuyên săn sale",
+        "Quan tâm xe hơi"
+      ],
+      "telco": [
+        "Hay nạp thẻ lẻ tẻ",
+        "Thường xuyên roaming công tác"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "Medium",
+      "recommended_nbo": "Vay mua ô tô",
+      "lookalike_rate": 19
+    }
+  },
+  {
+    "customer_id": "CUS049",
+    "pii_data": {
+      "full_name": "Lê Tuấn Em",
+      "phone": "0938804984",
+      "job_title": "Nhân viên kinh doanh"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Thường hết hạn mức",
+        "Hay trả góp kỳ hạn ngắn"
+      ],
+      "social_media": [
+        "Thường xuyên săn sale",
+        "Quan tâm du lịch gia đình"
+      ],
+      "telco": [
+        "Thường xuyên roaming công tác",
+        "Dùng gói Data MAX"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "Medium",
+      "recommended_nbo": "Vay mua ô tô",
+      "lookalike_rate": 8
+    }
+  },
+  {
+    "customer_id": "CUS050",
+    "pii_data": {
+      "full_name": "Phạm Thị Uyên",
+      "phone": "0999057284",
+      "job_title": "Kế toán doanh nghiệp"
+    },
+    "behavioral_tags": {
+      "e_wallet": [
+        "Thường hết hạn mức",
+        "Thanh toán điện nước đúng hạn"
+      ],
+      "social_media": [
+        "Quan tâm du lịch gia đình",
+        "Xem nội dung nâng cấp tài sản"
+      ],
+      "telco": [
+        "Thường xuyên roaming công tác",
+        "Ưu tiên gói gọi ngoại mạng"
+      ]
+    },
+    "deterministic_stats": {
+      "risk_score": "Medium",
+      "recommended_nbo": "Vay mua ô tô",
+      "lookalike_rate": 25
+    }
+  }
+]
