@@ -11,7 +11,7 @@ rm -f setup-git.sh commit.sh
 git rm --cached setup-git.sh commit.sh 2>/dev/null || true
 
 # Amend the commit to remove secret
-git commit --amend -m "feat: Add SB10 Branch Traffic Prediction PoC
+git commit --amend -m "feat: Add SF10 Queue Mind PoC
 
 - Next.js 14 + TypeScript + Tailwind CSS
 - Dashboard with 5 branches display

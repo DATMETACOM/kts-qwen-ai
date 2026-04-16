@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "=== SB10: Commit & Push to GitHub ==="
+echo "=== SF10: Commit & Push to GitHub ==="
 echo ""
 
 cd "$(dirname "$0")"
@@ -21,7 +21,7 @@ echo ""
 
 # Commit
 echo "✅ Committing..."
-git commit -m "docs: Add comprehensive documentation for SB10
+git commit -m "docs: Add comprehensive documentation for SF10
 
 📚 Documentation:
 - README.md: Complete overview, features, quick start, data structure

@@ -11,7 +11,7 @@ This is a private repository for Qwen AI Build Day 2026 hackathon.
 
 ## Projects
 
-- `sb10-branch-prediction/` - Branch Traffic Prediction
+- `sf10-queue-mind/` - Queue Mind
 - `sf8-behavior-prediction/` - Customer Behavior Prediction
 
 ## Questions?

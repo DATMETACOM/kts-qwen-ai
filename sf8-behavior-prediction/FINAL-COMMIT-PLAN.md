@@ -1,5 +1,5 @@
 # KẾ HOẠCH COMMIT - SF8 BEHAVIOR PREDICTION
-# Monorepo Safe - Không ảnh hưởng SB10
+# Monorepo Safe - Không ảnh hưởng SF10
 
 > **Ngày**: April 14, 2026
 > **Repo**: kts-qwen-ai (https://github.com/DATMETACOM/kts-qwen-ai.git)
@@ -21,9 +21,9 @@ git remote -v
 git branch
 # Expected: * master
 
-# Verify không ảnh hưởng SB10
-git status | findstr "sb10"
-# Expected: (không có output - SB10 không bị modify)
+# Verify không ảnh hưởng SF10
+git status | findstr "sf10"
+# Expected: (không có output - SF10 không bị modify)
 ```
 
 ---
@@ -39,16 +39,16 @@ sf8-behavior-prediction/dist/
 sf8-behavior-prediction/*.tsbuildinfo
 sf8-behavior-prediction/.env
 
-# SB10 - Branch Traffic Prediction  
-sb10-branch-prediction/node_modules/
-sb10-branch-prediction/.next/
-sb10-branch-prediction/.env
+# SF10 - Queue Mind  
+sf10-queue-mind/node_modules/
+sf10-queue-mind/.next/
+sf10-queue-mind/.env
 ```
 
 **Commit**:
 ```bash
 git add .gitignore
-git commit -m "chore: add monorepo-safe .gitignore (sf8 + sb10)"
+git commit -m "chore: add monorepo-safe .gitignore (sf8 + sf10)"
 ```
 
 ---
@@ -248,8 +248,8 @@ branch 'develop' set up to track 'origin/develop'.
 # Check commits
 git log --oneline -5
 
-# Verify SB10 không bị ảnh hưởng
-git diff HEAD -- sb10-branch-prediction/
+# Verify SF10 không bị ảnh hưởng
+git diff HEAD -- sf10-queue-mind/
 # Expected: (no output)
 
 # Check status
@@ -269,7 +269,7 @@ echo "Visit: https://github.com/DATMETACOM/kts-qwen-ai/tree/develop/sf8-behavior
 - ❌ `sf8-behavior-prediction/dist/` (build output)
 - ❌ `sf8-behavior-prediction/*.tsbuildinfo` (cache)
 - ❌ `sf8-behavior-prediction/plan/` (planning notes - không cần thiết)
-- ❌ Bất kỳ files nào trong `sb10-branch-prediction/`
+- ❌ Bất kỳ files nào trong `sf10-queue-mind/`
 
 ### Chỉ commit:
 - ✅ Documentation (.md files)
