@@ -9,7 +9,7 @@
 | Project | Code | Description | Status | Link |
 |---------|------|-------------|--------|------|
 | **Branch Traffic Prediction** | SB10 | Dự đoán lưu lượng chi nhánh & quản lý hàng đợi | ✅ Ready | [sb10-branch-prediction/](./sb10-branch-prediction/) |
-| **Customer Behavior Prediction** | SF8 | Phân tích hành vi khách hàng mới | ✅ Ready | [sf8-behavior-prediction/](./sf8-behavior-prediction/) |
+| **Customer Behavior Prediction** | SF8 | Phân tích hành vi khách hàng mới | ✅ Ready | [sf8-cuca-insider-ai/](./sf8-cuca-insider-ai/) |
 
 ---
 
@@ -23,7 +23,7 @@ npm run dev
 # Open http://localhost:3000
 
 # SF8 - Customer Behavior Prediction
-cd sf8-behavior-prediction
+cd sf8-cuca-insider-ai
 npm install
 npm run dev
 # Open http://localhost:3000
@@ -48,10 +48,10 @@ npm run dev
 - [DEMO](./sb10-branch-prediction/DEMO.md) - Demo Script
 
 ### SF8 - Customer Behavior Prediction
-- [README](./sf8-behavior-prediction/README.md) - Overview & Quick Start
-- [ARCHITECTURE](./sf8-behavior-prediction/ARCHITECTURE.md) - System Architecture
-- [API](./sf8-behavior-prediction/API.md) - API Endpoints
-- [DEMO](./sf8-behavior-prediction/DEMO.md) - Demo Script
+- [README](./sf8-cuca-insider-ai/README.md) - Overview & Quick Start
+- [ARCHITECTURE](./sf8-cuca-insider-ai/ARCHITECTURE.md) - System Architecture
+- [API](./sf8-cuca-insider-ai/API.md) - API Endpoints
+- [DEMO](./sf8-cuca-insider-ai/DEMO.md) - Demo Script
 
 ---
 
@@ -81,7 +81,7 @@ Add your Qwen API key to each project's `.env.local`:
 # sb10-branch-prediction/.env.local
 QWEN_API_KEY=your_qwen_api_key_here
 
-# sf8-behavior-prediction/.env.local
+# sf8-cuca-insider-ai/.env.local
 QWEN_API_KEY=your_qwen_api_key_here
 ```
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const BASE_URL = (process.env.SMOKE_BASE_URL || "https://sf8-behavior-prediction.vercel.app").replace(/\/$/, "");
+const BASE_URL = (process.env.SMOKE_BASE_URL || "https://sf8-cuca-insider-ai.vercel.app").replace(/\/$/, "");
 const DEFAULT_CUSTOMER_ID = process.env.SMOKE_CUSTOMER_ID || "CUS001";
 const COPILOT_PROMPT =
   process.env.SMOKE_PROMPT ||
