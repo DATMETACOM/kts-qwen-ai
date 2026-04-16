@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "=== Adding SF10 Documentation ==="
+echo "=== Adding SB10 Documentation ==="
 
 cd "$(dirname "$0")"
 
@@ -8,7 +8,7 @@ cd "$(dirname "$0")"
 git add .
 
 # Commit
-git commit -m "docs: Add comprehensive documentation for SF10
+git commit -m "docs: Add comprehensive documentation for SB10
 
 - README.md: Complete overview, features, quick start, data structure
 - ARCHITECTURE.md: System architecture, component structure, data flow

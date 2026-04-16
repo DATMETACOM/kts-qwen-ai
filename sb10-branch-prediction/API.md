@@ -1,8 +1,8 @@
-# SF10 API Documentation
+# SB10 API Documentation
 
 ## Overview
 
-SF10 exposes REST APIs for branch traffic prediction. Currently using mock data until Qwen API key is available.
+SB10 exposes REST APIs for branch traffic prediction. Currently using mock data until Qwen API key is available.
 
 ---
 

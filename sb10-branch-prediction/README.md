@@ -1,4 +1,4 @@
-# SF10 - Queue Mind & Smart Queue Management
+# SB10 - Branch Traffic Prediction & Smart Queue Management
 
 > **Qwen AI Build Day 2026 - Shinhan Bank InnoBoost PoC**
 
@@ -6,7 +6,7 @@
 
 ## 📋 Overview
 
-**Use Case:** SF10 - AI-Powered Queue Mind & Smart Queue Management
+**Use Case:** SB10 - AI-Powered Branch Traffic Prediction & Smart Queue Management
 
 **Problem:** Khách hàng đến chi nhánh không biết trước thời gian chờ, dẫn đến:
 - Đợi lâu (trung bình 20-30 phút)
@@ -47,7 +47,7 @@ open http://localhost:3000
 ## 📁 Project Structure
 
 ```
-sf10-queue-mind/
+sb10-branch-prediction/
 ├── src/
 │   ├── app/
 │   │   ├── globals.css          # Global styles
@@ -259,7 +259,7 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 ## 👥 Team
 
 - **Track:** Financial Services (Shinhan Bank)
-- **Use Case:** SF10 - Queue Mind
+- **Use Case:** SB10 - Branch Traffic Prediction
 - **Tech Stack:** Next.js 14, TypeScript, Tailwind CSS, Qwen AI
 
 ---
