@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SF11 EWA | Payroll-Verified Lending PoC</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <div class="hero-copy">
+          <span class="eyebrow">SF11 · Earned Wage Access</span>
+          <h1>Payroll-verified EWA and salary-linked lending without paper income proof.</h1>
+          <p>
+            Real-time salary verification from employer payroll systems enables instant wage access,
+            faster loan decisions, and cleaner risk controls through payroll-linked repayment.
+          </p>
+          <div class="hero-actions">
+            <a href="#workspace" class="btn btn-primary">Open operator workspace</a>
+            <a href="#roadmap" class="btn btn-secondary">View rollout path</a>
+          </div>
+        </div>
+        <div id="hero-stats" class="hero-stats" aria-label="Portfolio highlights"></div>
+      </header>
+
+      <main id="workspace" class="workspace">
+        <section class="panel panel-intro">
+          <div>
+            <span class="panel-label">Why This Matters</span>
+            <h2>From payroll truth to funding decision in one operating loop.</h2>
+          </div>
+          <div class="value-grid">
+            <article>
+              <h3>Product</h3>
+              <p>Offer instant EWA and pre-approved payroll-linked loans inside one employer channel.</p>
+            </article>
+            <article>
+              <h3>Risk</h3>
+              <p>Reduce fraud and repayment uncertainty with payroll freshness, tenure, and deduction controls.</p>
+            </article>
+            <article>
+              <h3>Compliance</h3>
+              <p>Gate every disbursement by employee consent, employer policy, and outstanding obligation checks.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="dashboard-grid">
+          <section class="panel">
+            <div class="panel-heading">
+              <div>
+                <span class="panel-label">Employer Layer</span>
+                <h2>Integration readiness</h2>
+              </div>
+              <p class="panel-note">Payroll feed freshness and partner coverage</p>
+            </div>
+            <div id="employer-list" class="employer-list"></div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-heading">
+              <div>
+                <span class="panel-label">Portfolio Layer</span>
+                <h2>Operating metrics</h2>
+              </div>
+              <p class="panel-note">Calculated from current demo population</p>
+            </div>
+            <div id="portfolio-metrics" class="metric-grid"></div>
+          </section>
+        </section>
+
+        <section class="dashboard-grid dashboard-grid-wide">
+          <section class="panel">
+            <div class="panel-heading">
+              <div>
+                <span class="panel-label">Employee Layer</span>
+                <h2>Eligibility queue</h2>
+              </div>
+              <p class="panel-note">Select an employee to inspect decision details</p>
+            </div>
+            <div id="employee-list" class="employee-list"></div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-heading">
+              <div>
+                <span class="panel-label">Decision Layer</span>
+                <h2>Offer detail</h2>
+              </div>
+              <p class="panel-note">EWA recommendation, loan fallback, and policy checks</p>
+            </div>
+            <div id="employee-detail" class="detail-card"></div>
+          </section>
+        </section>
+
+        <section class="dashboard-grid">
+          <section class="panel">
+            <div class="panel-heading">
+              <div>
+                <span class="panel-label">Control Layer</span>
+                <h2>Risk and compliance rules</h2>
+              </div>
+            </div>
+            <div id="rule-list" class="rule-list"></div>
+          </section>
+
+          <section class="panel" id="roadmap">
+            <div class="panel-heading">
+              <div>
+                <span class="panel-label">Delivery Layer</span>
+                <h2>Rollout path</h2>
+              </div>
+            </div>
+            <div class="timeline">
+              <article>
+                <span>Phase 1</span>
+                <h3>Employer integration pilot</h3>
+                <p>Connect 2 payroll providers, capture employee consent, and verify salary snapshots in near real time.</p>
+              </article>
+              <article>
+                <span>Phase 2</span>
+                <h3>EWA launch</h3>
+                <p>Offer capped wage access for employees with clean payroll history and stable attendance.</p>
+              </article>
+              <article>
+                <span>Phase 3</span>
+                <h3>Salary-linked lending</h3>
+                <p>Extend to installment lending with payroll deduction orchestration and employer collections dashboards.</p>
+              </article>
+            </div>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+  </html>

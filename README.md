@@ -10,6 +10,7 @@
 |---------|------|-------------|--------|------|
 | **Branch Traffic Prediction** | SB10 | Dự đoán lưu lượng chi nhánh & quản lý hàng đợi | ✅ Ready | [sb10-queue-mind/](./sb10-queue-mind/) |
 | **Customer Behavior Prediction** | SF8 | Phân tích hành vi khách hàng mới | ✅ Ready | [sf8-cuca-insider-ai/](./sf8-cuca-insider-ai/) |
+| **Earned Wage Access** | SF11 | EWA & salary-linked lending với xác thực payroll real-time | 🚧 Init | [sf11-ewa/](./sf11-ewa/) |
 
 ---
 
@@ -27,6 +28,10 @@ cd sf8-cuca-insider-ai
 npm install
 npm run dev
 # Open http://localhost:3000
+
+# SF11 - Earned Wage Access
+python -m http.server 4173
+# Open http://localhost:4173/sf11-ewa/
 ```
 
 ---
@@ -52,6 +57,11 @@ npm run dev
 - [ARCHITECTURE](./sf8-cuca-insider-ai/ARCHITECTURE.md) - System Architecture
 - [API](./sf8-cuca-insider-ai/API.md) - API Endpoints
 - [DEMO](./sf8-cuca-insider-ai/DEMO.md) - Demo Script
+
+### SF11 - Earned Wage Access
+- [README](./sf11-ewa/README.md) - Overview & Quick Start
+- [ARCHITECTURE](./sf11-ewa/ARCHITECTURE.md) - System Architecture
+- [DEMO](./sf11-ewa/DEMO.md) - Demo Script
 
 ---
 
@@ -100,6 +110,11 @@ Without the API key, both projects will use mock/rule-based fallbacks.
 - 20 customers with profiles
 - Alternative data per customer (telco, e-wallet, ecommerce, social)
 - 7 Shinhan Finance products
+
+### SF11
+- 3 mock employer payroll integrations
+- 8 employees with payroll snapshots
+- EWA cap, consent, freshness, and payroll-loan rules
 
 ---
 
