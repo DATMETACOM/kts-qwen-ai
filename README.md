@@ -11,6 +11,7 @@
 | **Branch Traffic Prediction** | SB10 | Dự đoán lưu lượng chi nhánh & quản lý hàng đợi | ✅ Ready | [sb10-queue-mind/](./sb10-queue-mind/) |
 | **Customer Behavior Prediction** | SF8 | Phân tích hành vi khách hàng mới | ✅ Ready | [sf8-cuca-insider-ai/](./sf8-cuca-insider-ai/) |
 | **Earned Wage Access** | SF11 | EWA & salary-linked lending với xác thực payroll real-time | 🚧 Init | [sf11-ewa/](./sf11-ewa/) |
+| **MicroBiz Loan** | SF12 | Micro loan cho digital sellers với alternative cash-flow scoring | 🚧 Init | [sf12-microbiz-loan/](./sf12-microbiz-loan/) |
 
 ---
 
@@ -32,6 +33,10 @@ npm run dev
 # SF11 - Earned Wage Access
 python -m http.server 4173
 # Open http://localhost:4173/sf11-ewa/
+
+# SF12 - MicroBiz Loan
+python -m http.server 4173
+# Open http://localhost:4173/sf12-microbiz-loan/
 ```
 
 ---
@@ -62,6 +67,11 @@ python -m http.server 4173
 - [README](./sf11-ewa/README.md) - Overview & Quick Start
 - [ARCHITECTURE](./sf11-ewa/ARCHITECTURE.md) - System Architecture
 - [DEMO](./sf11-ewa/DEMO.md) - Demo Script
+
+### SF12 - MicroBiz Loan
+- [README](./sf12-microbiz-loan/README.md) - Overview & Quick Start
+- [ARCHITECTURE](./sf12-microbiz-loan/ARCHITECTURE.md) - System Architecture
+- [DEMO](./sf12-microbiz-loan/DEMO.md) - Demo Script
 
 ---
 
@@ -115,6 +125,11 @@ Without the API key, both projects will use mock/rule-based fallbacks.
 - 3 mock employer payroll integrations
 - 8 employees with payroll snapshots
 - EWA cap, consent, freshness, and payroll-loan rules
+
+### SF12
+- 4 mock marketplace / wallet / gig-data channels
+- 8 seller and freelancer profiles
+- Alternative score, revenue-share repayment, and risk-monitoring rules
 
 ---
 
