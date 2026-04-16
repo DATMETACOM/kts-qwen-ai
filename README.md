@@ -66,12 +66,16 @@ python -m http.server 4173
 ### SF11 - Earned Wage Access
 - [README](./sf11-ewa/README.md) - Overview & Quick Start
 - [ARCHITECTURE](./sf11-ewa/ARCHITECTURE.md) - System Architecture
+- [API](./sf11-ewa/API.md) - Mock API Design
 - [DEMO](./sf11-ewa/DEMO.md) - Demo Script
+- [TEST_CASES](./sf11-ewa/TEST_CASES.md) - Test Coverage Checklist
 
 ### SF12 - MicroBiz Loan
 - [README](./sf12-microbiz-loan/README.md) - Overview & Quick Start
 - [ARCHITECTURE](./sf12-microbiz-loan/ARCHITECTURE.md) - System Architecture
+- [API](./sf12-microbiz-loan/API.md) - Mock API Design
 - [DEMO](./sf12-microbiz-loan/DEMO.md) - Demo Script
+- [TEST_CASES](./sf12-microbiz-loan/TEST_CASES.md) - Test Coverage Checklist
 
 ---
 
