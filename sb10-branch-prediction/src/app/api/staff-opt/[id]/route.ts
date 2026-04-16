@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { BRANCHES, getBranchTraffic } from "@/lib/data";
+import { formatLocalDate } from "@/lib/date";
 import { predictTraffic, optimizeStaff } from "@/lib/qwen";
 
 async function getQueueStatus(branchId: string, request: Request) {
@@ -22,7 +23,7 @@ export async function POST(
 
   try {
     const body = await request.json();
-    const targetDate = body.targetDate || new Date().toISOString().split("T")[0];
+    const targetDate = body.targetDate || formatLocalDate(new Date());
     const trafficHistory = getBranchTraffic(branch.id, 30);
     const queueStatus = await getQueueStatus(branch.id, request);
 

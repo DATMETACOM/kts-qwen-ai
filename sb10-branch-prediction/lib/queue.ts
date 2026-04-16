@@ -1,7 +1,8 @@
 import type { CheckIn, QueueStatus } from "../types/index.ts";
+import { formatLocalDate } from "./date.ts";
 
 export function getTodayKey(branchId: string, date = new Date()) {
-  return `${branchId}-${date.toISOString().split("T")[0]}`;
+  return `${branchId}-${formatLocalDate(date)}`;
 }
 
 export function buildQueueStatus(branchId: string, queue: CheckIn[]): QueueStatus {

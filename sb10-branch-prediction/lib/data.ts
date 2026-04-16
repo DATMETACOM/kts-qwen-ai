@@ -1,6 +1,7 @@
 // SB10 - Mock Data Generator
 
 import type { Branch, TrafficRecord, HourlyForecast } from "../types/index.ts";
+import { formatLocalDate, parseDateOnly } from "./date.ts";
 
 // 5 Branches in HCMC
 export const BRANCHES: Branch[] = [
@@ -95,7 +96,7 @@ export function generateTrafficData(): TrafficRecord[] {
     for (let day = 30; day >= 0; day--) {
       const date = new Date(today);
       date.setDate(date.getDate() - day);
-      const dateStr = date.toISOString().split("T")[0];
+      const dateStr = formatLocalDate(date);
       const dayOfWeek = date.getDay();
 
       // Lunch rush pattern (11-13h) and end of month
@@ -153,7 +154,7 @@ export function getBranchTraffic(branchId: string, days = 7): TrafficRecord[] {
 
 // Get today's traffic so far
 export function getTodayTraffic(branchId: string): TrafficRecord[] {
-  const today = new Date().toISOString().split("T")[0];
+  const today = formatLocalDate(new Date());
   return TRAFFIC_DATA.filter((r) => r.branchId === branchId && r.date === today);
 }
 
@@ -167,10 +168,10 @@ export const SIMULATED_CHECK_INS = [
 ];
 
 export function generateHourlyForecast(branchId?: string, targetDate?: string): HourlyForecast[] {
-  const today = targetDate || new Date().toISOString().split("T")[0];
+  const today = targetDate || formatLocalDate(new Date());
   const seedBase = branchId ? createSeed(branchId, today) : 42;
   const rand = seededRandom(seedBase);
-  const dateObj = new Date(today);
+  const dateObj = parseDateOnly(today);
   const isWeekend = dateObj.getDay() === 0 || dateObj.getDay() === 6;
   const isEndOfMonth = dateObj.getDate() >= 25;
 

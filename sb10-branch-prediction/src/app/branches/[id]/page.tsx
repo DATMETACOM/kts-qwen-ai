@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { BRANCHES, getBranchTraffic, HourlyForecast } from "@/lib/data";
+import { formatLocalDate } from "@/lib/date";
 import { predictTraffic } from "@/lib/qwen";
 import { BranchDetailClient } from "@/components";
 
@@ -15,7 +16,7 @@ export default async function BranchDetailPage({ params }: PageProps) {
   }
 
   const trafficHistory = getBranchTraffic(branch.id, 7);
-  const today = new Date().toISOString().split("T")[0];
+  const today = formatLocalDate(new Date());
 
   let initialForecast: HourlyForecast[] = [];
   let initialBestTime: string | undefined;

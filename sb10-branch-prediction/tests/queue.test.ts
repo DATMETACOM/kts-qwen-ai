@@ -9,6 +9,11 @@ test("getTodayKey is deterministic for the same branch and date", () => {
   assert.equal(getTodayKey("bn-001", date), getTodayKey("bn-001", date));
 });
 
+test("getTodayKey uses local date parts for queue partitioning", () => {
+  const date = new Date(2026, 3, 16, 0, 30, 0);
+  assert.equal(getTodayKey("bn-001", date), "bn-001-2026-04-16");
+});
+
 test("createCheckIn derives queue position and sanitizes defaults", () => {
   const existingCheckIns: CheckIn[] = [
     {

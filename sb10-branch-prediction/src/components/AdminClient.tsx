@@ -15,6 +15,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Branch, HourlyForecast } from "@/lib/data";
+import { formatLocalDate } from "@/lib/date";
 import type { QueueStatus } from "@/lib/data";
 
 interface StaffRec {
@@ -49,7 +50,7 @@ export function AdminClient({ branch }: AdminClientProps) {
     try {
       const tomorrow = new Date();
       tomorrow.setDate(tomorrow.getDate() + 1);
-      const targetDate = tomorrow.toISOString().split("T")[0];
+      const targetDate = formatLocalDate(tomorrow);
 
       const res = await fetch(`/api/staff-opt/${branch.id}`, {
         method: "POST",

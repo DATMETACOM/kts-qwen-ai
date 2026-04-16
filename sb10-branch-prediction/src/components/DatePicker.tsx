@@ -2,6 +2,7 @@
 
 import { Calendar, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { formatLocalDate, parseDateOnly } from "@/lib/date";
 
 interface DatePickerProps {
   selectedDate: string;
@@ -9,7 +10,7 @@ interface DatePickerProps {
 }
 
 function formatDateLabel(dateStr: string): string {
-  const date = new Date(dateStr + "T00:00:00");
+  const date = parseDateOnly(dateStr);
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const tomorrow = new Date(today);
@@ -31,9 +32,9 @@ function formatDateLabel(dateStr: string): string {
 
 export function DatePicker({ selectedDate, onDateChange }: DatePickerProps) {
   const shift = (offset: number) => {
-    const current = new Date(selectedDate + "T00:00:00");
+    const current = parseDateOnly(selectedDate);
     current.setDate(current.getDate() + offset);
-    const newDate = current.toISOString().split("T")[0];
+    const newDate = formatLocalDate(current);
     onDateChange(newDate);
   };
 
