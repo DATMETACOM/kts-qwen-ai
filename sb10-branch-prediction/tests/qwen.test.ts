@@ -22,7 +22,7 @@ test("predictTraffic falls back deterministically when QWEN_API_KEY is missing",
     const second = await predictTraffic(request);
 
     assert.deepEqual(second, first);
-    assert.match(first.summary, /Fallback deterministic forecast/);
+    assert.match(first.summary, /Dùng dữ liệu mẫu/);
     assert.equal(first.hourly.length, 9);
   } finally {
     if (originalKey) process.env.QWEN_API_KEY = originalKey;
@@ -47,7 +47,7 @@ test("predictTraffic falls back when Qwen returns malformed payload", async () =
   try {
     const prediction = await predictTraffic(request);
 
-    assert.match(prediction.summary, /Fallback deterministic forecast/);
+    assert.match(prediction.summary, /Dùng dữ liệu mẫu/);
     assert.equal(prediction.hourly.length, 9);
   } finally {
     globalThis.fetch = originalFetch;
@@ -64,7 +64,7 @@ test("optimizeStaff falls back when QWEN_API_KEY is missing", async () => {
     const prediction = await predictTraffic(request);
     const result = await optimizeStaff("Chi nhánh Quận Tân Bình", 8, prediction.hourly);
 
-    assert.match(result.summary, /Fallback staff optimization/);
+    assert.match(result.summary, /Dùng dữ liệu mẫu/);
     assert.equal(result.hourlyRecommendations.length, prediction.hourly.length);
     assert.ok(result.totalAdditionalStaff >= 0);
   } finally {
