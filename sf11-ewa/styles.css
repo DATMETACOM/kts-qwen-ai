@@ -196,6 +196,35 @@ a {
   gap: 16px;
 }
 
+.queue-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.filter-control {
+  min-width: 180px;
+  flex: 1;
+}
+
+.filter-control label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.filter-control select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.84);
+  color: var(--ink);
+  font: inherit;
+}
+
 .value-grid {
   margin-top: 20px;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -399,6 +428,13 @@ a {
 .detail-section h4 {
   margin: 0 0 8px;
   font-family: "Space Grotesk", sans-serif;
+}
+
+.memo-box {
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: rgba(15, 118, 110, 0.08);
+  color: var(--brand-deep);
 }
 
 .rule-list {

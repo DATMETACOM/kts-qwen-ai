@@ -2,6 +2,10 @@ import { employers, employees, rules } from "./data/mockData.js";
 
 const state = {
   selectedEmployeeId: employees[0]?.id ?? null,
+  filters: {
+    employerId: "all",
+    decision: "all",
+  },
   policy: {
     ewaCapMultiplier: 100,
     maxFreshnessHours: 48,
@@ -107,6 +111,24 @@ function getPortfolioSummary() {
   };
 }
 
+function getFilteredEmployees() {
+  const filtered = employees.filter((employee) => {
+    const result = calculateDecision(employee);
+    const matchesEmployer =
+      state.filters.employerId === "all" || employee.employerId === state.filters.employerId;
+    const matchesDecision =
+      state.filters.decision === "all" || result.decision === state.filters.decision;
+
+    return matchesEmployer && matchesDecision;
+  });
+
+  if (!filtered.some((employee) => employee.id === state.selectedEmployeeId)) {
+    state.selectedEmployeeId = filtered[0]?.id ?? employees[0]?.id ?? null;
+  }
+
+  return filtered;
+}
+
 function renderHeroStats() {
   const summary = getPortfolioSummary();
   const items = [
@@ -174,7 +196,23 @@ function renderPortfolioMetrics() {
 }
 
 function renderEmployees() {
-  document.getElementById("employee-list").innerHTML = employees
+  const visibleEmployees = getFilteredEmployees();
+
+  if (visibleEmployees.length === 0) {
+    document.getElementById("employee-list").innerHTML = `
+      <article class="employee-card">
+        <header>
+          <div>
+            <h3 class="employee-title">No employees match the current filters</h3>
+            <p>Broaden employer or decision filters to resume review.</p>
+          </div>
+        </header>
+      </article>
+    `;
+    return;
+  }
+
+  document.getElementById("employee-list").innerHTML = visibleEmployees
     .map((employee) => {
       const result = calculateDecision(employee);
       const isActive = employee.id === state.selectedEmployeeId;
@@ -210,9 +248,66 @@ function renderEmployees() {
   });
 }
 
+function renderQueueFilters() {
+  document.getElementById("queue-filters").innerHTML = `
+    <div class="filter-control">
+      <label for="employer-filter">Employer</label>
+      <select id="employer-filter">
+        <option value="all">All employers</option>
+        ${employers
+          .map(
+            (employer) => `
+              <option value="${employer.id}" ${state.filters.employerId === employer.id ? "selected" : ""}>
+                ${employer.name}
+              </option>
+            `,
+          )
+          .join("")}
+      </select>
+    </div>
+    <div class="filter-control">
+      <label for="decision-filter">Decision</label>
+      <select id="decision-filter">
+        <option value="all">All decisions</option>
+        <option value="Approve EWA" ${state.filters.decision === "Approve EWA" ? "selected" : ""}>Approve EWA</option>
+        <option value="Offer Salary Loan" ${state.filters.decision === "Offer Salary Loan" ? "selected" : ""}>Offer Salary Loan</option>
+        <option value="Decline" ${state.filters.decision === "Decline" ? "selected" : ""}>Decline</option>
+      </select>
+    </div>
+  `;
+
+  document.getElementById("employer-filter").addEventListener("change", (event) => {
+    state.filters.employerId = event.target.value;
+    rerender();
+  });
+
+  document.getElementById("decision-filter").addEventListener("change", (event) => {
+    state.filters.decision = event.target.value;
+    rerender();
+  });
+}
+
 function renderEmployeeDetail() {
-  const employee = employees.find((item) => item.id === state.selectedEmployeeId) ?? employees[0];
+  const visibleEmployees = getFilteredEmployees();
+  const employee = visibleEmployees.find((item) => item.id === state.selectedEmployeeId) ?? visibleEmployees[0];
+
+  if (!employee) {
+    document.getElementById("employee-detail").innerHTML = `
+      <div class="detail-main">
+        <span class="panel-label">Decision Layer</span>
+        <h3>No employee selected</h3>
+        <p>Current filters removed all queue candidates. Reset or broaden the queue filters to continue.</p>
+      </div>
+    `;
+    return;
+  }
+
   const result = calculateDecision(employee);
+  const decisionMemo = [
+    `${employee.name} is currently mapped to ${result.decision.toLowerCase()}.`,
+    `Payroll data from ${result.employer.payrollProvider} is ${result.payrollFresh ? "within" : "outside"} the policy freshness window.`,
+    `Current disposable payroll capacity supports up to ${formatCurrency(result.maxInstallment)} per cycle.`,
+  ].join(" ");
 
   document.getElementById("employee-detail").innerHTML = `
     <div class="detail-main">
@@ -246,6 +341,10 @@ function renderEmployeeDetail() {
 
       <div class="detail-grid">
         <section class="detail-section">
+          <h4>Operator memo</h4>
+          <div class="memo-box">${decisionMemo}</div>
+        </section>
+        <section class="detail-section">
           <h4>Decision rationale</h4>
           <ul class="detail-list">
             ${result.reasons.map((reason) => `<li>${reason}</li>`).join("")}
@@ -259,6 +358,7 @@ function renderEmployeeDetail() {
             <li>Payroll freshness: ${result.payrollFresh ? "Pass" : "Fail"}</li>
             <li>Applied EWA cap: ${formatPercent(result.appliedEwaCap)}</li>
             <li>Prior EWA used this cycle: ${formatCurrency(employee.priorEwaAmount)}</li>
+            <li>Queue view: ${visibleEmployees.length} employee(s) after filters</li>
           </ul>
         </section>
       </div>
@@ -332,6 +432,7 @@ function rerender() {
   renderEmployers();
   renderPortfolioMetrics();
   renderScenarioControls();
+  renderQueueFilters();
   renderEmployees();
   renderEmployeeDetail();
   renderRules();
