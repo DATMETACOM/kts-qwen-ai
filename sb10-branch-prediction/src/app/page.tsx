@@ -84,7 +84,7 @@ export default function HomePage() {
       <footer className="bg-gray-900 text-gray-500 py-5 mt-16">
         <div className="container mx-auto px-4 text-center text-xs space-y-1">
           <p className="text-gray-400 font-medium">
-            SF10 - Queue Mind & Smart Queue
+            SB10 - Branch Traffic Prediction & Smart Queue
           </p>
           <p>PoC for Qwen AI Build Day 2026 & Shinhan InnoBoost</p>
         </div>

@@ -1,6 +1,6 @@
-# SF10 Demo Guide
+# SB10 Demo Guide
 
-> Hướng dẫn demo SF10 - Queue Mind cho Shinhan InnoBoost
+> Hướng dẫn demo SB10 - Branch Traffic Prediction cho Shinhan InnoBoost
 
 ---
 
@@ -22,7 +22,7 @@
 "Xin chào ban giám khảo và các anh chị.
 
 Mình là [Tên] từ đội [Tên đội]. Hôm nay mình xin trình bày
-SF10 - Hệ thống dự đoán lưu lượng chi nhánh bằng Qwen AI."
+SB10 - Hệ thống dự đoán lưu lượng chi nhánh bằng Qwen AI."
 ```
 
 ### Problem Statement (30 seconds)
@@ -43,7 +43,7 @@ Chúng tôi có giải pháp:"
 ### Solution Overview (30 seconds)
 
 ```
-"SF10 - Hệ thống dự đoán lưu lượng chi nhánh bằng Qwen AI:
+"SB10 - Hệ thống dự đoán lưu lượng chi nhánh bằng Qwen AI:
 
 1. Dự báo theo giờ - Biết trước khi nào đông
 2. Best time to visit - Khuyến nghị giờ vàng
@@ -171,7 +171,7 @@ A:
 
 ### Server không chạy
 ```bash
-cd sf10-queue-mind
+cd sb10-branch-prediction
 npm install
 npm run dev
 ```

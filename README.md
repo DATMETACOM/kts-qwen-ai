@@ -8,7 +8,7 @@
 
 | Project | Code | Description | Status | Link |
 |---------|------|-------------|--------|------|
-| **Queue Mind** | SF10 | Dự đoán lưu lượng chi nhánh & quản lý hàng đợi | ✅ Ready | [sf10-queue-mind/](./sf10-queue-mind/) |
+| **Branch Traffic Prediction** | SB10 | Dự đoán lưu lượng chi nhánh & quản lý hàng đợi | ✅ Ready | [sb10-branch-prediction/](./sb10-branch-prediction/) |
 | **Customer Behavior Prediction** | SF8 | Phân tích hành vi khách hàng mới | ✅ Ready | [sf8-behavior-prediction/](./sf8-behavior-prediction/) |
 
 ---
@@ -16,8 +16,8 @@
 ## 🚀 Quick Start
 
 ```bash
-# SF10 - Queue Mind
-cd sf10-queue-mind
+# SB10 - Branch Traffic Prediction
+cd sb10-branch-prediction
 npm install
 npm run dev
 # Open http://localhost:3000
@@ -41,11 +41,11 @@ npm run dev
 
 ## 📚 Documentation
 
-### SF10 - Queue Mind
-- [README](./sf10-queue-mind/README.md) - Overview & Quick Start
-- [ARCHITECTURE](./sf10-queue-mind/ARCHITECTURE.md) - System Architecture
-- [API](./sf10-queue-mind/API.md) - API Endpoints
-- [DEMO](./sf10-queue-mind/DEMO.md) - Demo Script
+### SB10 - Branch Traffic Prediction
+- [README](./sb10-branch-prediction/README.md) - Overview & Quick Start
+- [ARCHITECTURE](./sb10-branch-prediction/ARCHITECTURE.md) - System Architecture
+- [API](./sb10-branch-prediction/API.md) - API Endpoints
+- [DEMO](./sb10-branch-prediction/DEMO.md) - Demo Script
 
 ### SF8 - Customer Behavior Prediction
 - [README](./sf8-behavior-prediction/README.md) - Overview & Quick Start
@@ -57,7 +57,7 @@ npm run dev
 
 ## 🎯 Features Summary
 
-### SF10 - Queue Mind
+### SB10 - Branch Traffic Prediction
 - 📊 Dashboard với 5 chi nhánh mẫu tại TP.HCM
 - ⏰ Best Time to Visit - Khuyến nghị giờ vàng
 - 📈 Dự báo lưu lượng theo giờ (8h-17h)
@@ -78,7 +78,7 @@ npm run dev
 Add your Qwen API key to each project's `.env.local`:
 
 ```bash
-# sf10-queue-mind/.env.local
+# sb10-branch-prediction/.env.local
 QWEN_API_KEY=your_qwen_api_key_here
 
 # sf8-behavior-prediction/.env.local
@@ -91,7 +91,7 @@ Without the API key, both projects will use mock/rule-based fallbacks.
 
 ## 📊 Demo Data
 
-### SF10
+### SB10
 - 5 branches in HCMC
 - 30 days history (~3,600 traffic records)
 - Hourly traffic patterns
