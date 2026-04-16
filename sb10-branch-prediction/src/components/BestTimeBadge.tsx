@@ -16,25 +16,24 @@ export function BestTimeBadge({ hourlyForecast, bestTimeLabel }: BestTimeBadgePr
   const displayLabel = bestTimeLabel || `${bestHour.hour}:00 - ${bestHour.hour + 1}:00`;
 
   return (
-    <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl shadow-md p-6 mb-6 border border-green-400">
-      <div className="flex items-center justify-between">
+    <div className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-xl shadow-md p-4 sm:p-5 mb-5 relative overflow-hidden">
+      <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -translate-y-8 translate-x-8" />
+      <div className="absolute bottom-0 right-12 w-20 h-20 bg-white/5 rounded-full translate-y-6" />
+      <div className="relative flex items-center justify-between">
         <div>
-          <h2 className="text-lg font-semibold mb-1 flex items-center gap-2">
-            <Sparkles className="w-5 h-5" />
-            Giờ vàng để đến
+          <h2 className="text-sm font-semibold mb-1.5 flex items-center gap-2 opacity-90">
+            <Sparkles className="w-4 h-4" />
+            Giờ vàng để đến chi nhánh
           </h2>
-          <p className="text-green-100">
-            Khung giờ thấp nhất:{" "}
-            <span className="font-bold text-white text-xl">
-              {displayLabel}
-            </span>
+          <p className="text-xl sm:text-2xl font-bold">
+            {displayLabel}
           </p>
-          <p className="text-green-100 text-sm mt-1 flex items-center gap-1">
+          <p className="text-emerald-100 text-xs mt-1.5 flex items-center gap-1.5">
             <Clock className="w-3.5 h-3.5" />
             Thời gian chờ ước tính: ~{bestHour.predictedWaitTime} phút
           </p>
         </div>
-        <Sparkles className="w-10 h-10 text-green-200 opacity-50" />
+        <Sparkles className="w-10 h-10 text-white/20" />
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ListOrdered, Loader2 } from "lucide-react";
+import { ListOrdered, Loader2, Users, Clock, Hourglass } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import type { QueueStatus } from "@/lib/data";
@@ -39,16 +39,16 @@ export function QueueDisplay({ branchId, onStatusChange }: QueueDisplayProps) {
 
   if (loading) {
     return (
-      <Card className="mb-6">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <ListOrdered className="w-5 h-5" />
+      <Card className="mb-5 border-gray-200 shadow-sm">
+        <CardHeader className="pb-2">
+          <CardTitle className="flex items-center gap-2 text-sm">
+            <ListOrdered className="w-4 h-4 text-gray-500" />
             Hàng đợi hiện tại
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="flex items-center gap-2 text-gray-500 text-sm">
-            <Loader2 className="w-4 h-4 animate-spin" />
+          <div className="flex items-center gap-2 text-gray-400 text-xs">
+            <Loader2 className="w-3.5 h-3.5 animate-spin" />
             Đang tải...
           </div>
         </CardContent>
@@ -59,57 +59,66 @@ export function QueueDisplay({ branchId, onStatusChange }: QueueDisplayProps) {
   const checkIns = queue?.checkIns || [];
 
   return (
-    <Card className="mb-6">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <ListOrdered className="w-5 h-5" />
+    <Card className="mb-5 border-gray-200 shadow-sm">
+      <CardHeader className="pb-2">
+        <CardTitle className="flex items-center gap-2 text-sm">
+          <ListOrdered className="w-4 h-4 text-gray-500" />
           Hàng đợi hiện tại
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-3 gap-4 mb-4">
-          <div className="text-center p-3 bg-blue-50 rounded-lg">
-            <p className="text-2xl font-bold text-blue-600">{queue?.waiting || 0}</p>
-            <p className="text-xs text-gray-600">Đang chờ</p>
+        <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-4">
+          <div className="text-center p-2.5 bg-blue-50 rounded-lg">
+            <Users className="w-4 h-4 text-blue-400 mx-auto mb-1" />
+            <p className="text-lg sm:text-xl font-bold text-blue-600">{queue?.waiting || 0}</p>
+            <p className="text-[10px] text-gray-500">Đang chờ</p>
           </div>
-          <div className="text-center p-3 bg-green-50 rounded-lg">
-            <p className="text-2xl font-bold text-green-600">{queue?.serving || 0}</p>
-            <p className="text-xs text-gray-600">Đang phục vụ</p>
+          <div className="text-center p-2.5 bg-emerald-50 rounded-lg">
+            <Clock className="w-4 h-4 text-emerald-400 mx-auto mb-1" />
+            <p className="text-lg sm:text-xl font-bold text-emerald-600">{queue?.serving || 0}</p>
+            <p className="text-[10px] text-gray-500">Phục vụ</p>
           </div>
-          <div className="text-center p-3 bg-orange-50 rounded-lg">
-            <p className="text-2xl font-bold text-orange-600">{queue?.averageWaitTime || 0}p</p>
-            <p className="text-xs text-gray-600">TB chờ</p>
+          <div className="text-center p-2.5 bg-amber-50 rounded-lg">
+            <Hourglass className="w-4 h-4 text-amber-400 mx-auto mb-1" />
+            <p className="text-lg sm:text-xl font-bold text-amber-600">{queue?.averageWaitTime || 0}p</p>
+            <p className="text-[10px] text-gray-500">TB chờ</p>
           </div>
         </div>
 
         {checkIns.length > 0 ? (
-          <div className="space-y-2">
-            {checkIns.slice(0, 8).map((c) => (
+          <div className="space-y-1.5">
+            {checkIns.slice(0, 6).map((c) => (
               <div
                 key={c.checkInId}
-                className="flex items-center justify-between p-3 bg-gray-50 rounded-lg text-sm"
+                className="flex items-center justify-between p-2.5 bg-gray-50 rounded-lg text-xs"
               >
-                <div className="flex items-center gap-3">
-                  <Badge variant="outline" className="font-mono">#{c.positionInQueue}</Badge>
-                  <span className="text-gray-700">{c.customerName}</span>
-                  <span className="text-gray-400 text-xs">{c.serviceType}</span>
+                <div className="flex items-center gap-2">
+                  <Badge variant="outline" className="font-mono text-[10px] h-5">
+                    #{c.positionInQueue}
+                  </Badge>
+                  <span className="text-gray-700 font-medium">{c.customerName}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   {c.status === "serving" ? (
-                    <Badge variant="success">Đang phục vụ</Badge>
+                    <Badge variant="success" className="text-[10px]">Đang phục vụ</Badge>
                   ) : (
-                    <span className="text-xs text-gray-500">~{c.estimatedWaitTime} phút</span>
+                    <span className="text-gray-400 text-[11px]">~{c.estimatedWaitTime}p</span>
                   )}
                 </div>
               </div>
             ))}
+            {checkIns.length > 6 && (
+              <p className="text-[11px] text-gray-400 text-center">
+                +{checkIns.length - 6} khách khác
+              </p>
+            )}
           </div>
         ) : (
-          <p className="text-gray-400 text-sm text-center py-4">Chưa có khách hàng nào trong hàng đợi</p>
+          <p className="text-gray-300 text-xs text-center py-6">Chưa có khách trong hàng đợi</p>
         )}
 
-        <p className="text-xs text-gray-400 mt-3 text-right">
-          Ước tính khách mới: ~{queue?.estimatedTimeForNew || 0} phút. Tự động cập nhật mỗi 15 giây
+        <p className="text-[10px] text-gray-300 mt-3 text-right">
+          Khách mới ước tính: ~{queue?.estimatedTimeForNew || 0} phút &middot; Cập nhật mỗi 15s
         </p>
       </CardContent>
     </Card>

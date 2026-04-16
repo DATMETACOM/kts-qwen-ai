@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { UserPlus } from "lucide-react";
+import { UserPlus, CheckCircle, XCircle } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
@@ -33,7 +33,7 @@ export function CheckInButton({ branchId, onCheckIn }: CheckInButtonProps) {
 
       if (response.ok) {
         setMessage(
-          `Check-in thành công! Số thứ tự: ${data.positionInQueue}, Thời gian chờ: ~${data.estimatedWaitTime} phút`
+          `STT: #${data.positionInQueue} | Chờ: ~${data.estimatedWaitTime} phút`
         );
         onCheckIn?.(data.positionInQueue);
       } else {
@@ -46,29 +46,42 @@ export function CheckInButton({ branchId, onCheckIn }: CheckInButtonProps) {
     }
   };
 
+  const isSuccess = message.startsWith("STT");
+  const isError = message.startsWith("Lỗi");
+
   return (
-    <Card className="mb-6">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <UserPlus className="w-5 h-5" />
+    <Card className="mb-5 border-gray-200 shadow-sm">
+      <CardHeader className="pb-2">
+        <CardTitle className="flex items-center gap-2 text-sm">
+          <UserPlus className="w-4 h-4 text-gray-500" />
           Check-in mô phỏng
         </CardTitle>
-        <CardDescription>
-          Thêm khách check-in để xem hàng đợi và dự báo cập nhật theo thời gian thực
+        <CardDescription className="text-xs">
+          Thêm khách để xem hàng đợi cập nhật
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <Button onClick={handleCheckIn} disabled={isLoading}>
-          <UserPlus className="w-4 h-4 mr-2" />
+        <Button
+          onClick={handleCheckIn}
+          disabled={isLoading}
+          size="sm"
+          className="bg-blue-600 hover:bg-blue-700"
+        >
+          <UserPlus className="w-3.5 h-3.5 mr-1.5" />
           {isLoading ? "Đang xử lý..." : "Check-in mới"}
         </Button>
         {message && (
-          <div className={`mt-4 p-3 rounded-lg text-sm ${
-            message.startsWith("Check-in")
-              ? "bg-green-50 border border-green-200 text-green-800"
-              : "bg-red-50 border border-red-200 text-red-800"
+          <div className={`mt-3 p-2.5 rounded-lg text-xs flex items-center gap-2 ${
+            isSuccess
+              ? "bg-emerald-50 border border-emerald-200 text-emerald-700"
+              : "bg-red-50 border border-red-200 text-red-700"
           }`}>
-            {message.startsWith("Check-in") ? "✅" : "❌"} {message}
+            {isSuccess ? (
+              <CheckCircle className="w-3.5 h-3.5 shrink-0" />
+            ) : (
+              <XCircle className="w-3.5 h-3.5 shrink-0" />
+            )}
+            {message}
           </div>
         )}
       </CardContent>

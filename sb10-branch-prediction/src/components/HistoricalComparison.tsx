@@ -45,38 +45,38 @@ export function HistoricalComparison({ todayForecast, lastWeekHistory }: Histori
   });
 
   return (
-    <Card className="mb-6">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <TrendingUp className="w-5 h-5" />
-          So sánh: Hôm nay vs Tuần trước
+    <Card className="mb-5 border-gray-200 shadow-sm">
+      <CardHeader className="pb-2">
+        <CardTitle className="flex items-center gap-2 text-sm">
+          <TrendingUp className="w-4 h-4 text-gray-500" />
+          Hôm nay vs Tuần trước
         </CardTitle>
       </CardHeader>
-      <CardContent>
-
-      <div style={{ width: "100%", height: 300 }}>
-        <ResponsiveContainer>
-          <BarChart data={chartData} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-            <XAxis dataKey="hour" tick={{ fontSize: 12, fill: "#6b7280" }} />
-            <YAxis tick={{ fontSize: 12, fill: "#6b7280" }} />
-            <Tooltip
-              contentStyle={{ borderRadius: 8, fontSize: 13 }}
-              formatter={(value, name) => [
-                `${value} khách`,
-                name === "homNay" ? "Hôm nay" : "Tuần trước",
-              ]}
-            />
-            <Legend
-              formatter={(value: string) =>
-                value === "homNay" ? "Hôm nay (dự báo)" : "Tuần trước (TB)"
-              }
-            />
-            <Bar dataKey="homNay" fill="#3b82f6" radius={[4, 4, 0, 0]} />
-            <Bar dataKey="tuanTruoc" fill="#93c5fd" radius={[4, 4, 0, 0]} fillOpacity={0.6} />
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
+      <CardContent className="pt-0">
+        <div style={{ width: "100%", height: 260 }}>
+          <ResponsiveContainer>
+            <BarChart data={chartData} margin={{ top: 5, right: 10, left: -10, bottom: 5 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+              <XAxis dataKey="hour" tick={{ fontSize: 11, fill: "#9ca3af" }} axisLine={{ stroke: "#e5e7eb" }} />
+              <YAxis tick={{ fontSize: 11, fill: "#9ca3af" }} axisLine={false} tickLine={false} />
+              <Tooltip
+                contentStyle={{ borderRadius: 8, fontSize: 12, border: "1px solid #e5e7eb" }}
+                formatter={(value, name) => [
+                  `${value} khách`,
+                  name === "homNay" ? "Hôm nay" : "Tuần trước",
+                ]}
+              />
+              <Legend
+                formatter={(value: string) =>
+                  value === "homNay" ? "Hôm nay (dự báo)" : "Tuần trước (TB)"
+                }
+                wrapperStyle={{ fontSize: 11 }}
+              />
+              <Bar dataKey="homNay" fill="#3b82f6" radius={[3, 3, 0, 0]} />
+              <Bar dataKey="tuanTruoc" fill="#93c5fd" radius={[3, 3, 0, 0]} fillOpacity={0.5} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
       </CardContent>
     </Card>
   );

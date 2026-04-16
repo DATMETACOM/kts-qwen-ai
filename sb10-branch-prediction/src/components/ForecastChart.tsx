@@ -52,8 +52,8 @@ function CustomTooltip({
   const data = payload[0].payload;
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg shadow-lg p-3 text-sm">
-      <p className="font-semibold text-gray-900 mb-2">{label}:00 - {Number(label) + 1}:00</p>
+    <div className="bg-white border border-gray-200 rounded-lg shadow-lg p-3 text-xs">
+      <p className="font-semibold text-gray-900 mb-1.5">{label}:00 - {Number(label) + 1}:00</p>
       <div className="space-y-1">
         <p className="text-blue-600">
           Số khách: <strong>{data.predictedCustomers}</strong>
@@ -87,82 +87,73 @@ export function ForecastChart({ hourlyForecast, targetDate }: ForecastChartProps
   const maxCustomers = Math.max(...hourlyForecast.map((h) => h.predictedCustomers), 1);
 
   return (
-    <Card className="mb-6">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <BarChart3 className="w-5 h-5" />
+    <Card className="mb-5 border-gray-200 shadow-sm">
+      <CardHeader className="pb-2">
+        <CardTitle className="flex items-center gap-2 text-sm">
+          <BarChart3 className="w-4 h-4 text-gray-500" />
           Dự báo lưu lượng ({targetDate})
         </CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="pt-0">
+        <div style={{ width: "100%", height: 300 }}>
+          <ResponsiveContainer>
+            <BarChart data={chartData} margin={{ top: 5, right: 10, left: -10, bottom: 5 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+              <XAxis
+                dataKey="hour"
+                tick={{ fontSize: 11, fill: "#9ca3af" }}
+                axisLine={{ stroke: "#e5e7eb" }}
+              />
+              <YAxis
+                yAxisId="left"
+                tick={{ fontSize: 11, fill: "#9ca3af" }}
+                axisLine={false}
+                tickLine={false}
+                domain={[0, Math.ceil(maxCustomers * 1.2)]}
+              />
+              <YAxis
+                yAxisId="right"
+                orientation="right"
+                tick={{ fontSize: 11, fill: "#9ca3af" }}
+                axisLine={false}
+                tickLine={false}
+              />
+              <Tooltip content={<CustomTooltip />} />
+              <Legend
+                formatter={(value: string) =>
+                  value === "customers" ? "Số khách" : "Thời gian chờ (phút)"
+                }
+                wrapperStyle={{ fontSize: 11 }}
+              />
+              <Bar yAxisId="left" dataKey="customers" radius={[4, 4, 0, 0]} name="customers">
+                {chartData.map((entry, index) => (
+                  <Cell key={index} fill={entry.fill} fillOpacity={0.85} />
+                ))}
+              </Bar>
+              <Bar
+                yAxisId="right"
+                dataKey="waitTime"
+                fill="#6366f1"
+                radius={[4, 4, 0, 0]}
+                fillOpacity={0.4}
+                name="waitTime"
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
 
-      <div style={{ width: "100%", height: 350 }}>
-        <ResponsiveContainer>
-          <BarChart data={chartData} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-            <XAxis
-              dataKey="hour"
-              tick={{ fontSize: 12, fill: "#6b7280" }}
-            />
-            <YAxis
-              yAxisId="left"
-              tick={{ fontSize: 12, fill: "#6b7280" }}
-              label={{
-                value: "Số khách",
-                angle: -90,
-                position: "insideLeft",
-                style: { fontSize: 12, fill: "#6b7280" },
-              }}
-              domain={[0, Math.ceil(maxCustomers * 1.2)]}
-            />
-            <YAxis
-              yAxisId="right"
-              orientation="right"
-              tick={{ fontSize: 12, fill: "#6b7280" }}
-              label={{
-                value: "Phút chờ",
-                angle: 90,
-                position: "insideRight",
-                style: { fontSize: 12, fill: "#6b7280" },
-              }}
-            />
-            <Tooltip content={<CustomTooltip />} />
-            <Legend
-              formatter={(value: string) =>
-                value === "customers" ? "Số khách" : "Thời gian chờ (phút)"
-              }
-            />
-            <Bar yAxisId="left" dataKey="customers" radius={[4, 4, 0, 0]} name="customers">
-              {chartData.map((entry, index) => (
-                <Cell key={index} fill={entry.fill} fillOpacity={0.85} />
-              ))}
-            </Bar>
-            <Bar
-              yAxisId="right"
-              dataKey="waitTime"
-              fill="#6366f1"
-              radius={[4, 4, 0, 0]}
-              fillOpacity={0.5}
-              name="waitTime"
-            />
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
-
-      <div className="flex items-center gap-6 mt-4 pt-4 border-t">
-        <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded bg-green-500"></div>
-          <span className="text-sm text-gray-600">Thấp (&lt;10 phút)</span>
+        <div className="flex flex-wrap items-center gap-4 mt-3 pt-3 border-t border-gray-100">
+          {[
+            { color: "bg-emerald-500", label: "Thấp (<10 phút)" },
+            { color: "bg-amber-500", label: "TB (10-20 phút)" },
+            { color: "bg-red-500", label: "Cao (>20 phút)" },
+          ].map(({ color, label }) => (
+            <div key={label} className="flex items-center gap-1.5">
+              <div className={`w-3 h-3 rounded ${color}`} />
+              <span className="text-[11px] text-gray-500">{label}</span>
+            </div>
+          ))}
         </div>
-        <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded bg-yellow-500"></div>
-          <span className="text-sm text-gray-600">Trung bình (10-20 phút)</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded bg-red-500"></div>
-          <span className="text-sm text-gray-600">Cao (&gt;20 phút)</span>
-        </div>
-      </div>
       </CardContent>
     </Card>
   );

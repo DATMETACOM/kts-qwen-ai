@@ -6,3 +6,5 @@ export { CheckInButton } from "./CheckInButton";
 export { HistoricalComparison } from "./HistoricalComparison";
 export { QueueDisplay } from "./QueueDisplay";
 export { BranchDetailClient } from "./BranchDetailClient";
+export { DatePicker } from "./DatePicker";
+export { NotificationPanel } from "./NotificationPanel";
