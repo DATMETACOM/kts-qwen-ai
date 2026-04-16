@@ -2,16 +2,38 @@ import { channels, rules, sellers } from "./data/mockData.js";
 
 const state = {
   selectedSellerId: sellers[0]?.id ?? null,
+  selectedPreset: "balanced",
   filters: {
     channelId: "all",
     decision: "all",
   },
   policy: {
-    riskTolerance: 0,
-    seasonalityShockPercent: 0,
+    riskTolerance: 4,
+    seasonalityShockPercent: 5,
     revenueShareCapPercent: 15,
   },
 };
+
+const presets = [
+  {
+    id: "growth",
+    title: "Growth mode",
+    description: "Push approvals with lighter score tightening and a higher revenue-share ceiling.",
+    policy: { riskTolerance: 0, seasonalityShockPercent: 0, revenueShareCapPercent: 18 },
+  },
+  {
+    id: "balanced",
+    title: "Balanced mode",
+    description: "Default operating posture for production-ready pilots.",
+    policy: { riskTolerance: 4, seasonalityShockPercent: 5, revenueShareCapPercent: 15 },
+  },
+  {
+    id: "conservative",
+    title: "Conservative mode",
+    description: "Tighten score acceptance and assume weaker revenue conditions.",
+    policy: { riskTolerance: 12, seasonalityShockPercent: 15, revenueShareCapPercent: 12 },
+  },
+];
 
 function formatCurrency(value) {
   return new Intl.NumberFormat("en-US", {
@@ -139,6 +161,30 @@ function getFilteredSellers() {
   return filtered;
 }
 
+function getSelectedSeller() {
+  const visibleSellers = getFilteredSellers();
+  return visibleSellers.find((item) => item.id === state.selectedSellerId) ?? visibleSellers[0] ?? null;
+}
+
+function getRepaymentSchedule(result) {
+  const schedule = [];
+  let remaining = result.recommendedLoan;
+
+  for (let month = 1; month <= Math.min(result.projectedTenor, 6); month += 1) {
+    const seasonalityDrift = month % 3 === 0 ? 0.88 : month % 2 === 0 ? 0.96 : 1;
+    const plannedCollection = Math.min(result.monthlyRepayment * seasonalityDrift, remaining);
+    remaining = Math.max(remaining - plannedCollection, 0);
+    schedule.push({
+      month,
+      plannedCollection,
+      remaining,
+    });
+    if (remaining <= 0) break;
+  }
+
+  return schedule;
+}
+
 function renderHeroStats() {
   const summary = getPortfolioSummary();
   const items = [
@@ -242,12 +288,36 @@ function renderScenarioControls() {
   });
 
   document.getElementById("reset-policy").addEventListener("click", () => {
+    state.selectedPreset = "balanced";
     state.policy = {
-      riskTolerance: 0,
-      seasonalityShockPercent: 0,
+      riskTolerance: 4,
+      seasonalityShockPercent: 5,
       revenueShareCapPercent: 15,
     };
     rerender();
+  });
+}
+
+function renderPresetBar() {
+  document.getElementById("preset-bar").innerHTML = presets
+    .map(
+      (preset) => `
+        <article class="preset-card ${state.selectedPreset === preset.id ? "is-active" : ""}" data-preset-id="${preset.id}">
+          <h3>${preset.title}</h3>
+          <p>${preset.description}</p>
+        </article>
+      `,
+    )
+    .join("");
+
+  document.querySelectorAll("[data-preset-id]").forEach((node) => {
+    node.addEventListener("click", () => {
+      const preset = presets.find((item) => item.id === node.getAttribute("data-preset-id"));
+      if (!preset) return;
+      state.selectedPreset = preset.id;
+      state.policy = { ...preset.policy };
+      rerender();
+    });
   });
 }
 
@@ -359,7 +429,7 @@ function renderSellers() {
 
 function renderSellerDetail() {
   const visibleSellers = getFilteredSellers();
-  const seller = visibleSellers.find((item) => item.id === state.selectedSellerId) ?? visibleSellers[0];
+  const seller = getSelectedSeller();
 
   if (!seller) {
     document.getElementById("seller-detail").innerHTML = `
@@ -445,6 +515,35 @@ function renderSellerDetail() {
   `;
 }
 
+function renderRepaymentPlan() {
+  const seller = getSelectedSeller();
+
+  if (!seller) {
+    document.getElementById("repayment-plan").innerHTML = `
+      <article class="repayment-row">
+        <h3>No repayment plan available</h3>
+        <p>Select a seller from the current queue to inspect the revenue-share waterfall.</p>
+      </article>
+    `;
+    return;
+  }
+
+  const result = calculateDecision(seller);
+  const schedule = getRepaymentSchedule(result);
+
+  document.getElementById("repayment-plan").innerHTML = schedule
+    .map(
+      (row) => `
+        <article class="repayment-row">
+          <h3>Month ${row.month}</h3>
+          <p>Planned collection: ${formatCurrency(row.plannedCollection)}</p>
+          <p>Remaining balance: ${formatCurrency(row.remaining)}</p>
+        </article>
+      `,
+    )
+    .join("");
+}
+
 function renderSignals() {
   const approvedCount = sellers.filter((seller) => calculateDecision(seller).decision === "Approve").length;
   const highRiskCount = sellers.filter((seller) => calculateDecision(seller).riskBand === "high").length;
@@ -497,10 +596,12 @@ function rerender() {
   renderChannels();
   renderPortfolioMetrics();
   renderScenarioControls();
+  renderPresetBar();
   renderRules();
   renderQueueFilters();
   renderSellers();
   renderSellerDetail();
+  renderRepaymentPlan();
   renderSignals();
 }
 

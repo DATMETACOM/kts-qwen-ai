@@ -129,6 +129,82 @@ function getFilteredEmployees() {
   return filtered;
 }
 
+function getWorkflowForEmployee(employee, result) {
+  const steps = [
+    {
+      title: "Consent captured",
+      detail: employee.consent ? "Employee data-sharing consent is active." : "Consent is missing.",
+      state: employee.consent ? "done" : "blocked",
+    },
+    {
+      title: "Payroll verified",
+      detail: result.payrollFresh
+        ? `Payroll feed from ${result.employer.payrollProvider} is within freshness policy.`
+        : "Payroll data is stale and cannot support instant processing.",
+      state: result.payrollFresh ? "done" : "blocked",
+    },
+    {
+      title: "Offer approved",
+      detail:
+        result.decision === "Decline"
+          ? "No offer can be approved under current policy."
+          : `${result.decision} is available for this employee.`,
+      state: result.decision === "Decline" ? "blocked" : "done",
+    },
+    {
+      title: "Disbursement ready",
+      detail:
+        result.decision === "Approve EWA"
+          ? `Instant wage access can disburse ${formatCurrency(result.ewaAmount)}.`
+          : result.decision === "Offer Salary Loan"
+            ? `Salary-linked loan can disburse ${formatCurrency(result.loanAmount)} after acceptance.`
+            : "Disbursement remains blocked.",
+      state: result.decision === "Decline" ? "blocked" : "current",
+    },
+    {
+      title: "Payroll auto-debit scheduled",
+      detail:
+        result.decision === "Decline"
+          ? "No deduction setup created."
+          : "Repayment deduction will be attached to the next payroll cycle.",
+      state: result.decision === "Decline" ? "blocked" : "pending",
+    },
+  ];
+
+  return steps;
+}
+
+function getAuditEntries(employee, result) {
+  return [
+    {
+      label: "Data intake",
+      title: "Employee and payroll snapshot loaded",
+      detail: `${employee.name} was scored against ${result.employer.name} with ${employee.tenureMonths} months tenure and ${employee.attendanceScore}/100 attendance.`,
+    },
+    {
+      label: "Policy gate",
+      title: "Consent and freshness checks applied",
+      detail: `Consent is ${employee.consent ? "active" : "missing"} and payroll freshness status is ${result.payrollFresh ? "pass" : "fail"}.`,
+    },
+    {
+      label: "Offer sizing",
+      title: "Exposure limits recalculated",
+      detail:
+        result.decision === "Approve EWA"
+          ? `EWA cap and prior usage produced an eligible amount of ${formatCurrency(result.ewaAmount)}.`
+          : `Debt-service capacity produced a salary-linked loan capacity of ${formatCurrency(result.loanAmount)}.`,
+    },
+    {
+      label: "Collections",
+      title: "Payroll deduction memo prepared",
+      detail:
+        result.decision === "Decline"
+          ? "No collection setup is permitted because the case remains blocked."
+          : `Repayment will rely on payroll deduction with a max cycle capacity of ${formatCurrency(result.maxInstallment)}.`,
+    },
+  ];
+}
+
 function renderHeroStats() {
   const summary = getPortfolioSummary();
   const items = [
@@ -366,6 +442,41 @@ function renderEmployeeDetail() {
   `;
 }
 
+function renderWorkflowBoard() {
+  const employee = employees.find((item) => item.id === state.selectedEmployeeId) ?? employees[0];
+  const result = calculateDecision(employee);
+  const steps = getWorkflowForEmployee(employee, result);
+
+  document.getElementById("workflow-board").innerHTML = steps
+    .map(
+      (step) => `
+        <article class="workflow-step is-${step.state}">
+          <h3>${step.title}</h3>
+          <p>${step.detail}</p>
+        </article>
+      `,
+    )
+    .join("");
+}
+
+function renderAuditLog() {
+  const employee = employees.find((item) => item.id === state.selectedEmployeeId) ?? employees[0];
+  const result = calculateDecision(employee);
+  const entries = getAuditEntries(employee, result);
+
+  document.getElementById("audit-log").innerHTML = entries
+    .map(
+      (entry) => `
+        <article class="audit-item">
+          <span class="audit-meta">${entry.label}</span>
+          <h3>${entry.title}</h3>
+          <p>${entry.detail}</p>
+        </article>
+      `,
+    )
+    .join("");
+}
+
 function renderScenarioControls() {
   document.getElementById("scenario-controls").innerHTML = `
     <article class="control-card">
@@ -436,6 +547,8 @@ function rerender() {
   renderEmployees();
   renderEmployeeDetail();
   renderRules();
+  renderWorkflowBoard();
+  renderAuditLog();
 }
 
 rerender();

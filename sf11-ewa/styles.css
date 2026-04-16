@@ -191,7 +191,9 @@ a {
 .employee-list,
 .rule-list,
 .timeline,
-.scenario-controls {
+.scenario-controls,
+.workflow-board,
+.audit-log {
   display: grid;
   gap: 16px;
 }
@@ -439,6 +441,61 @@ a {
 
 .rule-list {
   grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.workflow-board,
+.audit-log {
+  grid-template-columns: 1fr;
+}
+
+.workflow-step,
+.audit-item {
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--panel-strong);
+}
+
+.workflow-step h3,
+.audit-item h3 {
+  margin: 0 0 8px;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1rem;
+}
+
+.workflow-step p,
+.audit-item p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.workflow-step.is-done {
+  border-color: rgba(21, 128, 61, 0.18);
+  background: rgba(21, 128, 61, 0.06);
+}
+
+.workflow-step.is-current {
+  border-color: rgba(15, 118, 110, 0.25);
+  background: rgba(15, 118, 110, 0.08);
+}
+
+.workflow-step.is-blocked {
+  border-color: rgba(185, 28, 28, 0.2);
+  background: rgba(185, 28, 28, 0.06);
+}
+
+.audit-meta {
+  display: inline-flex;
+  margin-bottom: 8px;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: rgba(217, 119, 6, 0.12);
+  color: var(--warn);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .scenario-controls {

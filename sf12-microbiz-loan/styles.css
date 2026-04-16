@@ -153,7 +153,9 @@ a {
 .rule-list,
 .seller-list,
 .signal-list,
-.timeline {
+.timeline,
+.preset-bar,
+.repayment-plan {
   display: grid;
   gap: 16px;
 }
@@ -233,6 +235,44 @@ a {
 .rule-list,
 .signal-list {
   grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.preset-bar {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.preset-card,
+.repayment-row {
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--panel-strong);
+}
+
+.preset-card {
+  cursor: pointer;
+  transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.preset-card:hover,
+.preset-card.is-active {
+  transform: translateY(-2px);
+  border-color: rgba(37, 99, 235, 0.25);
+  box-shadow: 0 12px 28px rgba(37, 99, 235, 0.12);
+}
+
+.preset-card h3,
+.repayment-row h3 {
+  margin: 0 0 8px;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.preset-card p,
+.repayment-row p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.55;
 }
 
 .channel-card header,
@@ -469,6 +509,7 @@ a {
   .channel-list,
   .metric-grid,
   .scenario-controls,
+  .preset-bar,
   .rule-list,
   .seller-list,
   .signal-list {
