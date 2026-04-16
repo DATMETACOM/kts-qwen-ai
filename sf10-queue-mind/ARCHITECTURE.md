@@ -1,4 +1,4 @@
-# SB10 Architecture
+# SF10 Architecture
 
 ## System Overview
 

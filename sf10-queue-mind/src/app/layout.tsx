@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "SB10 - Branch Traffic Prediction",
+  title: "SF10 - Queue Mind",
   description: "Dự đoán lưu lượng chi nhánh & quản lý hàng đợi thông minh | Shinhan Bank InnoBoost 2026",
 };
 

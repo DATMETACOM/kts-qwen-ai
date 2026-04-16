@@ -1,4 +1,4 @@
-// SB10 - Branch Traffic Prediction Types
+// SF10 - Queue Mind Types
 
 export interface Branch {
   id: string;

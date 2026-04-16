@@ -1,4 +1,4 @@
-// SB10 - Mock Data Generator
+// SF10 - Mock Data Generator
 
 import type { Branch, TrafficRecord, HourlyForecast } from "../types/index.ts";
 
