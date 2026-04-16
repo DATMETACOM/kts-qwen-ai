@@ -193,7 +193,8 @@ a {
 .timeline,
 .scenario-controls,
 .workflow-board,
-.audit-log {
+.audit-log,
+.ai-insight {
   display: grid;
   gap: 16px;
 }
@@ -444,12 +445,14 @@ a {
 }
 
 .workflow-board,
-.audit-log {
+.audit-log,
+.ai-insight {
   grid-template-columns: 1fr;
 }
 
 .workflow-step,
-.audit-item {
+.audit-item,
+.ai-card {
   padding: 16px 18px;
   border: 1px solid var(--line);
   border-radius: 18px;
@@ -457,14 +460,16 @@ a {
 }
 
 .workflow-step h3,
-.audit-item h3 {
+.audit-item h3,
+.ai-card h3 {
   margin: 0 0 8px;
   font-family: "Space Grotesk", sans-serif;
   font-size: 1rem;
 }
 
 .workflow-step p,
-.audit-item p {
+.audit-item p,
+.ai-card p {
   margin: 0;
   color: var(--muted);
   line-height: 1.55;
@@ -492,6 +497,23 @@ a {
   border-radius: 999px;
   background: rgba(217, 119, 6, 0.12);
   color: var(--warn);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.ai-card {
+  background: rgba(15, 118, 110, 0.06);
+}
+
+.ai-source {
+  display: inline-flex;
+  width: fit-content;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: rgba(15, 118, 110, 0.12);
+  color: var(--brand-deep);
   font-size: 0.76rem;
   font-weight: 700;
   letter-spacing: 0.04em;

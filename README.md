@@ -31,11 +31,11 @@ npm run dev
 # Open http://localhost:3000
 
 # SF11 - Earned Wage Access
-python -m http.server 4173
+node tools/poc-server.mjs
 # Open http://localhost:4173/sf11-ewa/
 
 # SF12 - MicroBiz Loan
-python -m http.server 4173
+node tools/poc-server.mjs
 # Open http://localhost:4173/sf12-microbiz-loan/
 ```
 

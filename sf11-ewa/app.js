@@ -2,6 +2,9 @@ import { employers, employees, rules } from "./data/mockData.js";
 
 const state = {
   selectedEmployeeId: employees[0]?.id ?? null,
+  aiInsight: null,
+  aiRequestKey: "",
+  aiTimer: null,
   filters: {
     employerId: "all",
     decision: "all",
@@ -12,6 +15,52 @@ const state = {
     dsrCapPercent: 35,
   },
 };
+
+async function loadSf11AiInsight(employee, result) {
+  const notes = [
+    `decision=${result.decision}`,
+    `ewaAmount=${result.ewaAmount}`,
+    `loanAmount=${result.loanAmount}`,
+    `payrollFresh=${result.payrollFresh}`,
+    `attendance=${employee.attendanceScore}`,
+  ].join(", ");
+  const requestKey = [employee.id, result.decision, result.riskBand, result.ewaAmount, result.loanAmount, result.payrollFresh].join("|");
+
+  if (state.aiRequestKey === requestKey) {
+    return;
+  }
+  state.aiRequestKey = requestKey;
+
+  state.aiInsight = {
+    source: "loading",
+    operator_summary: "Loading Qwen insight...",
+    recommended_action: "Fetching server-side memo.",
+    risk_note: "Please wait.",
+  };
+  renderAiInsight();
+
+  try {
+    const params = new URLSearchParams({
+      employeeId: employee.id,
+      employerName: result.employer.name,
+      decision: result.decision,
+      riskBand: result.riskBand,
+      notes,
+    });
+    const response = await fetch(`/api/sf11/insight?${params.toString()}`);
+    const data = await response.json();
+    state.aiInsight = data;
+  } catch (error) {
+    state.aiInsight = {
+      source: "fallback",
+      operator_summary: `${employee.name} can still be handled with the local payroll policy engine.`,
+      recommended_action: "Use the workflow board and audit trail to complete manual approval.",
+      risk_note: "Qwen endpoint is unavailable from the current server context.",
+    };
+  }
+
+  renderAiInsight();
+}
 
 function formatCurrency(value) {
   return new Intl.NumberFormat("en-US", {
@@ -477,6 +526,27 @@ function renderAuditLog() {
     .join("");
 }
 
+function renderAiInsight() {
+  const insight = state.aiInsight || {
+    source: "local",
+    operator_summary: "Select a case to request server-side Qwen analysis.",
+    recommended_action: "Use the local decision engine until AI insight is loaded.",
+    risk_note: "No AI call has been made yet.",
+  };
+
+  document.getElementById("ai-insight").innerHTML = `
+    <article class="ai-card">
+      <span class="ai-source">${insight.source}</span>
+      <h3>Operator Summary</h3>
+      <p>${insight.operator_summary}</p>
+      <h3>Recommended Action</h3>
+      <p>${insight.recommended_action}</p>
+      <h3>Risk Note</h3>
+      <p>${insight.risk_note}</p>
+    </article>
+  `;
+}
+
 function renderScenarioControls() {
   document.getElementById("scenario-controls").innerHTML = `
     <article class="control-card">
@@ -549,6 +619,14 @@ function rerender() {
   renderRules();
   renderWorkflowBoard();
   renderAuditLog();
+  renderAiInsight();
+  const employee = employees.find((item) => item.id === state.selectedEmployeeId);
+  if (employee) {
+    if (state.aiTimer) clearTimeout(state.aiTimer);
+    state.aiTimer = setTimeout(() => {
+      loadSf11AiInsight(employee, calculateDecision(employee));
+    }, 350);
+  }
 }
 
 rerender();

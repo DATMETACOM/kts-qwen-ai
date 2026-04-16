@@ -3,6 +3,9 @@ import { channels, rules, sellers } from "./data/mockData.js";
 const state = {
   selectedSellerId: sellers[0]?.id ?? null,
   selectedPreset: "balanced",
+  aiInsight: null,
+  aiRequestKey: "",
+  aiTimer: null,
   filters: {
     channelId: "all",
     decision: "all",
@@ -183,6 +186,52 @@ function getRepaymentSchedule(result) {
   }
 
   return schedule;
+}
+
+async function loadSf12AiInsight(seller, result) {
+  const notes = [
+    `decision=${result.decision}`,
+    `altScore=${result.altScore}`,
+    `loan=${result.recommendedLoan}`,
+    `share=${result.appliedRevenueShare}`,
+    `tenor=${result.projectedTenor}`,
+  ].join(", ");
+  const requestKey = [seller.id, result.decision, result.riskBand, result.altScore, result.recommendedLoan, result.projectedTenor].join("|");
+
+  if (state.aiRequestKey === requestKey) {
+    return;
+  }
+  state.aiRequestKey = requestKey;
+
+  state.aiInsight = {
+    source: "loading",
+    operator_summary: "Loading Qwen insight...",
+    recommended_action: "Fetching server-side memo.",
+    risk_note: "Please wait.",
+  };
+  renderAiInsight();
+
+  try {
+    const params = new URLSearchParams({
+      sellerId: seller.id,
+      segment: seller.segment,
+      decision: result.decision,
+      riskBand: result.riskBand,
+      notes,
+    });
+    const response = await fetch(`/api/sf12/insight?${params.toString()}`);
+    const data = await response.json();
+    state.aiInsight = data;
+  } catch (error) {
+    state.aiInsight = {
+      source: "fallback",
+      operator_summary: `${seller.name} can still be reviewed with the local alternative scorecard and waterfall logic.`,
+      recommended_action: "Use the seller detail card and repayment plan for manual underwriting review.",
+      risk_note: "Qwen endpoint is unavailable from the current server context.",
+    };
+  }
+
+  renderAiInsight();
 }
 
 function renderHeroStats() {
@@ -544,6 +593,27 @@ function renderRepaymentPlan() {
     .join("");
 }
 
+function renderAiInsight() {
+  const insight = state.aiInsight || {
+    source: "local",
+    operator_summary: "Select a seller case to request server-side Qwen analysis.",
+    recommended_action: "Use the local scorecard until AI insight is loaded.",
+    risk_note: "No AI call has been made yet.",
+  };
+
+  document.getElementById("ai-insight").innerHTML = `
+    <article class="ai-card">
+      <span class="ai-source">${insight.source}</span>
+      <h3>Operator Summary</h3>
+      <p>${insight.operator_summary}</p>
+      <h3>Recommended Action</h3>
+      <p>${insight.recommended_action}</p>
+      <h3>Risk Note</h3>
+      <p>${insight.risk_note}</p>
+    </article>
+  `;
+}
+
 function renderSignals() {
   const approvedCount = sellers.filter((seller) => calculateDecision(seller).decision === "Approve").length;
   const highRiskCount = sellers.filter((seller) => calculateDecision(seller).riskBand === "high").length;
@@ -603,6 +673,14 @@ function rerender() {
   renderSellerDetail();
   renderRepaymentPlan();
   renderSignals();
+  renderAiInsight();
+  const seller = getSelectedSeller();
+  if (seller) {
+    if (state.aiTimer) clearTimeout(state.aiTimer);
+    state.aiTimer = setTimeout(() => {
+      loadSf12AiInsight(seller, calculateDecision(seller));
+    }, 350);
+  }
 }
 
 rerender();
