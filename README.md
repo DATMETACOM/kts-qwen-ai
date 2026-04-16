@@ -8,7 +8,7 @@
 
 | Project | Code | Description | Status | Link |
 |---------|------|-------------|--------|------|
-| **Branch Traffic Prediction** | SB10 | Dự đoán lưu lượng chi nhánh & quản lý hàng đợi | ✅ Ready | [sb10-branch-prediction/](./sb10-branch-prediction/) |
+| **Branch Traffic Prediction** | SB10 | Dự đoán lưu lượng chi nhánh & quản lý hàng đợi | ✅ Ready | [sb10-queue-mind/](./sb10-queue-mind/) |
 | **Customer Behavior Prediction** | SF8 | Phân tích hành vi khách hàng mới | ✅ Ready | [sf8-cuca-insider-ai/](./sf8-cuca-insider-ai/) |
 
 ---
@@ -17,7 +17,7 @@
 
 ```bash
 # SB10 - Branch Traffic Prediction
-cd sb10-branch-prediction
+cd sb10-queue-mind
 npm install
 npm run dev
 # Open http://localhost:3000
@@ -42,10 +42,10 @@ npm run dev
 ## 📚 Documentation
 
 ### SB10 - Branch Traffic Prediction
-- [README](./sb10-branch-prediction/README.md) - Overview & Quick Start
-- [ARCHITECTURE](./sb10-branch-prediction/ARCHITECTURE.md) - System Architecture
-- [API](./sb10-branch-prediction/API.md) - API Endpoints
-- [DEMO](./sb10-branch-prediction/DEMO.md) - Demo Script
+- [README](./sb10-queue-mind/README.md) - Overview & Quick Start
+- [ARCHITECTURE](./sb10-queue-mind/ARCHITECTURE.md) - System Architecture
+- [API](./sb10-queue-mind/API.md) - API Endpoints
+- [DEMO](./sb10-queue-mind/DEMO.md) - Demo Script
 
 ### SF8 - Customer Behavior Prediction
 - [README](./sf8-cuca-insider-ai/README.md) - Overview & Quick Start
@@ -78,7 +78,7 @@ npm run dev
 Add your Qwen API key to each project's `.env.local`:
 
 ```bash
-# sb10-branch-prediction/.env.local
+# sb10-queue-mind/.env.local
 QWEN_API_KEY=your_qwen_api_key_here
 
 # sf8-cuca-insider-ai/.env.local

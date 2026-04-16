@@ -171,7 +171,7 @@ A:
 
 ### Server không chạy
 ```bash
-cd sb10-branch-prediction
+cd sb10-queue-mind
 npm install
 npm run dev
 ```

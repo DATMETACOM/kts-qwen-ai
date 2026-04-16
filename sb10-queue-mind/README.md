@@ -47,7 +47,7 @@ open http://localhost:3000
 ## 📁 Project Structure
 
 ```
-sb10-branch-prediction/
+sb10-queue-mind/
 ├── src/
 │   ├── app/
 │   │   ├── globals.css          # Global styles
