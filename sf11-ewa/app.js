@@ -2,6 +2,11 @@ import { employers, employees, rules } from "./data/mockData.js";
 
 const state = {
   selectedEmployeeId: employees[0]?.id ?? null,
+  policy: {
+    ewaCapMultiplier: 100,
+    maxFreshnessHours: 48,
+    dsrCapPercent: 35,
+  },
 };
 
 function formatCurrency(value) {
@@ -20,11 +25,21 @@ function getEmployer(id) {
   return employers.find((employer) => employer.id === id);
 }
 
+function getPolicy() {
+  return {
+    ewaCapMultiplier: state.policy.ewaCapMultiplier / 100,
+    maxFreshnessHours: state.policy.maxFreshnessHours,
+    dsrCapRatio: state.policy.dsrCapPercent / 100,
+  };
+}
+
 function calculateDecision(employee) {
+  const policy = getPolicy();
   const employer = getEmployer(employee.employerId);
   const earnedGross = (employee.monthlySalary / employee.cycleDays) * employee.daysWorked;
-  const rawEwa = Math.max(earnedGross * employer.defaultEwaCap - employee.priorEwaAmount, 0);
-  const payrollFresh = employer.syncHoursAgo <= 48;
+  const appliedEwaCap = employer.defaultEwaCap * policy.ewaCapMultiplier;
+  const rawEwa = Math.max(earnedGross * appliedEwaCap - employee.priorEwaAmount, 0);
+  const payrollFresh = employer.syncHoursAgo <= policy.maxFreshnessHours;
   const eligibleForEwa =
     employee.consent &&
     employee.bankVerified &&
@@ -43,7 +58,7 @@ function calculateDecision(employee) {
     (!payrollFresh ? 20 : 0);
 
   const riskBand = riskScore >= 50 ? "high" : riskScore >= 25 ? "medium" : "low";
-  const maxInstallment = employee.netSalary * 0.35 - employee.netSalary * employee.externalDebtRatio;
+  const maxInstallment = employee.netSalary * policy.dsrCapRatio - employee.netSalary * employee.externalDebtRatio;
   const loanAmount = Math.max(Math.round(maxInstallment * 6 * 0.9 / 10000) * 10000, 0);
 
   let decision = "Decline";
@@ -64,6 +79,7 @@ function calculateDecision(employee) {
   return {
     employer,
     earnedGross,
+    appliedEwaCap,
     ewaAmount,
     loanAmount,
     maxInstallment: Math.max(maxInstallment, 0),
@@ -97,6 +113,7 @@ function renderHeroStats() {
     { label: "Active integrations", value: `${summary.liveEmployers}/${employers.length}` },
     { label: "Decision coverage", value: formatPercent(summary.approvalRate) },
     { label: "EWA exposure", value: formatCurrency(summary.totalEwaExposure) },
+    { label: "Policy DSR cap", value: `${state.policy.dsrCapPercent}%` },
   ];
 
   document.getElementById("hero-stats").innerHTML = items
@@ -127,7 +144,7 @@ function renderEmployers() {
             <li>Payroll cycle: ${employer.payCycle}</li>
             <li>Employees covered: ${employer.employees}</li>
             <li>Feed freshness: ${employer.syncHoursAgo} hours ago</li>
-            <li>EWA cap: ${formatPercent(employer.defaultEwaCap)}</li>
+            <li>EWA cap: ${formatPercent(employer.defaultEwaCap * getPolicy().ewaCapMultiplier)}</li>
           </ul>
         </article>
       `,
@@ -240,12 +257,60 @@ function renderEmployeeDetail() {
             <li>Consent: ${employee.consent ? "Active" : "Missing"}</li>
             <li>Bank account match: ${employee.bankVerified ? "Verified" : "Unverified"}</li>
             <li>Payroll freshness: ${result.payrollFresh ? "Pass" : "Fail"}</li>
+            <li>Applied EWA cap: ${formatPercent(result.appliedEwaCap)}</li>
             <li>Prior EWA used this cycle: ${formatCurrency(employee.priorEwaAmount)}</li>
           </ul>
         </section>
       </div>
     </div>
   `;
+}
+
+function renderScenarioControls() {
+  document.getElementById("scenario-controls").innerHTML = `
+    <article class="control-card">
+      <label for="ewa-cap-slider">Employer EWA cap multiplier</label>
+      <input id="ewa-cap-slider" type="range" min="70" max="120" step="5" value="${state.policy.ewaCapMultiplier}" />
+      <span class="control-value">${state.policy.ewaCapMultiplier}% of base cap</span>
+    </article>
+    <article class="control-card">
+      <label for="freshness-slider">Allowed payroll freshness</label>
+      <input id="freshness-slider" type="range" min="12" max="72" step="6" value="${state.policy.maxFreshnessHours}" />
+      <span class="control-value">${state.policy.maxFreshnessHours} hours</span>
+    </article>
+    <article class="control-card">
+      <label for="dsr-slider">Max debt-service ratio</label>
+      <input id="dsr-slider" type="range" min="25" max="45" step="1" value="${state.policy.dsrCapPercent}" />
+      <span class="control-value">${state.policy.dsrCapPercent}% of net salary</span>
+    </article>
+    <article class="control-card control-actions">
+      <button id="reset-policy" class="control-button" type="button">Reset baseline policy</button>
+    </article>
+  `;
+
+  document.getElementById("ewa-cap-slider").addEventListener("input", (event) => {
+    state.policy.ewaCapMultiplier = Number(event.target.value);
+    rerender();
+  });
+
+  document.getElementById("freshness-slider").addEventListener("input", (event) => {
+    state.policy.maxFreshnessHours = Number(event.target.value);
+    rerender();
+  });
+
+  document.getElementById("dsr-slider").addEventListener("input", (event) => {
+    state.policy.dsrCapPercent = Number(event.target.value);
+    rerender();
+  });
+
+  document.getElementById("reset-policy").addEventListener("click", () => {
+    state.policy = {
+      ewaCapMultiplier: 100,
+      maxFreshnessHours: 48,
+      dsrCapPercent: 35,
+    };
+    rerender();
+  });
 }
 
 function renderRules() {
@@ -262,13 +327,14 @@ function renderRules() {
     .join("");
 }
 
-function init() {
+function rerender() {
   renderHeroStats();
   renderEmployers();
   renderPortfolioMetrics();
+  renderScenarioControls();
   renderEmployees();
   renderEmployeeDetail();
   renderRules();
 }
 
-init();
+rerender();

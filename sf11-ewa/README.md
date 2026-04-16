@@ -21,13 +21,7 @@ This PoC is aimed at internal product, risk, IT, legal/compliance, and sales sta
 
 ## Quick Start
 
-Open the app directly in a browser:
-
-```bash
-open index.html
-```
-
-Or serve it locally:
+Serve it locally:
 
 ```bash
 python -m http.server 4173
@@ -44,7 +38,8 @@ Then open `http://localhost:4173/sf11-ewa/`.
    - earned wage calculation
    - recommended offer
    - risk and compliance gates
-4. Review portfolio KPIs and lender control rules.
+4. Move the simulation sliders to stress payroll freshness, EWA caps, and debt-service policy.
+5. Review portfolio KPIs and lender control rules.
 
 ## Files
 

@@ -190,7 +190,8 @@ a {
 .employer-list,
 .employee-list,
 .rule-list,
-.timeline {
+.timeline,
+.scenario-controls {
   display: grid;
   gap: 16px;
 }
@@ -404,6 +405,62 @@ a {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.scenario-controls {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.control-card {
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: var(--panel-strong);
+}
+
+.control-card label {
+  display: block;
+  margin-bottom: 10px;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.control-card input[type="range"] {
+  width: 100%;
+  accent-color: var(--brand);
+}
+
+.control-value {
+  display: inline-flex;
+  margin-top: 8px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(15, 118, 110, 0.1);
+  color: var(--brand-deep);
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.control-actions {
+  display: flex;
+  align-items: flex-end;
+}
+
+.control-button {
+  width: 100%;
+  padding: 14px 16px;
+  border: 0;
+  border-radius: 18px;
+  background: linear-gradient(135deg, var(--accent), #b45309);
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.control-button:hover {
+  filter: brightness(1.03);
+}
+
 .timeline article span {
   color: var(--accent);
   font-size: 0.75rem;
@@ -421,7 +478,8 @@ a {
   .value-grid,
   .metric-grid,
   .rule-list,
-  .employee-list {
+  .employee-list,
+  .scenario-controls {
     grid-template-columns: 1fr;
   }
 
