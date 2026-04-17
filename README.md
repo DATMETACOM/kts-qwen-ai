@@ -10,6 +10,7 @@
 |---------|------|-------------|--------|------|
 | **Branch Traffic Prediction** | SB10 | Dự đoán lưu lượng chi nhánh & quản lý hàng đợi | ✅ Ready | [sb10-branch-prediction/](./sb10-branch-prediction/) |
 | **Customer Behavior Prediction** | SF8 | Phân tích hành vi khách hàng mới | ✅ Ready | [sf8-behavior-prediction/](./sf8-behavior-prediction/) |
+| **EWA & Salary-Linked Lending** | SF11 | Rút lương trước payday & vay tín chấp paperless | 🔧 In Progress | [sf11-ewa-lending/](./sf11-ewa-lending/) |
 
 ---
 
