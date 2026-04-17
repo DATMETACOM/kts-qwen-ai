@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { MOCK_COMPANIES, MOCK_HRM_EMPLOYEES } from "@/types";
 
 // Types
 interface Employee {
@@ -786,21 +787,25 @@ function HRPortal() {
       <div className="p-4 max-w-7xl mx-auto space-y-4">
         <div className="bg-white rounded-xl shadow p-6">
           <h2 className="text-lg font-bold text-[#003478] mb-4">HR Admin — Quản lý EWA & Khoản vay</h2>
-          <div className="grid grid-cols-4 gap-4 mb-6">
+          <div className="grid grid-cols-5 gap-4 mb-6">
             <div className="bg-blue-50 rounded-lg p-3 text-center">
               <p className="text-2xl font-bold text-[#003478]">5</p>
+              <p className="text-xs text-gray-500">Công ty</p>
+            </div>
+            <div className="bg-blue-50 rounded-lg p-3 text-center">
+              <p className="text-2xl font-bold text-[#003478]">170</p>
               <p className="text-xs text-gray-500">Tổng nhân viên</p>
             </div>
             <div className="bg-green-50 rounded-lg p-3 text-center">
-              <p className="text-2xl font-bold text-green-600">3</p>
+              <p className="text-2xl font-bold text-green-600">127</p>
               <p className="text-xs text-gray-500">EWA active</p>
             </div>
             <div className="bg-purple-50 rounded-lg p-3 text-center">
-              <p className="text-2xl font-bold text-purple-600">2</p>
+              <p className="text-2xl font-bold text-purple-600">45</p>
               <p className="text-xs text-gray-500">Vay active</p>
             </div>
             <div className="bg-orange-50 rounded-lg p-3 text-center">
-              <p className="text-2xl font-bold text-orange-500">{formatVND(8500000)}</p>
+              <p className="text-2xl font-bold text-orange-500">{formatVND(5700000000)}</p>
               <p className="text-xs text-gray-500">Tổng EWA tháng</p>
             </div>
           </div>
@@ -808,38 +813,102 @@ function HRPortal() {
 
         <div className="bg-white rounded-xl shadow">
           <div className="p-4 border-b">
-            <h3 className="font-bold text-[#003478]">Danh sách nhân viên</h3>
+            <h3 className="font-bold text-[#003478]">📋 Danh sách công ty ({MOCK_COMPANIES.length} công ty)</h3>
           </div>
-          <table className="w-full text-sm">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="text-left p-3">Mã NV</th>
-                <th className="text-left p-3">Họ tên</th>
-                <th className="text-right p-3">Lương</th>
-                <th className="text-right p-3">EWA đã dùng</th>
-                <th className="text-center p-3">Vay</th>
-              </tr>
-            </thead>
-            <tbody>
-              {[
-                { id: "EMP001", name: "Nguyễn Văn Minh", salary: 25000000, ewa: 2000000, loan: true },
-                { id: "EMP002", name: "Trần Thị Lan", salary: 18000000, ewa: 0, loan: false },
-                { id: "EMP003", name: "Lê Hoàng Nam", salary: 35000000, ewa: 5000000, loan: true },
-                { id: "EMP004", name: "Phạm Minh Tú", salary: 22000000, ewa: 1500000, loan: false },
-                { id: "EMP005", name: "Võ Thanh Hoa", salary: 28000000, ewa: 3000000, loan: true }
-              ].map((e) => (
-                <tr key={e.id} className="border-b hover:bg-gray-50">
-                  <td className="p-3 font-mono text-gray-500">{e.id}</td>
-                  <td className="p-3 font-medium">{e.name}</td>
-                  <td className="p-3 text-right">{formatVND(e.salary)}</td>
-                  <td className="p-3 text-right">{e.ewa > 0 ? formatVND(e.ewa) : "—"}</td>
-                  <td className="p-3 text-center">
-                    {e.loan ? <span className="bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded-full">Active</span> : "—"}
-                  </td>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+            {MOCK_COMPANIES.map((company) => {
+              const employeeCount = MOCK_HRM_EMPLOYEES.filter(e => e.company === company.id).length;
+              const totalSalary = MOCK_HRM_EMPLOYEES.filter(e => e.company === company.id).reduce((sum, e) => sum + e.monthlySalary, 0);
+              return (
+                <div key={company.id} className="border rounded-xl p-4 hover:shadow-lg transition">
+                  <div className="flex justify-between items-start mb-2">
+                    <div>
+                      <span className={`text-xs px-2 py-0.5 rounded-full ${
+                        company.type === "TNHH" ? "bg-blue-100 text-blue-700" :
+                        company.type === "TNHH MTV" ? "bg-indigo-100 text-indigo-700" :
+                        "bg-purple-100 text-purple-700"
+                      }`}>{company.type}</span>
+                    </div>
+                    <span className={`text-xs px-2 py-0.5 rounded-full ${
+                      company.healthScore >= 80 ? "bg-green-100 text-green-700" :
+                      company.healthScore >= 60 ? "bg-yellow-100 text-yellow-700" :
+                      "bg-red-100 text-red-700"
+                    }`}>Health: {company.healthScore}/100</span>
+                  </div>
+                  <h4 className="font-bold text-[#003478] mb-1">{company.name}</h4>
+                  <p className="text-xs text-gray-500 mb-3">{company.city} • {company.industry}</p>
+                  <div className="grid grid-cols-2 gap-2 text-sm">
+                    <div>
+                      <p className="text-gray-500">Nhân viên</p>
+                      <p className="font-semibold">{employeeCount}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-500">Lương TB</p>
+                      <p className="font-semibold">{formatVND(Math.round(totalSalary / employeeCount))}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-500">EWA Volume</p>
+                      <p className="font-semibold text-green-600">{formatVND(company.ewaVolume)}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-500">NPL Rate</p>
+                      <p className={`font-semibold ${company.nplRate > 1.5 ? "text-red-600" : "text-green-600"}`}>{company.nplRate}%</p>
+                    </div>
+                  </div>
+                  <div className="mt-3 flex gap-2">
+                    <span className={`text-xs px-2 py-1 rounded ${company.ewaEnabled ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-500"}`}>EWA</span>
+                    <span className={`text-xs px-2 py-1 rounded ${company.loanEnabled ? "bg-purple-100 text-purple-700" : "bg-gray-100 text-gray-500"}`}>Loan</span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="bg-white rounded-xl shadow">
+          <div className="p-4 border-b">
+            <h3 className="font-bold text-[#003478]">👥 Danh sách nhân viên (tất cả công ty)</h3>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="text-left p-3">Mã NV</th>
+                  <th className="text-left p-3">Họ tên</th>
+                  <th className="text-left p-3">Công ty</th>
+                  <th className="text-left p-3">Phòng ban</th>
+                  <th className="text-right p-3">Lương</th>
+                  <th className="text-center p-3">Trạng thái</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {MOCK_HRM_EMPLOYEES.slice(0, 30).map((e) => {
+                  const company = MOCK_COMPANIES.find(c => c.id === e.company);
+                  return (
+                    <tr key={e.employeeId} className="border-b hover:bg-gray-50">
+                      <td className="p-3 font-mono text-gray-500">{e.employeeId}</td>
+                      <td className="p-3 font-medium">{e.name}</td>
+                      <td className="p-3 text-sm">
+                        <span className={`text-xs px-2 py-0.5 rounded ${
+                          company?.type === "TNHH" ? "bg-blue-100 text-blue-700" :
+                          company?.type === "TNHH MTV" ? "bg-indigo-100 text-indigo-700" :
+                          "bg-purple-100 text-purple-700"
+                        }`}>{company?.type}</span>
+                      </td>
+                      <td className="p-3 text-gray-600">{e.department}</td>
+                      <td className="p-3 text-right font-medium">{formatVND(e.monthlySalary)}</td>
+                      <td className="p-3 text-center">
+                        <span className={`text-xs px-2 py-0.5 rounded-full ${
+                          e.status === "active" ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-500"
+                        }`}>{e.status === "active" ? "Active" : "Inactive"}</span>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+            <p className="p-3 text-sm text-gray-500">Hiển thị 30/170 nhân viên...</p>
+          </div>
         </div>
       </div>
     </div>
@@ -849,6 +918,7 @@ function HRPortal() {
 // Admin Portal Component
 function AdminPortal() {
   const [riskTab, setRiskTab] = useState<"overview" | "corporate" | "churn" | "cashflow" | "compliance">("overview");
+  const [selectedCompany, setSelectedCompany] = useState<string>("C001");
   const [corpData, setCorpData] = useState<any>(null);
   const [churnData, setChurnData] = useState<any>(null);
   const [cashflowData, setCashflowData] = useState<any>(null);
@@ -914,6 +984,15 @@ function AdminPortal() {
               <p className="text-xs text-blue-200">Admin Dashboard — Risk Center</p>
             </div>
           </div>
+          <select
+            value={selectedCompany}
+            onChange={(e) => setSelectedCompany(e.target.value)}
+            className="bg-blue-900 text-white px-3 py-1.5 rounded text-sm"
+          >
+            {MOCK_COMPANIES.map(c => (
+              <option key={c.id} value={c.id}>{c.name}</option>
+            ))}
+          </select>
         </div>
       </header>
 
@@ -940,37 +1019,77 @@ function AdminPortal() {
         {riskTab === "overview" && (
           <>
             <div className="bg-white rounded-xl shadow p-6">
-              <h2 className="text-lg font-bold text-[#003478] mb-4">Portfolio Overview</h2>
-              <div className="grid grid-cols-4 gap-4">
+              <h2 className="text-lg font-bold text-[#003478] mb-4">📊 Portfolio Overview — {MOCK_COMPANIES.length} Doanh nghiệp</h2>
+              <div className="grid grid-cols-5 gap-4">
                 <div className="bg-blue-50 rounded-lg p-4 text-center">
-                  <p className="text-3xl font-bold text-[#003478]">1</p>
+                  <p className="text-3xl font-bold text-[#003478]">5</p>
                   <p className="text-sm text-gray-500">Doanh nghiệp</p>
                 </div>
+                <div className="bg-blue-50 rounded-lg p-4 text-center">
+                  <p className="text-3xl font-bold text-[#003478]">170</p>
+                  <p className="text-sm text-gray-500">Nhân viên</p>
+                </div>
                 <div className="bg-green-50 rounded-lg p-4 text-center">
-                  <p className="text-3xl font-bold text-green-600">150M</p>
-                  <p className="text-sm text-gray-500">Tổng dư nợ</p>
+                  <p className="text-3xl font-bold text-green-600">{formatVND(10450000000)}</p>
+                  <p className="text-sm text-gray-500">Tổng EWA Volume</p>
                 </div>
                 <div className="bg-red-50 rounded-lg p-4 text-center">
-                  <p className="text-3xl font-bold text-red-600">1.4%</p>
-                  <p className="text-sm text-gray-500">NPL Rate</p>
+                  <p className="text-3xl font-bold text-red-600">1.06%</p>
+                  <p className="text-sm text-gray-500">NPL Rate (avg)</p>
                 </div>
                 <div className="bg-purple-50 rounded-lg p-4 text-center">
-                  <p className="text-3xl font-bold text-purple-600">5</p>
-                  <p className="text-sm text-gray-500">Khoản vay active</p>
+                  <p className="text-3xl font-bold text-purple-600">127</p>
+                  <p className="text-sm text-gray-500">EWA Active</p>
                 </div>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-xl shadow p-6">
+              <h3 className="font-bold text-[#003478] mb-4">🏢 Corporate Risk Overview — All Companies</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                {MOCK_COMPANIES.map((company) => (
+                  <div key={company.id} className={`border-2 rounded-xl p-4 ${company.healthScore >= 80 ? "border-green-200 bg-green-50" : company.healthScore >= 60 ? "border-yellow-200 bg-yellow-50" : "border-red-200 bg-red-50"}`}>
+                    <div className="flex justify-between items-start mb-2">
+                      <span className={`text-xs px-2 py-0.5 rounded-full ${
+                        company.type === "TNHH" ? "bg-blue-100 text-blue-700" :
+                        company.type === "TNHH MTV" ? "bg-indigo-100 text-indigo-700" :
+                        "bg-purple-100 text-purple-700"
+                      }`}>{company.type}</span>
+                      <span className={`text-lg font-bold ${company.healthScore >= 80 ? "text-green-600" : company.healthScore >= 60 ? "text-yellow-600" : "text-red-600"}`}>
+                        {company.healthScore}
+                      </span>
+                    </div>
+                    <h4 className="font-semibold text-sm mb-1">{company.name.split(" ").slice(0, 4).join(" ")}</h4>
+                    <p className="text-xs text-gray-500 mb-3">{company.city}</p>
+                    <div className="space-y-1 text-xs">
+                      <div className="flex justify-between">
+                        <span>Nhân viên:</span>
+                        <span className="font-semibold">{company.employeeCount}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>EWA Volume:</span>
+                        <span className="font-semibold text-green-600">{formatVND(company.ewaVolume)}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>NPL Rate:</span>
+                        <span className={`font-semibold ${company.nplRate > 1.5 ? "text-red-600" : "text-green-600"}`}>{company.nplRate}%</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-white rounded-xl shadow p-6">
-                <h3 className="font-bold text-[#003478] mb-4">🤖 Qwen AI + Risk Engine Stats</h3>
+                <h3 className="font-bold text-[#003478] mb-4">🤖 Qwen AI + Risk Engine Stats (5 Companies)</h3>
                 <div className="space-y-3">
-                  <div className="flex justify-between"><span className="text-gray-600">Salary verifications</span><span className="font-bold">147</span></div>
-                  <div className="flex justify-between"><span className="text-gray-600">Credit scoring calls</span><span className="font-bold">89</span></div>
-                  <div className="flex justify-between"><span className="text-gray-600">Corporate risk checks</span><span className="font-bold">34</span></div>
-                  <div className="flex justify-between"><span className="text-gray-600">Churn predictions</span><span className="font-bold">56</span></div>
-                  <div className="flex justify-between"><span className="text-gray-600">Avg processing time</span><span className="font-bold text-green-600">2.8s</span></div>
-                  <div className="flex justify-between"><span className="text-gray-600">NPL target achieved</span><span className="font-bold text-green-600">1.4% &lt; 2%</span></div>
+                  <div className="flex justify-between"><span className="text-gray-600">Salary verifications</span><span className="font-bold">170</span></div>
+                  <div className="flex justify-between"><span className="text-gray-600">Credit scoring calls</span><span className="font-bold">127</span></div>
+                  <div className="flex justify-between"><span className="text-gray-600">Corporate risk checks</span><span className="font-bold">5</span></div>
+                  <div className="flex justify-between"><span className="text-gray-600">Churn predictions</span><span className="font-bold">170</span></div>
+                  <div className="flex justify-between"><span className="text-gray-600">Avg processing time</span><span className="font-bold text-green-600">2.1s</span></div>
+                  <div className="flex justify-between"><span className="text-gray-600">NPL target achieved</span><span className="font-bold text-green-600">1.06% &lt; 2%</span></div>
                 </div>
               </div>
 
@@ -1000,12 +1119,13 @@ function AdminPortal() {
             </div>
 
             <div className="bg-white rounded-xl shadow p-6">
-              <h3 className="font-bold text-[#003478] mb-4">Giải ngân gần đây</h3>
+              <h3 className="font-bold text-[#003478] mb-4">💰 Giải ngân gần đây (5 công ty)</h3>
               <table className="w-full text-sm">
                 <thead className="bg-gray-50">
                   <tr>
                     <th className="text-left p-3">Mã</th>
                     <th className="text-left p-3">Khách hàng</th>
+                    <th className="text-left p-3">Công ty</th>
                     <th className="text-left p-3">Loại</th>
                     <th className="text-right p-3">Số tiền</th>
                     <th className="text-center p-3">Trạng thái</th>
@@ -1013,18 +1133,39 @@ function AdminPortal() {
                 </thead>
                 <tbody>
                   {[
-                    { id: "LN-001", name: "Nguyễn Văn Minh", type: "Salary Loan", amount: 50000000, status: "Active" },
-                    { id: "EW-001", name: "Lê Hoàng Nam", type: "EWA", amount: 5000000, status: "Active" },
-                    { id: "LN-002", name: "Võ Thanh Hoa", type: "Salary Loan", amount: 80000000, status: "Active" }
-                  ].map((tx) => (
-                    <tr key={tx.id} className="border-b">
-                      <td className="p-3 font-mono text-gray-500">{tx.id}</td>
-                      <td className="p-3">{tx.name}</td>
-                      <td className="p-3"><span className={`text-xs px-2 py-0.5 rounded-full ${tx.type === "EWA" ? "bg-blue-100 text-blue-600" : "bg-purple-100 text-purple-600"}`}>{tx.type}</span></td>
-                      <td className="p-3 text-right font-bold">{formatVND(tx.amount)}</td>
-                      <td className="p-3 text-center"><span className="bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded-full">{tx.status}</span></td>
-                    </tr>
-                  ))}
+                    { id: "LN-001", name: "Nguyễn Văn Minh", company: "C001", type: "Vay", amount: 50000000, status: "Active" },
+                    { id: "EW-001", name: "Lê Hoàng Nam", company: "C001", type: "EWA", amount: 5000000, status: "Active" },
+                    { id: "LN-002", name: "Nguyễn Đình Bảo", company: "C002", type: "Vay", amount: 120000000, status: "Active" },
+                    { id: "EW-002", name: "Trần Thu Hà", company: "C002", type: "EWA", amount: 8000000, status: "Active" },
+                    { id: "LN-003", name: "Nguyễn Trọng Nghĩa", company: "C003", type: "Vay", amount: 200000000, status: "Active" },
+                    { id: "EW-003", name: "Phạm Văn Minh", company: "C003", type: "EWA", amount: 12000000, status: "Active" },
+                    { id: "LN-004", name: "Trần Đình Minh", company: "C004", type: "Vay", amount: 300000000, status: "Active" },
+                    { id: "EW-004", name: "Hoàng Minh Tuấn", company: "C004", type: "EWA", amount: 20000000, status: "Active" },
+                    { id: "LN-005", name: "Nguyễn Trọng Đức", company: "C005", type: "Vay", amount: 250000000, status: "Active" },
+                    { id: "EW-005", name: "Trần Hữu Minh", company: "C005", type: "EWA", amount: 15000000, status: "Active" }
+                  ].map((tx) => {
+                    const company = MOCK_COMPANIES.find(c => c.id === tx.company);
+                    return (
+                      <tr key={tx.id} className="border-b hover:bg-gray-50">
+                        <td className="p-3 font-mono text-gray-500">{tx.id}</td>
+                        <td className="p-3 font-medium">{tx.name}</td>
+                        <td className="p-3">
+                          <span className={`text-xs px-2 py-0.5 rounded ${
+                            company?.type === "TNHH" ? "bg-blue-100 text-blue-700" :
+                            company?.type === "TNHH MTV" ? "bg-indigo-100 text-indigo-700" :
+                            "bg-purple-100 text-purple-700"
+                          }`}>{company?.type}</span>
+                        </td>
+                        <td className="p-3">
+                          <span className={`text-xs px-2 py-0.5 rounded-full ${tx.type === "EWA" ? "bg-blue-100 text-blue-600" : "bg-purple-100 text-purple-600"}`}>{tx.type}</span>
+                        </td>
+                        <td className="p-3 text-right font-bold">{formatVND(tx.amount)}</td>
+                        <td className="p-3 text-center">
+                          <span className="bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded-full">{tx.status}</span>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
