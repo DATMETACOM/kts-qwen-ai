@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 // Types
 interface Employee {
@@ -30,6 +30,12 @@ interface EWABalance {
   totalDaysInMonth: number;
 }
 
+interface ChatMessage {
+  role: "user" | "assistant";
+  content: string;
+  timestamp: Date;
+}
+
 // Mock current user (Employee view)
 const CURRENT_EMPLOYEE_ID = "EMP001";
 
@@ -49,8 +55,191 @@ function getRiskLabel(riskLevel: string) {
   return "Cao";
 }
 
+// Sample Q&A for Copilot
+const SAMPLE_QAS = [
+  {
+    q: "Kiểm tra nhân viên EMP001 có được vay không?",
+    a: "✅ **NGUYỄN VĂN MINH** — Đủ điều kiện vay tín chấp\n\n**Thông tin:**\n- Lương: 25M/tháng\n- Thâm niên: 3 năm 2 tháng\n- Điểm credit: 750/850 (LOW RISK)\n- Đề xuất: Vay được đến **150M VNĐ**\n- Lãi suất: 18%/năm\n\n**Kết luận:** Đủ điều kiện vay. Đề xuất sản phẩm *Vay tín chấp cá nhân*."
+  },
+  {
+    q: "Công ty ABC có đang bị cảnh báo rủi ro gì không?",
+    a: "⚠️ **CẢNH BÁO DOANH NGHIỆP**\n\n**Trạng thái:** 🟢 XANH — Điểm sức khỏe: 78/100\n\n**5 yếu tố đánh giá:**\n1. Sức khỏe tài chính: 78/100 ✅\n2. Lịch sử thanh toán: 98/100 ✅\n3. Ổn định nhân sự: 82/100 ✅\n4. Tuân thủ thuế/BHXH: 95/100 ✅\n5. Rủi ro ngành: 75/100 ✅\n\n**Khuyến nghị:** Không có cảnh báo. Công ty ABC đang hoạt động ổn định."
+  },
+  {
+    q: "Dự báo dòng tiền tháng 4/2026?",
+    a: "💰 **CASHFLOW FORECAST — Tháng 4/2026**\n\n**Nhu cầu EWA:** 21M VNĐ\n**Giải ngân vay:** 70M VNĐ\n**Tổng thanh khoản cần:** 91M VNĐ\n\n📅 **Ngày cao điểm:**\n- 05/04: 5.25M (đầu tháng)\n- 15/04: 3.15M (giữa tháng)\n\n⚠️ **Cảnh báo mùa vụ:**\n- Tháng 4 có Tết **30/4** → Buffer tăng 20%\n- Khuyến nghị: Giữ **109M VNĐ** trong quỹ dự phòng"
+  },
+  {
+    q: "EMP003 Lê Hoàng Nam có rủi ro nghỉ việc không?",
+    a: "👤 **CHURN PREDICTION — LÊ HOÀNG NAM**\n\n**Xác suất nghỉ việc:** 12% (ỔN ĐỊNH)\n\n**Điểm tính toán:**\n- Thâm niên: 3 năm → ✅ Ổn định\n- Tăng lương: 8%/năm → ✅ Tốt\n- Ngày nghỉ QTR: 1 ngày → ✅ Bình thường\n- Peer churn: 12% → ⚠️ Cần theo dõi\n\n**Hạn mức EWA động:** 70% (cho phép rút nhiều)\n\n**Kết luận:** Nhân viên ổn định, tiếp tục cấp EWA cao."
+  }
+];
+
+// Shared Header Component
+function Header({ role, setRole }: { role: string; setRole: (r: string) => void }) {
+  return (
+    <header className="bg-[#003478] text-white shadow-lg sticky top-0 z-40">
+      <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-[#C8A96E] rounded-lg flex items-center justify-center font-bold text-[#003478] text-lg">
+            S
+          </div>
+          <div>
+            <h1 className="text-lg font-bold">Shinhan Finance</h1>
+            <p className="text-xs text-blue-200">EWA & Salary-Linked Lending</p>
+          </div>
+        </div>
+        <div className="flex gap-2">
+          {([
+            { key: "employee", label: "Nhân viên" },
+            { key: "hr", label: "HR Admin" },
+            { key: "admin", label: "Shinhan Admin" }
+          ] as const).map((r) => (
+            <button
+              key={r.key}
+              onClick={() => setRole(r.key)}
+              className={`px-3 py-1.5 rounded text-sm font-medium transition ${
+                role === r.key ? "bg-[#C8A96E] text-[#003478]" : "bg-blue-900 text-blue-200 hover:bg-blue-800"
+              }`}
+            >
+              {r.label}
+            </button>
+          ))}
+        </div>
+      </div>
+    </header>
+  );
+}
+
+// Copilot Sidebar Component
+function CopilotSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [input, setInput] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
+  const chatEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  function handleQuickAsk(qa: { q: string; a: string }) {
+    setMessages(prev => [...prev, { role: "user", content: qa.q, timestamp: new Date() }]);
+    setIsTyping(true);
+    setTimeout(() => {
+      setMessages(prev => [...prev, { role: "assistant", content: qa.a, timestamp: new Date() }]);
+      setIsTyping(false);
+    }, 1000);
+  }
+
+  function handleSend() {
+    if (!input.trim()) return;
+    
+    const userMsg = input;
+    setMessages(prev => [...prev, { role: "user", content: userMsg, timestamp: new Date() }]);
+    setInput("");
+    setIsTyping(true);
+
+    // Simulate AI response
+    setTimeout(() => {
+      const response = `🤖 **Qwen AI Copilot**
+
+Tôi đã nhận câu hỏi của bạn về: "${userMsg}"
+
+Để kiểm tra chi tiết, vui lòng:
+1. Chọn câu hỏi mẫu bên dưới, hoặc
+2. Liên hệ team Risk Management để được hỗ trợ thêm.
+
+**Hotline:** 1900-XXXX`;
+      setMessages(prev => [...prev, { role: "assistant", content: response, timestamp: new Date() }]);
+      setIsTyping(false);
+    }, 1500);
+  }
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed right-0 top-0 h-full w-96 bg-white shadow-2xl z-50 flex flex-col border-l">
+      <div className="bg-[#003478] text-white p-4 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 bg-[#C8A96E] rounded-lg flex items-center justify-center text-[#003478] font-bold">AI</div>
+          <div>
+            <h3 className="font-bold">🤖 Qwen AI Copilot</h3>
+            <p className="text-xs text-blue-200">Risk & Lending Assistant</p>
+          </div>
+        </div>
+        <button onClick={onClose} className="text-white hover:text-gray-200 text-xl">×</button>
+      </div>
+
+      <div className="flex-1 overflow-y-auto p-4 space-y-3">
+        {messages.length === 0 && (
+          <div className="text-center py-8">
+            <p className="text-gray-500 text-sm mb-4">Chào bạn! Tôi là Qwen AI Copilot. Hỏi tôi về:</p>
+          </div>
+        )}
+
+        {messages.map((msg, i) => (
+          <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
+            <div className={`max-w-[85%] p-3 rounded-lg ${
+              msg.role === "user" ? "bg-[#003478] text-white" : "bg-gray-100 text-gray-800"
+            }`}>
+              <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
+              <p className={`text-xs mt-1 ${msg.role === "user" ? "text-blue-200" : "text-gray-400"}`}>
+                {msg.timestamp.toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" })}
+              </p>
+            </div>
+          </div>
+        ))}
+
+        {isTyping && (
+          <div className="flex justify-start">
+            <div className="bg-gray-100 p-3 rounded-lg">
+              <p className="text-gray-500 text-sm">🤖 Đang xử lý...</p>
+            </div>
+          </div>
+        )}
+
+        <div ref={chatEndRef} />
+      </div>
+
+      {messages.length === 0 && (
+        <div className="p-4 border-t">
+          <p className="text-xs text-gray-500 mb-2">Câu hỏi mẫu:</p>
+          <div className="space-y-2">
+            {SAMPLE_QAS.map((qa, i) => (
+              <button
+                key={i}
+                onClick={() => handleQuickAsk(qa)}
+                className="w-full text-left text-sm p-2 bg-blue-50 hover:bg-blue-100 rounded-lg transition"
+              >
+                <span className="text-[#003478]">Q{i + 1}:</span> {qa.q}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <div className="p-4 border-t">
+        <div className="flex gap-2">
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleSend()}
+            placeholder="Hỏi Qwen AI Copilot..."
+            className="flex-1 border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#003478]"
+          />
+          <button onClick={handleSend} className="bg-[#003478] text-white px-4 py-2 rounded-lg hover:bg-[#002050]">
+            Gửi
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Home() {
-  const [role, setRole] = useState<"employee" | "hr" | "admin">("employee");
+  const [role, setRole] = useState<string>("employee");
+  const [copilotOpen, setCopilotOpen] = useState(false);
   const [tab, setTab] = useState<"overview" | "ewa" | "loan" | "history">("overview");
 
   // Employee data
@@ -196,33 +385,17 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#F5F6FA]">
-      {/* Header */}
-      <header className="bg-[#003478] text-white shadow-lg">
-        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-[#C8A96E] rounded-lg flex items-center justify-center font-bold text-[#003478] text-lg">
-              S
-            </div>
-            <div>
-              <h1 className="text-lg font-bold">Shinhan Finance</h1>
-              <p className="text-xs text-blue-200">Earned Wage Access & Salary-Linked Lending</p>
-            </div>
-          </div>
-          <div className="flex gap-2">
-            {(["employee", "hr", "admin"] as const).map((r) => (
-              <button
-                key={r}
-                onClick={() => setRole(r)}
-                className={`px-3 py-1.5 rounded text-sm font-medium transition ${
-                  role === r ? "bg-[#C8A96E] text-[#003478]" : "bg-blue-900 text-blue-200 hover:bg-blue-800"
-                }`}
-              >
-                {r === "employee" ? "Nhân viên" : r === "hr" ? "HR Admin" : "Shinhan Admin"}
-              </button>
-            ))}
-          </div>
-        </div>
-      </header>
+      <Header role={role} setRole={setRole} />
+
+      <CopilotSidebar isOpen={copilotOpen} onClose={() => setCopilotOpen(false)} />
+
+      <button
+        onClick={() => setCopilotOpen(true)}
+        className="fixed bottom-6 right-6 bg-[#003478] text-white w-14 h-14 rounded-full shadow-2xl hover:bg-[#002050] transition z-30 flex items-center justify-center text-2xl"
+        title="Open Qwen AI Copilot"
+      >
+        🤖
+      </button>
 
       {/* Tabs */}
       <div className="flex gap-1 border-b bg-white px-4 pt-2">
