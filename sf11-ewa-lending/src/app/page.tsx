@@ -675,127 +675,409 @@ function HRPortal() {
 
 // Admin Portal Component
 function AdminPortal() {
+  const [riskTab, setRiskTab] = useState<"overview" | "corporate" | "churn" | "cashflow" | "compliance">("overview");
+  const [corpData, setCorpData] = useState<any>(null);
+  const [churnData, setChurnData] = useState<any>(null);
+  const [cashflowData, setCashflowData] = useState<any>(null);
+  const [complianceData, setComplianceData] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
+
+  async function fetchCorporate() {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/risk/corporate?companyId=CMP001");
+      const data = await res.json();
+      setCorpData(data.corporateRisk);
+    } catch (e) { console.error(e); }
+    finally { setLoading(false); }
+  }
+
+  async function fetchChurn() {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/risk/ewa-dynamic-limit?employeeId=EMP001");
+      const data = await res.json();
+      setChurnData(data.churnPrediction);
+    } catch (e) { console.error(e); }
+    finally { setLoading(false); }
+  }
+
+  async function fetchCashflow() {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/risk/cashflow?baseMonthlyEwa=15000000&baseMonthlyLoan=50000000");
+      const data = await res.json();
+      setCashflowData(data.forecast);
+    } catch (e) { console.error(e); }
+    finally { setLoading(false); }
+  }
+
+  async function fetchCompliance() {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/risk/compliance", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          employeeId: "EMP001", employeeName: "Nguyễn Văn Minh", monthlySalary: 25000000,
+          requestedEwaAmount: 5000000, requestedLoanAmount: 50000000,
+          interestRate: 18, emi: 1750000, bankAccountName: "Nguyen Van Minh"
+        })
+      });
+      const data = await res.json();
+      setComplianceData(data.compliance);
+    } catch (e) { console.error(e); }
+    finally { setLoading(false); }
+  }
+
   return (
     <div className="min-h-screen bg-[#F5F6FA]">
       <header className="bg-[#003478] text-white shadow-lg">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-[#C8A96E] rounded-lg flex items-center justify-center font-bold text-[#003478] text-lg">
-              S
-            </div>
+            <div className="w-10 h-10 bg-[#C8A96E] rounded-lg flex items-center justify-center font-bold text-[#003478] text-lg">S</div>
             <div>
               <h1 className="text-lg font-bold">Shinhan Finance</h1>
-              <p className="text-xs text-blue-200">Admin Portfolio Dashboard</p>
+              <p className="text-xs text-blue-200">Admin Dashboard — Risk Center</p>
             </div>
           </div>
         </div>
       </header>
 
+      <div className="flex gap-1 border-b bg-white px-4 pt-2">
+        {[
+          { key: "overview" as const, label: "📊 Tổng quan" },
+          { key: "corporate" as const, label: "🏢 Corporate Risk" },
+          { key: "churn" as const, label: "👤 Churn Prediction" },
+          { key: "cashflow" as const, label: "💰 Cashflow AI" },
+          { key: "compliance" as const, label: "⚖️ Compliance" }
+        ].map((t) => (
+          <button key={t.key} onClick={() => setRiskTab(t.key)}
+            className={`px-4 py-2 text-sm font-medium rounded-t transition ${riskTab === t.key ? "bg-[#F5F6FA] text-[#003478] border-b-2 border-[#003478]" : "text-gray-500 hover:text-gray-700"}`}>
+            {t.label}
+          </button>
+        ))}
+      </div>
+
       <div className="p-4 max-w-7xl mx-auto space-y-4">
-        <div className="bg-white rounded-xl shadow p-6">
-          <h2 className="text-lg font-bold text-[#003478] mb-4">Portfolio Overview</h2>
-          <div className="grid grid-cols-4 gap-4">
-            <div className="bg-blue-50 rounded-lg p-4 text-center">
-              <p className="text-3xl font-bold text-[#003478]">1</p>
-              <p className="text-sm text-gray-500">Doanh nghiệp</p>
-            </div>
-            <div className="bg-green-50 rounded-lg p-4 text-center">
-              <p className="text-3xl font-bold text-green-600">150M</p>
-              <p className="text-sm text-gray-500">Tổng dư nợ</p>
-            </div>
-            <div className="bg-red-50 rounded-lg p-4 text-center">
-              <p className="text-3xl font-bold text-red-600">1.4%</p>
-              <p className="text-sm text-gray-500">NPL Rate</p>
-            </div>
-            <div className="bg-purple-50 rounded-lg p-4 text-center">
-              <p className="text-3xl font-bold text-purple-600">5</p>
-              <p className="text-sm text-gray-500">Khoản vay active</p>
-            </div>
-          </div>
-        </div>
+        {loading && (
+          <div className="flex justify-center py-4"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#003478]" /></div>
+        )}
 
-        <div className="grid grid-cols-2 gap-4">
-          <div className="bg-white rounded-xl shadow p-6">
-            <h3 className="font-bold text-[#003478] mb-4">🤖 Qwen AI Engine Stats</h3>
-            <div className="space-y-3">
-              <div className="flex justify-between">
-                <span className="text-gray-600">Salary verifications</span>
-                <span className="font-bold">147</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Credit scoring calls</span>
-                <span className="font-bold">89</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Avg processing time</span>
-                <span className="font-bold text-green-600">2.8s</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">NPL target achieved</span>
-                <span className="font-bold text-green-600">1.4% &lt; 2%</span>
+        {riskTab === "overview" && (
+          <>
+            <div className="bg-white rounded-xl shadow p-6">
+              <h2 className="text-lg font-bold text-[#003478] mb-4">Portfolio Overview</h2>
+              <div className="grid grid-cols-4 gap-4">
+                <div className="bg-blue-50 rounded-lg p-4 text-center">
+                  <p className="text-3xl font-bold text-[#003478]">1</p>
+                  <p className="text-sm text-gray-500">Doanh nghiệp</p>
+                </div>
+                <div className="bg-green-50 rounded-lg p-4 text-center">
+                  <p className="text-3xl font-bold text-green-600">150M</p>
+                  <p className="text-sm text-gray-500">Tổng dư nợ</p>
+                </div>
+                <div className="bg-red-50 rounded-lg p-4 text-center">
+                  <p className="text-3xl font-bold text-red-600">1.4%</p>
+                  <p className="text-sm text-gray-500">NPL Rate</p>
+                </div>
+                <div className="bg-purple-50 rounded-lg p-4 text-center">
+                  <p className="text-3xl font-bold text-purple-600">5</p>
+                  <p className="text-sm text-gray-500">Khoản vay active</p>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="bg-white rounded-xl shadow p-6">
-            <h3 className="font-bold text-[#003478] mb-4">NPL Tracking</h3>
-            <div className="space-y-3">
-              <div>
-                <div className="flex justify-between text-sm mb-1">
-                  <span>EWA Auto-deduct</span>
-                  <span className="text-green-600 font-bold">0.8%</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div className="bg-green-500 rounded-full h-2" style={{ width: "40%" }} />
-                </div>
-              </div>
-              <div>
-                <div className="flex justify-between text-sm mb-1">
-                  <span>Salary-Linked Loan</span>
-                  <span className="text-green-600 font-bold">1.6%</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div className="bg-green-500 rounded-full h-2" style={{ width: "80%" }} />
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-white rounded-xl shadow p-6">
+                <h3 className="font-bold text-[#003478] mb-4">🤖 Qwen AI + Risk Engine Stats</h3>
+                <div className="space-y-3">
+                  <div className="flex justify-between"><span className="text-gray-600">Salary verifications</span><span className="font-bold">147</span></div>
+                  <div className="flex justify-between"><span className="text-gray-600">Credit scoring calls</span><span className="font-bold">89</span></div>
+                  <div className="flex justify-between"><span className="text-gray-600">Corporate risk checks</span><span className="font-bold">34</span></div>
+                  <div className="flex justify-between"><span className="text-gray-600">Churn predictions</span><span className="font-bold">56</span></div>
+                  <div className="flex justify-between"><span className="text-gray-600">Avg processing time</span><span className="font-bold text-green-600">2.8s</span></div>
+                  <div className="flex justify-between"><span className="text-gray-600">NPL target achieved</span><span className="font-bold text-green-600">1.4% &lt; 2%</span></div>
                 </div>
               </div>
-              <div className="mt-4 bg-green-50 rounded-lg p-3">
-                <p className="text-sm text-green-700">
-                  <strong>✓ Mục tiêu NPL &lt;2% đạt được</strong> nhờ auto-debit từ payroll
-                </p>
+
+              <div className="bg-white rounded-xl shadow p-6">
+                <h3 className="font-bold text-[#003478] mb-4">🛡️ Risk Mitigation Coverage</h3>
+                <div className="space-y-2">
+                  {[
+                    { name: "Corporate Scoring + EWS", status: "active", desc: "5 factors tracked" },
+                    { name: "Churn Prediction (ML)", status: "active", desc: "Dynamic EWA cap" },
+                    { name: "Cashflow Forecasting", status: "active", desc: "Seasonal alerts" },
+                    { name: "Compliance Engine", status: "active", desc: "6 hard rules" },
+                    { name: "Circuit Breaker", status: "active", desc: "Auto-fallback" },
+                    { name: "Biometric Auth", status: "planned", desc: "Phase 2" }
+                  ].map((r) => (
+                    <div key={r.name} className="flex justify-between items-center py-1">
+                      <div>
+                        <p className="text-sm font-medium">{r.name}</p>
+                        <p className="text-xs text-gray-400">{r.desc}</p>
+                      </div>
+                      <span className={`text-xs px-2 py-0.5 rounded-full ${r.status === "active" ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-500"}`}>
+                        {r.status === "active" ? "✓ Active" : "Phase 2"}
+                      </span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-        </div>
 
-        <div className="bg-white rounded-xl shadow p-6">
-          <h3 className="font-bold text-[#003478] mb-4">Giải ngân gần đây</h3>
-          <table className="w-full text-sm">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="text-left p-3">Mã</th>
-                <th className="text-left p-3">Khách hàng</th>
-                <th className="text-left p-3">Loại</th>
-                <th className="text-right p-3">Số tiền</th>
-                <th className="text-center p-3">Trạng thái</th>
-              </tr>
-            </thead>
-            <tbody>
-              {[
-                { id: "LN-001", name: "Nguyễn Văn Minh", type: "Salary Loan", amount: 50000000, status: "Active" },
-                { id: "EW-001", name: "Lê Hoàng Nam", type: "EWA", amount: 5000000, status: "Active" },
-                { id: "LN-002", name: "Võ Thanh Hoa", type: "Salary Loan", amount: 80000000, status: "Active" }
-              ].map((tx) => (
-                <tr key={tx.id} className="border-b">
-                  <td className="p-3 font-mono text-gray-500">{tx.id}</td>
-                  <td className="p-3">{tx.name}</td>
-                  <td className="p-3"><span className={`text-xs px-2 py-0.5 rounded-full ${tx.type === "EWA" ? "bg-blue-100 text-blue-600" : "bg-purple-100 text-purple-600"}`}>{tx.type}</span></td>
-                  <td className="p-3 text-right font-bold">{formatVND(tx.amount)}</td>
-                  <td className="p-3 text-center"><span className="bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded-full">{tx.status}</span></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+            <div className="bg-white rounded-xl shadow p-6">
+              <h3 className="font-bold text-[#003478] mb-4">Giải ngân gần đây</h3>
+              <table className="w-full text-sm">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="text-left p-3">Mã</th>
+                    <th className="text-left p-3">Khách hàng</th>
+                    <th className="text-left p-3">Loại</th>
+                    <th className="text-right p-3">Số tiền</th>
+                    <th className="text-center p-3">Trạng thái</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    { id: "LN-001", name: "Nguyễn Văn Minh", type: "Salary Loan", amount: 50000000, status: "Active" },
+                    { id: "EW-001", name: "Lê Hoàng Nam", type: "EWA", amount: 5000000, status: "Active" },
+                    { id: "LN-002", name: "Võ Thanh Hoa", type: "Salary Loan", amount: 80000000, status: "Active" }
+                  ].map((tx) => (
+                    <tr key={tx.id} className="border-b">
+                      <td className="p-3 font-mono text-gray-500">{tx.id}</td>
+                      <td className="p-3">{tx.name}</td>
+                      <td className="p-3"><span className={`text-xs px-2 py-0.5 rounded-full ${tx.type === "EWA" ? "bg-blue-100 text-blue-600" : "bg-purple-100 text-purple-600"}`}>{tx.type}</span></td>
+                      <td className="p-3 text-right font-bold">{formatVND(tx.amount)}</td>
+                      <td className="p-3 text-center"><span className="bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded-full">{tx.status}</span></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
+        )}
+
+        {riskTab === "corporate" && (
+          <div className="space-y-4">
+            <button onClick={fetchCorporate} disabled={loading}
+              className="bg-[#003478] text-white px-4 py-2 rounded-lg font-medium hover:bg-[#002050] disabled:opacity-50">
+              {corpData ? "Refresh Corporate Score" : "Chạy Corporate Scoring"}
+            </button>
+
+            {corpData && (
+              <>
+                <div className="bg-white rounded-xl shadow p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <h3 className="text-lg font-bold text-[#003478]">{corpData.companyName}</h3>
+                      <p className="text-sm text-gray-500">Corporate Risk Assessment</p>
+                    </div>
+                    <div className={`px-4 py-2 rounded-full text-lg font-bold ${
+                      corpData.riskLevel === "green" ? "bg-green-100 text-green-700" :
+                      corpData.riskLevel === "yellow" ? "bg-yellow-100 text-yellow-700" :
+                      "bg-red-100 text-red-700"
+                    }`}>
+                      {corpData.overallScore}/100 — {corpData.riskLevel === "green" ? "AN TOÀN" : corpData.riskLevel === "yellow" ? "CẢNH BÁO" : "NGUY HIỂM"}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-5 gap-3">
+                    {Object.entries(corpData.factors).map(([key, val]) => (
+                      <div key={key} className="text-center p-3 bg-gray-50 rounded-lg">
+                        <p className="text-xs text-gray-500 mb-1">{key === "financialHealth" ? "Sức khỏe TC" : key === "paymentHistory" ? "Thanh toán" : key === "employeeStability" ? "Ổn định NV" : key === "taxCompliance" ? "Thuế/BHXH" : "Ngành"}</p>
+                        <p className={`text-xl font-bold ${(val as number) >= 70 ? "text-green-600" : (val as number) >= 50 ? "text-yellow-600" : "text-red-600"}`}>{val as number}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {corpData.ewaFrozen && (
+                  <div className="bg-red-50 border border-red-200 rounded-xl p-4">
+                    <p className="font-bold text-red-700">🚨 EWA FROZEN — Doanh nghiệp bị đóng băng hạn mức</p>
+                    <p className="text-sm text-red-600 mt-1">Toàn bộ EWA requests bị chặn do điểm sức khỏe quá thấp.</p>
+                  </div>
+                )}
+
+                {corpData.alerts && corpData.alerts.length > 0 && (
+                  <div className="bg-white rounded-xl shadow p-6">
+                    <h4 className="font-bold text-[#003478] mb-3">⚠️ Early Warning Alerts</h4>
+                    {corpData.alerts.map((a: any, i: number) => (
+                      <div key={i} className={`p-3 rounded-lg mb-2 ${a.type === "critical" ? "bg-red-50 border-l-4 border-red-500" : a.type === "warning" ? "bg-yellow-50 border-l-4 border-yellow-500" : "bg-blue-50 border-l-4 border-blue-500"}`}>
+                        <p className="font-medium text-sm">{a.message}</p>
+                        <p className="text-xs text-gray-500 mt-1">Action: {a.action} • {a.code}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        )}
+
+        {riskTab === "churn" && (
+          <div className="space-y-4">
+            <button onClick={fetchChurn} disabled={loading}
+              className="bg-[#003478] text-white px-4 py-2 rounded-lg font-medium hover:bg-[#002050] disabled:opacity-50">
+              {churnData ? "Refresh Churn Score" : "Chạy Churn Prediction"}
+            </button>
+
+            {churnData && (
+              <>
+                <div className="bg-white rounded-xl shadow p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-bold text-[#003478]">Churn Prediction — {churnData.employeeId}</h3>
+                    <div className={`px-4 py-2 rounded-full font-bold ${
+                      churnData.riskBand === "stable" ? "bg-green-100 text-green-700" :
+                      churnData.riskBand === "moderate" ? "bg-yellow-100 text-yellow-700" :
+                      churnData.riskBand === "high" ? "bg-orange-100 text-orange-700" :
+                      "bg-red-100 text-red-700"
+                    }`}>
+                      {Math.round(churnData.churnProbability * 100)}% churn — {churnData.riskBand.toUpperCase()}
+                    </div>
+                  </div>
+
+                  <div className="bg-blue-50 rounded-lg p-4 mb-4">
+                    <p className="text-sm font-medium text-blue-700">Dynamic EWA Limit (AI-adjusted)</p>
+                    <p className="text-3xl font-bold text-blue-600">{Math.round(churnData.dynamicEwaCap * 100)}%</p>
+                    <p className="text-xs text-gray-500 mt-1">{churnData.recommendation}</p>
+                  </div>
+
+                  <h4 className="font-medium text-gray-700 mb-2">Feature Importance (XGBoost Simulation)</h4>
+                  <div className="space-y-2">
+                    {Object.entries(churnData.factors).map(([key, f]: [string, any]) => (
+                      <div key={key} className="flex items-center gap-3">
+                        <span className="text-sm w-32 text-gray-600">{key === "tenure" ? "Thâm niên" : key === "salaryGrowth" ? "Tăng lương" : key === "leavePattern" ? "Nghỉ phép" : key === "peerChurn" ? "Peer churn" : "Hiệu suất"}</span>
+                        <div className="flex-1 bg-gray-200 rounded-full h-3">
+                          <div className="bg-[#003478] rounded-full h-3" style={{ width: `${f.weight * 100}%` }} />
+                        </div>
+                        <span className="text-xs w-24 text-right">{f.signal}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        )}
+
+        {riskTab === "cashflow" && (
+          <div className="space-y-4">
+            <button onClick={fetchCashflow} disabled={loading}
+              className="bg-[#003478] text-white px-4 py-2 rounded-lg font-medium hover:bg-[#002050] disabled:opacity-50">
+              {cashflowData ? "Refresh Forecast" : "Chạy Cashflow Forecast"}
+            </button>
+
+            {cashflowData && (
+              <>
+                <div className="bg-white rounded-xl shadow p-6">
+                  <h3 className="text-lg font-bold text-[#003478] mb-4">AI Cashflow Forecast (30 ngày)</h3>
+                  <div className="grid grid-cols-3 gap-4 mb-4">
+                    <div className="bg-blue-50 rounded-lg p-3 text-center">
+                      <p className="text-xs text-gray-500">EWA Demand</p>
+                      <p className="text-xl font-bold text-blue-600">{formatVND(cashflowData.next30Days.totalEwaDemand)}</p>
+                    </div>
+                    <div className="bg-purple-50 rounded-lg p-3 text-center">
+                      <p className="text-xs text-gray-500">Loan Disbursement</p>
+                      <p className="text-xl font-bold text-purple-600">{formatVND(cashflowData.next30Days.totalLoanDisbursement)}</p>
+                    </div>
+                    <div className="bg-green-50 rounded-lg p-3 text-center">
+                      <p className="text-xs text-gray-500">Required Liquidity</p>
+                      <p className="text-xl font-bold text-green-600">{formatVND(cashflowData.next30Days.requiredLiquidity)}</p>
+                    </div>
+                  </div>
+
+                  <div className="bg-gray-50 rounded-lg p-3 mb-4">
+                    <p className="text-sm text-gray-600">Confidence Interval: <strong>{formatVND(cashflowData.next30Days.confidenceLow)}</strong> — <strong>{formatVND(cashflowData.next30Days.confidenceHigh)}</strong></p>
+                    <p className="text-xs text-gray-400 mt-1">Algorithm: {cashflowData.modelMetrics.algorithm} • MAPE: {cashflowData.modelMetrics.mape}%</p>
+                  </div>
+
+                  <h4 className="font-medium text-gray-700 mb-2">Peak Demand Days</h4>
+                  {cashflowData.next30Days.peakDays.map((d: any, i: number) => (
+                    <div key={i} className="flex justify-between items-center py-2 border-b last:border-0">
+                      <span className="text-sm text-gray-600">{d.date}</span>
+                      <span className="text-sm font-medium">{formatVND(d.demand)}</span>
+                      <span className="text-xs text-gray-400">{d.reason}</span>
+                    </div>
+                  ))}
+                </div>
+
+                {cashflowData.seasonalAlerts && cashflowData.seasonalAlerts.length > 0 && (
+                  <div className="bg-white rounded-xl shadow p-6">
+                    <h4 className="font-bold text-[#003478] mb-3">📅 Seasonal Alerts (3 tháng tới)</h4>
+                    {cashflowData.seasonalAlerts.map((s: any, i: number) => (
+                      <div key={i} className="bg-orange-50 border-l-4 border-orange-400 p-3 rounded-r mb-2">
+                        <p className="font-medium text-sm">{s.period} — {s.reason}</p>
+                        <p className="text-xs text-gray-500">Demand x{s.expectedDemandMultiplier} • {s.action}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        )}
+
+        {riskTab === "compliance" && (
+          <div className="space-y-4">
+            <button onClick={fetchCompliance} disabled={loading}
+              className="bg-[#003478] text-white px-4 py-2 rounded-lg font-medium hover:bg-[#002050] disabled:opacity-50">
+              {complianceData ? "Refresh Compliance" : "Chạy Compliance Check"}
+            </button>
+
+            {complianceData && (
+              <>
+                <div className={`rounded-xl p-4 ${complianceData.allPassed ? "bg-green-50 border border-green-200" : "bg-red-50 border border-red-200"}`}>
+                  <p className={`text-lg font-bold ${complianceData.allPassed ? "text-green-700" : "text-red-700"}`}>
+                    {complianceData.allPassed ? "✅ TẤT CẢ CHECKS PASSED" : "❌ COMPLIANCE ISSUES DETECTED"}
+                  </p>
+                  <p className="text-sm text-gray-600 mt-1">Employee: {complianceData.employeeId}</p>
+                </div>
+
+                <div className="bg-white rounded-xl shadow p-6">
+                  <h4 className="font-bold text-[#003478] mb-4">Compliance Checks</h4>
+                  <div className="space-y-3">
+                    {Object.entries(complianceData.checks).map(([key, c]: [string, any]) => (
+                      <div key={key} className={`p-3 rounded-lg ${c.pass ? "bg-green-50" : "bg-red-50"}`}>
+                        <div className="flex justify-between items-center">
+                          <span className="font-medium text-sm">{key === "ewaCapCompliance" ? "EWA Cap (Luật Lao động)" : key === "emiAffordability" ? "EMI Affordability (NHNN)" : key === "interestRateCap" ? "Lãi suất (SBV)" : key === "bankAccountMatch" ? "Bank Account e-KYC" : key === "biometricVerified" ? "Biometric Auth" : "Digital Consent (NĐ13)"}</span>
+                          <span className={`text-xs px-2 py-0.5 rounded-full ${c.pass ? "bg-green-200 text-green-800" : "bg-red-200 text-red-800"}`}>
+                            {c.pass ? "PASS ✓" : "FAIL ✗"}
+                          </span>
+                        </div>
+                        <p className="text-xs text-gray-500 mt-1">{c.rule}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-xl shadow p-6">
+                  <h4 className="font-bold text-[#003478] mb-3">📋 Audit Trail (Digital Consent Logging)</h4>
+                  <table className="w-full text-sm">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th className="text-left p-2">Action</th>
+                        <th className="text-left p-2">Actor</th>
+                        <th className="text-left p-2">Timestamp</th>
+                        <th className="text-left p-2">Details</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {complianceData.auditTrail.map((a: any, i: number) => (
+                        <tr key={i} className="border-b">
+                          <td className="p-2 font-mono text-xs">{a.action}</td>
+                          <td className="p-2">{a.actor}</td>
+                          <td className="p-2 text-xs text-gray-500">{a.timestamp}</td>
+                          <td className="p-2 text-xs">{a.details}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
