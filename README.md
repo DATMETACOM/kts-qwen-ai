@@ -60,54 +60,59 @@ Each project addresses a specific problem in Vietnam's financial services market
 | **Branch Traffic Prediction** | SB10 | AI-powered branch queue management & customer flow prediction | ✅ Ready | Next.js 14 + Qwen |
 | **Customer Behavior Prediction** | SF8 | Alternative data scoring for thin-file customers | ✅ Ready | React/Vite + Qwen |
 | **EWA & Salary-Linked Lending** | SF11 | Earned Wage Access & paperless loans | ✅ Ready | Next.js 14 + Qwen |
-| **MicroBiz Loan** | SF12 | AI-powered micro loans for digital sellers | ✅ Ready | Next.js 14 + Qwen | [sf12-microbiz-loan/](./sf12-microbiz-loan/) |
+| **MicroBiz Loan** | SF12 | AI-powered micro loans for digital sellers | ✅ Ready | Next.js 14 + Qwen |
 
 ---
 
-## 🔗 Submit Your Project
+## 🏦 Official Use Cases (Shinhan Future's Lab)
 
-Submit all 4 projects on Devpost before the deadline:
+### [SB10] AI-Powered Branch Traffic Prediction & Smart Queue Management
+**Description:** Apply AI on historical branch traffic, transaction types, and real-time check-in data (from SOL app & queue systems) to predict waiting times and service demand — helping customers choose optimal visit times and enabling branches to optimize staffing.
 
-**Event:** [Qwen AI Build Day 2026](https://qwen-ai-build-day.devpost.com)
-**Track:** Financial Services (Shinhan Future's Lab)
-**Deadline:** 17 April 2026, end of day ICT
+**Target:** Branches/Transaction Offices, Digital Business Unit
 
----
+**Objectives:**
+- Reduce average customer waiting time
+- Improve branch service efficiency and staff allocation
+- Enhance customer experience and satisfaction at branches
+- Increase adoption of digital channels by redirecting simple transactions
+- Provide data-driven insights for branch network optimization
 
-## 🏦 Financial Services Track - Use Cases
+**Status:** New (from Internal contest idea)
 
-These projects solve real problems in Vietnam's financial services market:
+### [SF8] AI-based Customer Behavior Prediction (New Customers)
+**Description:** Forecast what a new customer is likely to be interested in next by predicting on their consumption behavior on other data sources (telco, social media, e-wallet, e-commerce, etc.) and by comparing their early signals in their reactions towards SVFC offers to patterns learned from past customers.
 
-### SB10 - Branch Traffic Prediction
-**Problem:** Customers don't know wait times in advance, leading to:
-- Long wait times (20-30 minutes average)
-- Peak hour congestion (11am-1pm)
-- Poor staff allocation
+**Target:** Product, Market expansion partnership
 
-**Solution:** AI-powered traffic prediction with best time to visit recommendations
+**Solution:** SVFC disburse the loan based on partnership scoring & sharing data
 
-### SF8 - Customer Behavior Prediction  
-**Problem:** Thin-file customers (no credit history) are difficult to assess
-- Manual income verification takes days
-- High NPL from poor targeting
+**Status:** Non-disclosed (From Strategy Division)
 
-**Solution:** Alternative data scoring (telco, e-wallet, e-commerce) with Qwen AI recommendations
+### [SF11] Earned Wage Access & Salary-Linked Lending
+**Description:** Partner with fintech to verify employee salary real-time from corporate HRM/Payroll systems, enabling paperless salary loan disbursement and Earned Wage Access (EWA) without traditional income documentation.
 
-### SF11 - EWA & Salary-Linked Lending
-**Problem:** Employees need access to earned wages before payday
-- 3-7 day loan approval TAT
-- Manual payslip verification
-- High acquisition costs
+**Target:** Product, Risk, IT, Legal/Compliance, Sales
 
-**Solution:** Instant EWA + salary-linked loans with real-time HRM integration and AI credit scoring
+**Objectives:**
+- Real-time payroll verification, eliminating manual income proof
+- Shorter loan TAT & lower acquisition cost
+- NPL target <2% via auto-debit from payroll
 
-### SF12 - MicroBiz Loan
-**Problem:** Digital economy workers (freelancers, gig workers) can't access traditional loans
-- No salary slips
-- Irregular income patterns
-- New market segment
+**Status:** Scouting stage (from Idea Contest)
 
-**Solution:** AI-powered micro loans based on cashflow data from e-commerce platforms
+### [SF12] MicroBiz Loan for Digital Economy Sellers
+**Description:** AI-powered micro loan product (5–50M VND) for online sellers, freelancers & gig workers, using alternative credit scoring based on e-commerce and e-wallet cash flow data. Repayment structured as % of revenue instead of fixed installment.
+
+**Target:** Product, Risk, IT, Legal/Compliance, Sales
+
+**Objectives:**
+- New customer segment outside traditional credit profiles
+- AI alternative scoring reduces CIC dependency
+- Flexible repayment lowers delinquency risk
+- NPL target <5%
+
+**Status:** Non-disclosed (From Idea Contest)
 
 ---
 
