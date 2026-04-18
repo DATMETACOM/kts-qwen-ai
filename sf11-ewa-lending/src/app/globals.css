@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --shinhan-blue: #003478;
+  --shinhan-blue-light: #0062CC;
+  --shinhan-gold: #C8A96E;
+  --bg-main: #F5F6FA;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: var(--bg-main);
+  color: #1a1a2e;
+}
