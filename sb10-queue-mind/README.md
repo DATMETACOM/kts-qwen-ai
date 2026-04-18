@@ -8,12 +8,12 @@
 
 **Use Case:** SB10 - AI-Powered Branch Traffic Prediction & Smart Queue Management
 
-**Problem:** Khách hàng đến chi nhánh không biết trước thời gian chờ, dẫn đến:
-- Đợi lâu (trung bình 20-30 phút)
-- Khung giờ đông đúc (11am-1pm)
-- Không tối ưu nhân sự
+**Problem:** Customers don't know wait times in advance, leading to:
+- Long wait times (average 20-30 minutes)
+- Peak hour congestion (11am-1pm)
+- Poor staff allocation
 
-**Solution:** Hệ thống dự đoán lưu lượng chi nhánh bằng Qwen AI
+**Solution:** AI-powered branch traffic prediction system using Qwen AI
 
 ---
 
@@ -21,11 +21,11 @@
 
 | Feature | Description |
 |---------|-------------|
-| **Dashboard** | Hiển thị 5 chi nhánh với trạng thái real-time |
-| **Hourly Forecast** | Dự báo khách hàng và thời gian chờ theo giờ |
-| **Best Time to Visit** | Khuyến nghị giờ vàng đến chi nhánh |
-| **Congestion Levels** | Màu sắc: 🟢 Thấp / 🟡 Trung bình / 🔴 Cao |
-| **Branch Detail** | Chi tiết từng chi nhánh với đồ thị forecast |
+| **Dashboard** | Display 5 branches with real-time status |
+| **Hourly Forecast** | Predict customer count and wait time by hour |
+| **Best Time to Visit** | Recommend optimal visit times |
+| **Congestion Levels** | Color-coded: 🟢 Low / 🟡 Medium / 🔴 High |
+| **Branch Detail** | Individual branch view with forecast charts |
 
 ---
 
@@ -50,16 +50,21 @@ open http://localhost:3000
 sb10-queue-mind/
 ├── src/
 │   ├── app/
-│   │   ├── globals.css          # Global styles
-│   │   ├── layout.tsx            # Root layout
-│   │   ├── page.tsx              # Dashboard (branch list)
+│   │   ├── globals.css
+│   │   ├── layout.tsx
+│   │   ├── page.tsx
 │   │   └── branches/[id]/
-│   │       └── page.tsx          # Branch detail + forecast
+│   │       └── page.tsx
+│   ├── components/
 │   └── lib/
-│       ├── data.ts               # Mock data generator
-│       └── qwen.ts               # Qwen API client (TBD)
+├── lib/
+│   ├── data.ts
+│   ├── qwen.ts
+│   ├── queue.ts
+│   └── date.ts
 ├── types/
-│   └── index.ts                  # TypeScript interfaces
+│   └── index.ts
+├── tests/
 ├── package.json
 ├── tsconfig.json
 ├── tailwind.config.ts
@@ -90,9 +95,9 @@ interface Branch {
 ### Hourly Forecast
 ```typescript
 interface HourlyForecast {
-  hour: number;                    // 8-17
+  hour: number; // 8-17
   predictedCustomers: number;
-  predictedWaitTime: number;       // minutes
+  predictedWaitTime: number; // minutes
   congestionLevel: "low" | "medium" | "high";
 }
 ```
@@ -102,11 +107,11 @@ interface HourlyForecast {
 interface TrafficRecord {
   id: string;
   branchId: string;
-  date: string;                    // YYYY-MM-DD
-  hour: number;                    // 0-23
-  dayOfWeek: number;               // 0-6
+  date: string; // YYYY-MM-DD
+  hour: number; // 0-23
+  dayOfWeek: number; // 0-6
   customerCount: number;
-  avgWaitTime: number;             // minutes
+  avgWaitTime: number; // minutes
   serviceTypes: string[];
   staffOnDuty: number;
 }
@@ -114,12 +119,12 @@ interface TrafficRecord {
 
 ---
 
-## 🤖 Qwen API Integration (Pending)
+## 🤖 Qwen API Integration
 
 ### Environment Setup
-```env
+```bash
 # .env.local
-QWEN_API_KEY=your-api-key-here
+QWEN_API_KEY=your-qwen-api-key-here
 ```
 
 ### Prompt Template
@@ -145,7 +150,7 @@ import { predictTraffic } from '@/lib/qwen';
 
 const prediction = await predictTraffic({
   branchId: "bn-001",
-  branchName: "Chi nhánh Quận Tân Bình",
+  branchName: "Tan Binh Branch",
   district: "TanBinh",
   history: trafficData,
   targetDate: "2026-04-14"
@@ -167,11 +172,11 @@ const prediction = await predictTraffic({
 ## 📊 Mock Data
 
 **5 Branches in HCMC:**
-1. Chi nhánh Quận Tân Bình
-2. Chi nhánh Quận 1
-3. Chi nhánh Quận 3
-4. Chi nhánh Bình Thạnh
-5. Chi nhánh Gò Vấp
+1. Tan Binh Branch
+2. District 1 Branch
+3. District 3 Branch
+4. Binh Thanh Branch
+5. Go Vap Branch
 
 **30 days history** (~3,600 records)
 
@@ -180,26 +185,26 @@ const prediction = await predictTraffic({
 ## 🎨 Demo Flow
 
 ### Scenario 1: Customer Finds Best Time
-1. Mở dashboard → Chọn "Chi nhánh Quận Tân Bình"
-2. Xem forecast → 11am đỏ (cao), 9am xanh (thấp)
-3. Hệ thống khuyến nghị: "Đến 9am hoặc 3pm"
+1. Open dashboard → Select "Tan Binh Branch"
+2. View forecast → 11am RED (high), 9am GREEN (low)
+3. System recommends: "Visit at 9am or 3pm"
 
 ### Scenario 2: Real-time Update
-1. 5 khách check-in bất ngờ
-2. Prediction cập nhật: 10 phút → 25 phút
-3. Thông báo cho khách đang chờ
+1. 5 customers check-in unexpectedly
+2. Prediction updates: 10 minutes → 25 minutes
+3. Notification sent to waiting customers
 
 ### Scenario 3: Manager Optimization
-1. Manager xem forecast ngày mai
-2. Hệ thống khuyến nghị: "Thêm 2 nhân viên 11am-1pm"
-3. Điều chỉnh roster → Giảm wait time 40%
+1. Manager views next-day forecast
+2. System recommends: "Add 2 staff during 11am-1pm"
+3. Adjust roster → Reduce wait time by 40%
 
 ---
 
 ## 🔧 Configuration
 
 ### Environment Variables
-```env
+```bash
 # Alibaba Cloud Qwen API
 QWEN_API_KEY=your-api-key-here
 
@@ -231,7 +236,7 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 - [x] Mock data generator
 - [x] Dashboard UI
 - [x] Forecast visualization
-- [ ] Qwen API integration (Pending key)
+- [ ] Qwen API integration (Pending API key)
 
 ### Phase 2: Enhancement
 - [ ] Real-time check-in system
