@@ -7,15 +7,17 @@
 
 ---
 
-## 📅 Event Timeline
+## 📅 Event Timeline (Completed)
 
-| Date | Event |
-|------|-------|
-| 10 April 2026 | Kickoff Webinar |
-| 11–17 April 2026 | Build Period (Virtual) |
-| 17 April 2026 | **Submission Deadline** (end of day ICT) |
-| 21 April 2026 | **Live Event Day** - Riverside Palace, Ho Chi Minh City |
-| 22 April 2026 | Final Showcase at Alibaba Cloud SME AI Growth Day Vietnam |
+| Date | Event | Status |
+|------|-------|--------|
+| 10 April 2026 | Kickoff Webinar | ✅ Completed |
+| 11–18 April 2026 | Build Period (Extended) | ✅ Completed |
+| 18 April 2026 | **Submission Deadline** | ✅ Completed |
+| 21 April 2026 | **Live Shortlist & Pitching** - Riverside Palace, HCMC | 📍 Upcoming |
+| 22 April 2026 | Final Showcase at Alibaba Cloud SME AI Growth Day | 📍 Upcoming |
+
+> ⚠️ **Submissions are CLOSED.** Shortlisted teams will be announced live on 21 April 2026.
 
 ---
 
@@ -183,6 +185,13 @@ QWEN_API_KEY=your_qwen_api_key_here
 - **Event Page:** [Qwen AI Build Day 2026](https://qwen-ai-build-day.devpost.com)
 - **Alibaba Cloud/Qwen Docs:** [Google Docs](https://docs.google.com)
 - **Shinhan Future's Lab:** [Track Use Cases](https://innoboost.shinhan.com)
+- **Kickoff Recording:** Passcode: @O#$HxM6
+
+### 📣 Next Steps
+1. **Assume you're shortlisted** - Tight 4-minute pitch + working demo ready
+2. **Live Event Day:** 21 April 2026 at Riverside Palace, Ho Chi Minh City
+3. **Shortlist announced live** - No advance notification
+4. **Final Showcase:** 22 April 2026 at Alibaba Cloud SME AI Growth Day Vietnam
 
 ### Learning Resources
 - **Qwen AI Learning:** [View Here](https://qwen.readthedocs.io/)
