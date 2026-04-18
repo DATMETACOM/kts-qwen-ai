@@ -1,4 +1,4 @@
-﻿const QWEN_API_URL = 'https://dashscope-intl.aliyuncs.com/api/v1/services/aigc/text-generation/generation'
+const QWEN_API_URL = 'https://dashscope-intl.aliyuncs.com/api/v1/services/aigc/text-generation/generation'
 
 function clampAdjustment(value) {
   if (!Number.isFinite(value)) return 0
@@ -50,7 +50,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' })
   }
 
-  const apiKey = process.env.DASHSCOPE_API_KEY
+  const apiKey = process.env.QWEN_API_KEY
   if (!apiKey) {
     return res.status(200).json({
       adjustment: 0,

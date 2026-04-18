@@ -1,0 +1,113 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  # Linting and Type Checking
+  lint:
+    name: Lint & Type Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run ESLint
+        run: npm run lint
+
+  # Build all projects
+  build:
+    name: Build Projects
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm run install:all
+
+      - name: Build SB10 - Branch Traffic Prediction
+        run: npm run build:sb10
+
+      - name: Build SF8 - Customer Behavior Prediction
+        run: npm run build:sf8
+
+      - name: Build SF11 - EWA & Salary-Linked Lending
+        run: npm run build:sf11
+
+  # Run tests
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm run install:all
+
+      - name: Run SB10 tests
+        run: npm run test:sb10
+
+      - name: Run SF8 tests
+        run: npm run test:sf8
+
+  # Deploy to Vercel
+  deploy:
+    name: Deploy to Vercel
+    runs-on: ubuntu-latest
+    needs: [build, test]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel
+
+      - name: Deploy SB10 to Vercel
+        run: |
+          cd sb10-queue-mind
+          vercel --prod --token ${{ secrets.VERCEL_TOKEN }} --confirm
+
+      - name: Deploy SF8 to Vercel
+        run: |
+          cd ../sf8-cuca-insider-ai
+          vercel --prod --token ${{ secrets.VERCEL_TOKEN }} --confirm
+
+      - name: Deploy SF11 to Vercel
+        run: |
+          cd ../sf11-ewa-lending
+          vercel --prod --token ${{ secrets.VERCEL_TOKEN }} --confirm

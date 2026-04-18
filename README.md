@@ -8,8 +8,8 @@
 
 | Project | Code | Description | Status | Link |
 |---------|------|-------------|--------|------|
-| **Branch Traffic Prediction** | SB10 | Dự đoán lưu lượng chi nhánh & quản lý hàng đợi | ✅ Ready | [sb10-branch-prediction/](./sb10-branch-prediction/) |
-| **Customer Behavior Prediction** | SF8 | Phân tích hành vi khách hàng mới | ✅ Ready | [sf8-behavior-prediction/](./sf8-behavior-prediction/) |
+| **Branch Traffic Prediction** | SB10 | Dự đoán lưu lượng chi nhánh & quản lý hàng đợi | ✅ Ready | [sb10-queue-mind/](./sb10-queue-mind/) |
+| **Customer Behavior Prediction** | SF8 | Phân tích hành vi khách hàng mới | ✅ Ready | [sf8-cuca-insider-ai/](./sf8-cuca-insider-ai/) |
 | **EWA & Salary-Linked Lending** | SF11 | Rút lương trước payday & vay tín chấp paperless | 🔧 In Progress | [sf11-ewa-lending/](./sf11-ewa-lending/) |
 
 ---
@@ -18,13 +18,19 @@
 
 ```bash
 # SB10 - Branch Traffic Prediction
-cd sb10-branch-prediction
+cd sb10-queue-mind
 npm install
 npm run dev
 # Open http://localhost:3000
 
 # SF8 - Customer Behavior Prediction
-cd sf8-behavior-prediction
+cd sf8-cuca-insider-ai
+npm install
+npm run dev
+# Open http://localhost:3000
+
+# SF11 - EWA & Salary-Linked Lending
+cd sf11-ewa-lending
 npm install
 npm run dev
 # Open http://localhost:3000
@@ -43,16 +49,20 @@ npm run dev
 ## 📚 Documentation
 
 ### SB10 - Branch Traffic Prediction
-- [README](./sb10-branch-prediction/README.md) - Overview & Quick Start
-- [ARCHITECTURE](./sb10-branch-prediction/ARCHITECTURE.md) - System Architecture
-- [API](./sb10-branch-prediction/API.md) - API Endpoints
-- [DEMO](./sb10-branch-prediction/DEMO.md) - Demo Script
+- [README](./sb10-queue-mind/README.md) - Overview & Quick Start
+- [ARCHITECTURE](./sb10-queue-mind/ARCHITECTURE.md) - System Architecture
+- [API](./sb10-queue-mind/API.md) - API Endpoints
+- [DEMO](./sb10-queue-mind/DEMO.md) - Demo Script
 
 ### SF8 - Customer Behavior Prediction
-- [README](./sf8-behavior-prediction/README.md) - Overview & Quick Start
-- [ARCHITECTURE](./sf8-behavior-prediction/ARCHITECTURE.md) - System Architecture
-- [API](./sf8-behavior-prediction/API.md) - API Endpoints
-- [DEMO](./sf8-behavior-prediction/DEMO.md) - Demo Script
+- [README](./sf8-cuca-insider-ai/README.md) - Overview & Quick Start
+- [ARCHITECTURE](./sf8-cuca-insider-ai/ARCHITECTURE.md) - System Architecture
+- [API](./sf8-cuca-insider-ai/API.md) - API Endpoints
+- [DEMO](./sf8-cuca-insider-ai/DEMO.md) - Demo Script
+
+### SF11 - EWA & Salary-Linked Lending
+- [README](./sf11-ewa-lending/README.md) - Overview & Quick Start
+- [DEMO](./sf11-ewa-lending/DEMO.md) - Demo Script
 
 ---
 
@@ -79,10 +89,13 @@ npm run dev
 Add your Qwen API key to each project's `.env.local`:
 
 ```bash
-# sb10-branch-prediction/.env.local
+# sb10-queue-mind/.env.local
 QWEN_API_KEY=your_qwen_api_key_here
 
-# sf8-behavior-prediction/.env.local
+# sf8-cuca-insider-ai/.env.local
+QWEN_API_KEY=your_qwen_api_key_here
+
+# sf11-ewa-lending/.env.local
 QWEN_API_KEY=your_qwen_api_key_here
 ```
 

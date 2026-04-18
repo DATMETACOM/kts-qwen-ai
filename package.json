@@ -1,0 +1,43 @@
+{
+  "name": "kts-qwen-ai",
+  "version": "1.0.0",
+  "description": "KTS-Qwen-AI - Shinhan Financial Group Qwen AI Build Day 2026 Projects",
+  "type": "module",
+  "scripts": {
+    "dev:sb10": "cd sb10-queue-mind && npm run dev",
+    "dev:sf8": "cd sf8-cuca-insider-ai && npm run dev",
+    "dev:sf11": "cd sf11-ewa-lending && npm run dev",
+    "build:sb10": "cd sb10-queue-mind && npm run build",
+    "build:sf8": "cd sf8-cuca-insider-ai && npm run build",
+    "build:sf11": "cd sf11-ewa-lending && npm run build",
+    "lint:sb10": "cd sb10-queue-mind && npm run lint",
+    "lint:sf8": "cd sf8-cuca-insider-ai && npm run lint",
+    "lint:sf11": "cd sf11-ewa-lending && npm run lint",
+    "lint": "npm run lint:sb10 && npm run lint:sf8 && npm run lint:sf11",
+    "test:sb10": "cd sb10-queue-mind && npm run test",
+    "test:sf8": "cd sf8-cuca-insider-ai && npm run test:run",
+    "test": "npm run test:sb10 && npm run test:sf8",
+    "install:all": "npm install && cd sb10-queue-mind && npm install && cd ../sf8-cuca-insider-ai && npm install && cd ../sf11-ewa-lending && npm install"
+  },
+  "keywords": [
+    "shinhan",
+    "qwen",
+    "ai",
+    "fintech"
+  ],
+  "author": "Shinhan Financial Group",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DATMETACOM/kts-qwen-ai"
+  },
+  "workspaces": [
+    "packages/*",
+    "sb10-queue-mind",
+    "sf8-cuca-insider-ai",
+    "sf11-ewa-lending"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
